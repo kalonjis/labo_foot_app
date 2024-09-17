@@ -17,5 +17,5 @@ spring:
       max-request-size: 2MB
 
 server:
-  port: 80800
+  port: 8080
 
