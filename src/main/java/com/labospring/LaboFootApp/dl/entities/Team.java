@@ -3,6 +3,8 @@ package com.labospring.LaboFootApp.dl.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @NoArgsConstructor @AllArgsConstructor
 @EqualsAndHashCode @ToString
 @Getter
@@ -14,10 +16,22 @@ public class Team{
 
     @Setter @Column(unique = true, nullable = false)
     private String name;
+
+    @OneToOne
     @Setter
-    private int nbPlayers;
+    @JoinColumn(unique = true, nullable = false)
+    private Coach coach;
 
-    //TODO Coach
+    @Setter
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private Set<Player> players;
 
 
+    public void addPlayer (Player player){
+        players.add(player);
+    }
+
+    public void removePlayer (Player player){
+        players.remove(player);
+    }
 }
