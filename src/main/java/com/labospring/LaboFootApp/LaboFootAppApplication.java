@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class LaboFootAppApplication {
 
 	public static void main(String[] args) {
-//githubtest
+
 		SpringApplication.run(LaboFootAppApplication.class, args);
 	}
 
