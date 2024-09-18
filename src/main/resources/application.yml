@@ -2,7 +2,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/labo_foot_app
     username: postgres
-    password: steby1981
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -11,10 +11,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  servlet:
-    multipart:
-      max-file-size: 2MB
-      max-request-size: 2MB
 
 server:
   port: 8080
