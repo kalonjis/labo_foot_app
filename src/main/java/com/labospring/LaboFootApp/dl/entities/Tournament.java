@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(name = "UK_title_startDate_address", columnNames = {"title", "startDate", "address"}))
+@Table(name = "tournament",
+        uniqueConstraints = @UniqueConstraint(name = "UK_title_startDate_address", columnNames = {"title", "startDate", "placeName"}))
 public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,12 +22,24 @@ public class Tournament {
     @Setter
     @Column(nullable = false)
     private String title;
-    @Setter @Temporal(TemporalType.TIMESTAMP)
+    @Setter
     private LocalDateTime startDate;
-    @Setter @Temporal(TemporalType.TIMESTAMP)
+    @Setter
     private LocalDateTime endDate;
+    @Setter
+    @Column(nullable = false)
+    private String placeName;
     @Setter  @Embedded
     @Column(nullable = false)
     private Address address;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "tournament_type_list_by_tournament", // Nom de la table de jointure
+            joinColumns = @JoinColumn(name = "tournament_id", nullable = false), // Clé étrangère pour l'entité actuelle (Tournament)
+            inverseJoinColumns = @JoinColumn(name = "tournament_type_id", nullable = false) // Clé étrangère pour l'entité associée (TournamentType)
+    )
+    private Set<TournamentType> tournamentTypes;
+
 
 }
