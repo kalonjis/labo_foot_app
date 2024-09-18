@@ -9,6 +9,7 @@ public class LaboFootAppApplication {
 	public static void main(String[] args) {
 
 		SpringApplication.run(LaboFootAppApplication.class, args);
+	public static void main(String[] args) {SpringApplication.run(LaboFootAppApplication.class, args);
 	}
 
 }
