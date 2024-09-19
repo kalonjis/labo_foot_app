@@ -51,6 +51,7 @@ public class FootMatch {
     private int scoreTeamAway;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     private MatchStatus matchStatus;
 
     @Setter

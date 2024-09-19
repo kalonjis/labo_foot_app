@@ -32,6 +32,7 @@ public class ParticipatingTeam {
     private Team team;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     private SubscriptionStatus subscriptionStatus;
 
     @Embeddable

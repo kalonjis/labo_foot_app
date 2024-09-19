@@ -1,8 +1,10 @@
 package com.labospring.LaboFootApp.dal;
 
+import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
 import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
 import com.labospring.LaboFootApp.dal.repositories.UserRepository;
 import com.labospring.LaboFootApp.dl.entities.Address;
+import com.labospring.LaboFootApp.dl.entities.Coach;
 import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.enums.FieldPosition;
@@ -20,6 +22,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PlayerRepository playerRepository;
+    private final CoachRepository coachRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -189,8 +192,19 @@ public class DataInitializer implements CommandLineRunner {
 
             playerRepository.saveAll(players);
         }
+    // endregion
 
-
+    // region Coach
+        if (coachRepository.count() == 0) {
+            List<Coach> coaches = List.of(
+                    new Coach("Pep", "Guardiola"),
+                    new Coach("Jurgen", "Klopp"),
+                    new Coach("Zinedine", "Zidane"),
+                    new Coach("Carlo", "Ancelotti"),
+                    new Coach("Diego", "Simeone")
+            );
+            coachRepository.saveAll(coaches);
+        }
     // endregion
     }
 
