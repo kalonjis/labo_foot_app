@@ -34,5 +34,5 @@ build/
 .vscode/
 
 ### config ###
-/src/main/resources/*.yml
-/src/main/resources/*.html
+src/main/resources/*.yml
+src/main/resources/*.html
