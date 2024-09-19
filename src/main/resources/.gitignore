@@ -1,4 +1,4 @@
-HELP.md
+../../../HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
@@ -34,4 +34,4 @@ build/
 .vscode/
 
 ### config ###
-.src/main/resources/
+*.yml
