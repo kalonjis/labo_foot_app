@@ -35,6 +35,7 @@ public class User extends BaseEntity{
     private Address address;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     private Role role;
 
 }

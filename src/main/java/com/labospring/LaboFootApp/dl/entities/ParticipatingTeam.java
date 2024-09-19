@@ -32,6 +32,7 @@ public class ParticipatingTeam extends BaseEntity{
     private Team team;
 
     @Setter
+    @Enumerated(EnumType.STRING)
     private SubscriptionStatus subscriptionStatus;
 
     @Embeddable

@@ -1,8 +1,13 @@
 package com.labospring.LaboFootApp.dal;
 
+import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
+import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
 import com.labospring.LaboFootApp.dal.repositories.UserRepository;
 import com.labospring.LaboFootApp.dl.entities.Address;
+import com.labospring.LaboFootApp.dl.entities.Coach;
+import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.dl.entities.User;
+import com.labospring.LaboFootApp.dl.enums.FieldPosition;
 import com.labospring.LaboFootApp.dl.enums.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -16,10 +21,13 @@ import java.util.List;
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
+    private final PlayerRepository playerRepository;
+    private final CoachRepository coachRepository;
 
     @Override
     public void run(String... args) throws Exception {
 
+    // region  User
         User user1 = new User(
                 null,
                 "steby81",
@@ -155,5 +163,49 @@ public class DataInitializer implements CommandLineRunner {
         // Save all users, regardless of whether the user table is empty or not
         List<User> users = List.of(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10);
         userRepository.saveAll(users);
+    //endregion
+
+    // region Player
+        if (playerRepository.count() == 0) {
+            List<Player> players = List.of(
+                    new Player(null, "Steph", "Kal", "Steby", 10, FieldPosition.MIDFIELDER),
+                    new Player(null, "Jean", "Gabin", "Gabinho", 9, FieldPosition.FORWARD),
+                    new Player(null, "Homer", "Simpson", "HomerSps", 1, FieldPosition.GOALKEEPER),
+                    new Player(null, "Bart", "Simpson", "Bartman", 7, FieldPosition.DEFENDER),
+                    new Player(null, "Lisa", "Simpson", "LisaS", 8, FieldPosition.MIDFIELDER),
+                    new Player(null, "Marge", "Simpson", "Margey", 11, FieldPosition.FORWARD),
+                    new Player(null, "Ned", "Flanders", "Neddy", 2, FieldPosition.DEFENDER),
+                    new Player(null, "Moe", "Szyslak", "MoeBar", 5, FieldPosition.MIDFIELDER),
+                    new Player(null, "Lenny", "Leonard", "LennyL", 3, FieldPosition.GOALKEEPER),
+                    new Player(null, "Carl", "Carlson", "CarlC", 4, FieldPosition.DEFENDER),
+                    new Player(null, "Milhouse", "Van Houten", "MilhouseV", 6, FieldPosition.FORWARD),
+                    new Player(null, "Ralph", "Wiggum", "Ralphie", 12, FieldPosition.MIDFIELDER),
+                    new Player(null, "Apu", "Nahasapeemapetilon", "ApuN", 13, FieldPosition.FORWARD),
+                    new Player(null, "Clancy", "Wiggum", "ChiefW", 14, FieldPosition.DEFENDER),
+                    new Player(null, "Krusty", "Clown", "KrustyK", 15, FieldPosition.GOALKEEPER),
+                    new Player(null, "Seymour", "Skinner", "PrincipalS", 16, FieldPosition.MIDFIELDER),
+                    new Player(null, "Edna", "Krabappel", "EdnaK", 17, FieldPosition.FORWARD),
+                    new Player(null, "Nelson", "Muntz", "NelsonM", 18, FieldPosition.DEFENDER),
+                    new Player(null, "Barney", "Gumble", "BarneyG", 19, FieldPosition.GOALKEEPER),
+                    new Player(null, "Otto", "Mann", "OttoM", 20, FieldPosition.FORWARD)
+            );
+
+            playerRepository.saveAll(players);
+        }
+    // endregion
+
+    // region Coach
+        if (coachRepository.count() == 0) {
+            List<Coach> coaches = List.of(
+                    new Coach("Pep", "Guardiola"),
+                    new Coach("Jurgen", "Klopp"),
+                    new Coach("Zinedine", "Zidane"),
+                    new Coach("Carlo", "Ancelotti"),
+                    new Coach("Diego", "Simeone")
+            );
+            coachRepository.saveAll(coaches);
+        }
+    // endregion
     }
+
 }

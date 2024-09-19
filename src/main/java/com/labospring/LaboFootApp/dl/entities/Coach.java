@@ -10,4 +10,7 @@ import lombok.*;
 @Getter @Setter
 @Entity
 public class Coach extends MatchActor{
+    public Coach(String firstName, String lastName){
+        super(null, firstName, lastName);
+    }
 }
