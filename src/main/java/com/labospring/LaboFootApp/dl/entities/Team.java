@@ -6,10 +6,10 @@ import lombok.*;
 import java.util.Set;
 
 @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
+@EqualsAndHashCode(callSuper = false) @ToString
 @Getter
 @Entity
-public class Team{
+public class Team extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

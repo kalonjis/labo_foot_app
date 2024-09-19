@@ -8,11 +8,11 @@ import static com.labospring.LaboFootApp.dl.consts.RankingPoint.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @Getter
 @Entity
-public class Ranking {
+public class Ranking  extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
