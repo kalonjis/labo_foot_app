@@ -20,4 +20,12 @@ public class Player extends MatchActor{
 
     private FieldPosition fieldPosition;
 
+    // Constructeur avec les champs de MatchActor + Player
+    public Player(Long id, String firstname, String lastname, String playerName, int teamNumber, FieldPosition fieldPosition) {
+        super(id, firstname, lastname); // Appelle le constructeur de la classe parente MatchActor
+        this.playerName = playerName;
+        this.teamNumber = teamNumber;
+        this.fieldPosition = fieldPosition;
+    }
+
 }
