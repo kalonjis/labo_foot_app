@@ -19,14 +19,5 @@ public class TournamentType {
     private String title;
 
     @Setter
-    @Column(nullable = false)
     private int nbTeams;
-
-    @Setter
-    @Column(nullable = false)
-    private int nbPlayersOnFieldByTeam;
-
-    @Setter
-    @Column(nullable = false)
-    private Boolean groupStage;
 }
