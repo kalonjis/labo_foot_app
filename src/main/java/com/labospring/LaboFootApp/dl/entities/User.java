@@ -7,11 +7,11 @@ import lombok.*;
 import java.time.LocalDate;
 
 @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
+@EqualsAndHashCode(callSuper = false) @ToString
 @Getter
 @Entity
 @Table(name = "user_")
-public class User{
+public class User extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

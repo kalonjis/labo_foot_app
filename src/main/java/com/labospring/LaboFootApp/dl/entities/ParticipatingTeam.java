@@ -10,11 +10,11 @@ import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @ToString
 @Getter
 @Entity
-public class ParticipatingTeam {
+public class ParticipatingTeam extends BaseEntity{
 
     @EmbeddedId
     private ParticipatingTeamId id = new ParticipatingTeamId();

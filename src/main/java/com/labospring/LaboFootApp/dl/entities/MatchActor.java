@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode @ToString
+@EqualsAndHashCode(callSuper = false) @ToString
 @Getter
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class MatchActor {
+public class MatchActor extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
