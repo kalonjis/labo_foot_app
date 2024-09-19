@@ -2,11 +2,9 @@ package com.labospring.LaboFootApp.dal;
 
 import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
 import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
+import com.labospring.LaboFootApp.dal.repositories.RefereeRepository;
 import com.labospring.LaboFootApp.dal.repositories.UserRepository;
-import com.labospring.LaboFootApp.dl.entities.Address;
-import com.labospring.LaboFootApp.dl.entities.Coach;
-import com.labospring.LaboFootApp.dl.entities.Player;
-import com.labospring.LaboFootApp.dl.entities.User;
+import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.FieldPosition;
 import com.labospring.LaboFootApp.dl.enums.Role;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PlayerRepository playerRepository;
     private final CoachRepository coachRepository;
+    private final RefereeRepository refereeRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -204,6 +203,24 @@ public class DataInitializer implements CommandLineRunner {
                     new Coach("Diego", "Simeone")
             );
             coachRepository.saveAll(coaches);
+        }
+    // endregion
+
+    // region Referee
+        if (refereeRepository.count() == 0) {
+            List<Referee> referees = List.of(
+                    new Referee("Howard", "Webb"),
+                    new Referee("Mark", "Clattenburg"),
+                    new Referee("Pierluigi", "Collina"),
+                    new Referee("Cüneyt", "Çakır"),
+                    new Referee("Néstor", "Pitana"),
+                    new Referee("Felix", "Brych"),
+                    new Referee("Antonio", "López"),
+                    new Referee("Jonas", "Eriksson"),
+                    new Referee("Jair", "Marrufo"),
+                    new Referee("Damir", "Skomina")
+            );
+            refereeRepository.saveAll(referees);
         }
     // endregion
     }
