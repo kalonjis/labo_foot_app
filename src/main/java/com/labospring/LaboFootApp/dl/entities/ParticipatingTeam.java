@@ -17,15 +17,13 @@ import java.util.Objects;
 public class ParticipatingTeam extends BaseEntity{
 
     @EmbeddedId
-    private ParticipatingTeamId id = new ParticipatingTeamId();
+    private ParticipatingTeamId id;
 
-    @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("tournamentId")
     @JoinColumn(name = "tournament_id")
     private Tournament tournament;
 
-    @Setter
     @MapsId("teamId")
     @JoinColumn(name = "team_id")
     @ManyToOne(fetch = FetchType.EAGER)
@@ -57,6 +55,12 @@ public class ParticipatingTeam extends BaseEntity{
         public int hashCode() {
             return Objects.hash(tournamentId, teamId);
         }
+    }
+
+    public ParticipatingTeam(Tournament tournament, Team team){
+        this.id = new ParticipatingTeamId(tournament.getId(), team.getId());
+        this.tournament = tournament;
+        this.team = team;
     }
 
 }

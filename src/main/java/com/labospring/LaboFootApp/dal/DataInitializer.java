@@ -25,6 +25,8 @@ public class DataInitializer implements CommandLineRunner {
     private final RefereeRepository refereeRepository;
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
+    private final ParticipatingTeamRepository participatingTeamRepository;
+
 
     // Méthode pour choisir une équipe aléatoirement
     public Team getRandomTeam(List<Team> teams) {
@@ -320,6 +322,26 @@ public class DataInitializer implements CommandLineRunner {
 
         if (tournamentRepository.count() == 0) {
             tournamentRepository.saveAll(tournaments);
+        }
+        // endregion
+
+        // region Participating Teams for Tournament 8
+        ParticipatingTeam participatingTeam1 = new ParticipatingTeam(tournament8, team1);
+        ParticipatingTeam participatingTeam2 = new ParticipatingTeam(tournament8, team2);
+        ParticipatingTeam participatingTeam3 = new ParticipatingTeam(tournament8, team3);
+        ParticipatingTeam participatingTeam4 = new ParticipatingTeam(tournament8, team4);
+        ParticipatingTeam participatingTeam5 = new ParticipatingTeam(tournament8, team5);
+        ParticipatingTeam participatingTeam6 = new ParticipatingTeam(tournament8, team6);
+        ParticipatingTeam participatingTeam7 = new ParticipatingTeam(tournament8, team7);
+        ParticipatingTeam participatingTeam8 = new ParticipatingTeam(tournament8, team8);
+
+        List<ParticipatingTeam> participatingTeams = List.of(
+                participatingTeam1, participatingTeam2, participatingTeam3, participatingTeam4,
+                participatingTeam5, participatingTeam6, participatingTeam7, participatingTeam8
+        );
+
+        if (participatingTeamRepository.count() == 0) {
+            participatingTeamRepository.saveAll(participatingTeams);
         }
 // endregion
     }
