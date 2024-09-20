@@ -24,7 +24,7 @@ public class Team extends BaseEntity{
     private Coach coach;
 
     @Setter
-    @OneToMany(mappedBy = "team", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Player> players = new HashSet<>();;
 
 
