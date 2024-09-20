@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -22,6 +23,7 @@ public class DataInitializer implements CommandLineRunner {
     private final CoachRepository coachRepository;
     private final RefereeRepository refereeRepository;
     private final TournamentRepository tournamentRepository;
+    private final TeamRepository teamRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -224,8 +226,20 @@ public class DataInitializer implements CommandLineRunner {
         }
         // endregion
 
-        // region tournament
 
+
+      // region team
+        if (teamRepository.count() == 0) {
+            List<Team> teams = List.of(
+                    new Team(null,"New Team", new Coach("Roberto", ""), new HashSet<>())
+
+            );
+            teamRepository.saveAll(teams);
+        }
+    }
+      // endregion
+
+        // region tournament
         if (tournamentRepository.count() == 0) {
             List<Tournament> tournaments = List.of(
                     new Tournament(

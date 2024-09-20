@@ -3,10 +3,11 @@ package com.labospring.LaboFootApp.dl.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false) @ToString
 @Getter
 @Entity
 public class Team extends BaseEntity{
@@ -17,21 +18,37 @@ public class Team extends BaseEntity{
     @Setter @Column(unique = true, nullable = false)
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @Setter
     @JoinColumn(unique = true, nullable = false)
     private Coach coach;
 
     @Setter
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private Set<Player> players;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Player> players = new HashSet<>();;
 
 
-    public void addPlayer (Player player){
-        players.add(player);
+    public void addPlayer(Player player) {
+        if(players.add(player))
+            player.setTeam(this);
     }
 
-    public void removePlayer (Player player){
-        players.remove(player);
+    public void removePlayer(Player player) {
+        if(players.remove(player))
+            player.setTeam(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Team team = (Team) o;
+        return Objects.equals(id, team.id) && Objects.equals(name, team.name) && Objects.equals(coach, team.coach);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, name, coach);
     }
 }

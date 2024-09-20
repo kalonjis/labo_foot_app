@@ -7,7 +7,8 @@ public record PlayerBusiness(String firstname,
                              String lastname,
                              String playername,
                              int teamNumber,
-                             FieldPosition fieldPosition
+                             FieldPosition fieldPosition,
+                             Long teamID
                              ) {
     public Player toEntity() {
         return new Player(null, firstname, lastname,

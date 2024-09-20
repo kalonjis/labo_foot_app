@@ -12,9 +12,10 @@ public record PlayerForm(String firstname,
                          String playername,
                          @NotNull
                          Integer teamNumber,
-                         FieldPosition fieldPosition) {
+                         FieldPosition fieldPosition,
+                         Long teamID) {
 
     public PlayerBusiness toPlayerBusiness() {
-        return new PlayerBusiness(firstname, lastname, playername, teamNumber, fieldPosition);
+        return new PlayerBusiness(firstname, lastname, playername, teamNumber, fieldPosition, teamID);
     }
 }
