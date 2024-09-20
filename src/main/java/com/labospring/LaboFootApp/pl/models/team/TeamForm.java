@@ -8,12 +8,12 @@ import java.util.List;
 
 public record TeamForm(
         String name,
-        CoachForm coachForm,
-        List<PlayerForm> playerDTOList
+        CoachForm coach,
+        List<PlayerForm> players
 ) {
     public TeamBusiness toTeamBusiness() {
         return new TeamBusiness(name,
-                coachForm.toCoachBusiness(),
-                playerDTOList.stream().map(PlayerForm::toPlayerBusiness).toList());
+                coach.toCoachBusiness(),
+                players.stream().map(PlayerForm::toPlayerBusiness).toList());
     }
 }
