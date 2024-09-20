@@ -286,6 +286,7 @@ public class DataInitializer implements CommandLineRunner {
         // endregion
 
 
+
         // region tournament
         if (tournamentRepository.count() == 0) {
             List<Tournament> tournaments = List.of(
