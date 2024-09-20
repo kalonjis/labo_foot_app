@@ -33,8 +33,13 @@ public class Player extends MatchActor{
     }
 
     public void changeTeam(Team team) {
-        if (team != null && !team.getPlayers().contains(this)) {
+        if (team != null) {
             team.addPlayer(this);
+        }
+        else {
+            if(this.team != null){
+                this.team.removePlayer(this);
+            }
         }
     }
 

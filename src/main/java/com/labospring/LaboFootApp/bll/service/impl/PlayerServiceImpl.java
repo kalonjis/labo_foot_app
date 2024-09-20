@@ -16,10 +16,10 @@ import java.util.List;
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
     private final TeamRepository teamRepository;
-    //TODO teamService
 
     @Override
     public Long addOne(PlayerBusiness playerBusiness) {
+        //TODO Change une fois team service
         Team team = null;
         if(playerBusiness.teamID() != null)
             team = teamRepository.findById(playerBusiness.teamID()).orElseThrow(() -> new RuntimeException());

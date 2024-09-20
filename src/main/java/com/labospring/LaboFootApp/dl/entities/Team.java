@@ -29,13 +29,13 @@ public class Team extends BaseEntity{
 
 
     public void addPlayer(Player player) {
-        players.add(player);
-        player.setTeam(this);
+        if(players.add(player))
+            player.setTeam(this);
     }
 
     public void removePlayer(Player player) {
-        players.remove(player);
-        player.setTeam(null);
+        if(players.remove(player))
+            player.setTeam(null);
     }
 
     @Override
