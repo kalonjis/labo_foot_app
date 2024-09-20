@@ -6,7 +6,7 @@ import com.labospring.LaboFootApp.dl.enums.FieldPosition;
 public record PlayerDTO(String firstname,
                         String lastname,
                         String playername,
-                        int teamNumber,
+                        Integer teamNumber,
                         FieldPosition fieldPosition) {
 
     public static PlayerDTO fromEntity(Player player) {
