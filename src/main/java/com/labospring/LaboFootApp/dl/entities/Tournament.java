@@ -1,10 +1,10 @@
 package com.labospring.LaboFootApp.dl.entities;
 
+import com.labospring.LaboFootApp.dl.enums.TournamentType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,14 +32,18 @@ public class Tournament extends BaseEntity{
     @Setter  @Embedded
     @Column(nullable = false)
     private Address address;
+    @Setter
+    private TournamentType tournamentTypes;
+    @Setter
+    private boolean isClose;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "tournament_type_list_by_tournament", // Nom de la table de jointure
-            joinColumns = @JoinColumn(name = "tournament_id", nullable = false), // Clé étrangère pour l'entité actuelle (Tournament)
-            inverseJoinColumns = @JoinColumn(name = "tournament_type_id", nullable = false) // Clé étrangère pour l'entité associée (TournamentType)
-    )
-    private Set<TournamentType> tournamentTypes;
+//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+//    @JoinTable(
+//            name = "tournament_type_list_by_tournament", // Nom de la table de jointure
+//            joinColumns = @JoinColumn(name = "tournament_id", nullable = false), // Clé étrangère pour l'entité actuelle (Tournament)
+//            inverseJoinColumns = @JoinColumn(name = "tournament_type_id", nullable = false) // Clé étrangère pour l'entité associée (TournamentType)
+//    )
+//    private Set<TournamentType> tournamentTypes;
 
 
 }
