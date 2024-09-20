@@ -41,5 +41,7 @@ public class Tournament {
     )
     private Set<TournamentType> tournamentTypes;
 
+    @Setter
+    private boolean isClose;
 
 }
