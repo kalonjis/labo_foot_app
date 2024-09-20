@@ -4,10 +4,10 @@ import com.labospring.LaboFootApp.dl.enums.FieldPosition;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = true)
-@ToString
 @Getter @Setter
 @Entity
 public class Player extends MatchActor{
@@ -20,7 +20,7 @@ public class Player extends MatchActor{
     @Enumerated(EnumType.STRING)
     private FieldPosition fieldPosition;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id")
     private Team team;
 
@@ -32,11 +32,23 @@ public class Player extends MatchActor{
         this.fieldPosition = fieldPosition;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
-        if (!team.getPlayers().contains(this)) {
-            team.getPlayers().add(this);
+    public void changeTeam(Team team) {
+        if (team != null && !team.getPlayers().contains(this)) {
+            team.addPlayer(this);
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Player player = (Player) o;
+        return teamNumber == player.teamNumber && Objects.equals(playerName, player.playerName) && fieldPosition == player.fieldPosition && Objects.equals(team, player.team);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), playerName, teamNumber, fieldPosition, team);
+    }
 }

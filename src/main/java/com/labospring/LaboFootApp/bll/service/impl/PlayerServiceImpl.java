@@ -3,7 +3,9 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.service.PlayerService;
 import com.labospring.LaboFootApp.bll.service.models.PlayerBusiness;
 import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
+import com.labospring.LaboFootApp.dal.repositories.TeamRepository;
 import com.labospring.LaboFootApp.dl.entities.Player;
+import com.labospring.LaboFootApp.dl.entities.Team;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
+    private final TeamRepository teamRepository;
+    //TODO teamService
 
     @Override
-    public Long addOne(PlayerBusiness entityBusiness) {
-        return playerRepository.save(entityBusiness.toEntity()).getId();
+    public Long addOne(PlayerBusiness playerBusiness) {
+        Team team = null;
+        if(playerBusiness.teamID() != null)
+            team = teamRepository.findById(playerBusiness.teamID()).orElseThrow(() -> new RuntimeException());
+        Player player = playerBusiness.toEntity();
+        player.changeTeam(team);
+
+        return playerRepository.save(player).getId();
     }
 
     @Override

@@ -1,9 +1,6 @@
 package com.labospring.LaboFootApp.dal;
 
-import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
-import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
-import com.labospring.LaboFootApp.dal.repositories.RefereeRepository;
-import com.labospring.LaboFootApp.dal.repositories.UserRepository;
+import com.labospring.LaboFootApp.dal.repositories.*;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.FieldPosition;
 import com.labospring.LaboFootApp.dl.enums.Role;
@@ -12,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 
 @Component
@@ -22,6 +20,7 @@ public class DataInitializer implements CommandLineRunner {
     private final PlayerRepository playerRepository;
     private final CoachRepository coachRepository;
     private final RefereeRepository refereeRepository;
+    private final TeamRepository teamRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -223,6 +222,14 @@ public class DataInitializer implements CommandLineRunner {
             refereeRepository.saveAll(referees);
         }
     // endregion
+
+        if (teamRepository.count() == 0) {
+            List<Team> teams = List.of(
+                    new Team(null,"New Team", new Coach("Roberto", ""), new HashSet<>())
+
+            );
+            teamRepository.saveAll(teams);
+        }
     }
 
 }
