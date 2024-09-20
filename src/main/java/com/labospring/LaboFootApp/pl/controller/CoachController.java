@@ -1,8 +1,9 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.CoachService;
-import com.labospring.LaboFootApp.pl.models.CoachDTO;
-import com.labospring.LaboFootApp.pl.models.CoachForm;
+import com.labospring.LaboFootApp.pl.models.coach.CoachDTO;
+import com.labospring.LaboFootApp.pl.models.coach.CoachForm;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,7 @@ public class CoachController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestBody CoachForm coachForm){
+    public ResponseEntity<Void> create(@Valid @RequestBody CoachForm coachForm){
         Long id = coachService.addOne(coachForm.toCoachBusiness());
         UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
         return ResponseEntity.created(uriComponents.toUri()).build();
@@ -35,7 +36,7 @@ public class CoachController {
     }
 
     @PutMapping("/{id:^\\d+}")
-    public ResponseEntity<Void> update(@PathVariable long id, @RequestBody CoachForm coachForm){
+    public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody CoachForm coachForm){
         coachService.updateOne(id, coachForm.toCoachBusiness());
         return ResponseEntity.ok().build();
     }
