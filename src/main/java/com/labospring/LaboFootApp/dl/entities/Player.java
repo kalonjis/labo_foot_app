@@ -15,7 +15,7 @@ public class Player extends MatchActor{
     @Column(nullable = false, length = 15)
     private String playerName;
 
-    private int teamNumber;
+    private Integer teamNumber;
 
     @Enumerated(EnumType.STRING)
     private FieldPosition fieldPosition;
@@ -25,7 +25,7 @@ public class Player extends MatchActor{
     private Team team;
 
     // Constructeur avec les champs de MatchActor + Player
-    public Player(Long id, String firstname, String lastname, String playerName, int teamNumber, FieldPosition fieldPosition) {
+    public Player(Long id, String firstname, String lastname, String playerName, Integer teamNumber, FieldPosition fieldPosition) {
         super(id, firstname, lastname); // Appelle le constructeur de la classe parente MatchActor
         this.playerName = playerName;
         this.teamNumber = teamNumber;

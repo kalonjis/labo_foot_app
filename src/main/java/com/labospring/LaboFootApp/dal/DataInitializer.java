@@ -166,34 +166,93 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.saveAll(users);
         //endregion
 
-        // region Player
-        if (playerRepository.count() == 0) {
-            List<Player> players = List.of(
-                    new Player(null, "Steph", "Kal", "Steby", 10, FieldPosition.MIDFIELDER),
-                    new Player(null, "Jean", "Gabin", "Gabinho", 9, FieldPosition.FORWARD),
-                    new Player(null, "Homer", "Simpson", "HomerSps", 1, FieldPosition.GOALKEEPER),
-                    new Player(null, "Bart", "Simpson", "Bartman", 7, FieldPosition.DEFENDER),
-                    new Player(null, "Lisa", "Simpson", "LisaS", 8, FieldPosition.MIDFIELDER),
-                    new Player(null, "Marge", "Simpson", "Margey", 11, FieldPosition.FORWARD),
-                    new Player(null, "Ned", "Flanders", "Neddy", 2, FieldPosition.DEFENDER),
-                    new Player(null, "Moe", "Szyslak", "MoeBar", 5, FieldPosition.MIDFIELDER),
-                    new Player(null, "Lenny", "Leonard", "LennyL", 3, FieldPosition.GOALKEEPER),
-                    new Player(null, "Carl", "Carlson", "CarlC", 4, FieldPosition.DEFENDER),
-                    new Player(null, "Milhouse", "Van Houten", "MilhouseV", 6, FieldPosition.FORWARD),
-                    new Player(null, "Ralph", "Wiggum", "Ralphie", 12, FieldPosition.MIDFIELDER),
-                    new Player(null, "Apu", "Nahasapeemapetilon", "ApuN", 13, FieldPosition.FORWARD),
-                    new Player(null, "Clancy", "Wiggum", "ChiefW", 14, FieldPosition.DEFENDER),
-                    new Player(null, "Krusty", "Clown", "KrustyK", 15, FieldPosition.GOALKEEPER),
-                    new Player(null, "Seymour", "Skinner", "PrincipalS", 16, FieldPosition.MIDFIELDER),
-                    new Player(null, "Edna", "Krabappel", "EdnaK", 17, FieldPosition.FORWARD),
-                    new Player(null, "Nelson", "Muntz", "NelsonM", 18, FieldPosition.DEFENDER),
-                    new Player(null, "Barney", "Gumble", "BarneyG", 19, FieldPosition.GOALKEEPER),
-                    new Player(null, "Otto", "Mann", "OttoM", 20, FieldPosition.FORWARD)
+        // region Team & Player
+        if (teamRepository.count() == 0) {
+            // Créer 16 équipes, dont 10 sans joueurs
+            List<Team> teams = List.of(
+                    new Team(null, "Manchester United", new Coach("Alex", "Ferguson"), new HashSet<>()),
+                    new Team(null, "Real Madrid", new Coach("Zinedine", "Zidane"), new HashSet<>()),
+                    new Team(null, "FC Barcelona", new Coach("Pep", "Guardiola"), new HashSet<>()),
+                    new Team(null, "Liverpool FC", new Coach("Jurgen", "Klopp"), new HashSet<>()),
+                    new Team(null, "Bayern Munich", new Coach("Carlo", "Ancelotti"), new HashSet<>()),
+                    new Team(null, "Juventus FC", new Coach("Massimiliano", "Allegri"), new HashSet<>()),
+                    new Team(null, "Paris Saint-Germain", new Coach("Mauricio", "Pochettino"), new HashSet<>()),
+                    new Team(null, "Chelsea FC", new Coach("Thomas", "Tuchel"), new HashSet<>()),
+                    new Team(null, "Atletico Madrid", new Coach("Diego", "Simeone"), new HashSet<>()),
+                    new Team(null, "Inter Milan", new Coach("Simone", "Inzaghi"), new HashSet<>()),
+                    // 6 équipes sans joueurs
+                    new Team(null, "AC Milan", new Coach("Pippo", "Inzaghi"), new HashSet<>()),
+                    new Team(null, "Tottenham Hotspur", new Coach("Antonio", "Conte"), new HashSet<>()),
+                    new Team(null, "AS Roma", new Coach("Marcelo", "Bielsa"), new HashSet<>()),
+                    new Team(null, "Borussia Dortmund", new Coach("Thomas", "Tuchel"), new HashSet<>()),
+                    new Team(null, "Olympique Lyonnais", new Coach("Roberto", "Mancini"), new HashSet<>()),
+                    new Team(null, "Ajax Amsterdam", new Coach("Luis", "Enrique"), new HashSet<>())
             );
 
-            playerRepository.saveAll(players);
+            teamRepository.saveAll(teams);
+
+            // region Player
+            if (playerRepository.count() == 0) {
+                // 50 joueurs, dont 30 avec une équipe
+                List<Player> players = List.of(
+                        // 30 joueurs avec équipes
+                        new Player(null, "Cristiano", "Ronaldo", "CR7", 7, FieldPosition.FORWARD),
+                        new Player(null, "Marcus", "Rashford", "Rashy", 10, FieldPosition.FORWARD),
+                        new Player(null, "Karim", "Benzema", "Benz", 9, FieldPosition.FORWARD),
+                        new Player(null, "Luka", "Modric", "Modric", 10, FieldPosition.MIDFIELDER),
+                        new Player(null, "Lionel", "Messi", "Messi", 10, FieldPosition.FORWARD),
+                        new Player(null, "Gerard", "Pique", "Pique", 3, FieldPosition.DEFENDER),
+                        new Player(null, "Mohamed", "Salah", "Salah", 11, FieldPosition.FORWARD),
+                        new Player(null, "Virgil", "van Dijk", "VVD", 4, FieldPosition.DEFENDER),
+                        new Player(null, "Robert", "Lewandowski", "Lewy", 9, FieldPosition.FORWARD),
+                        new Player(null, "Joshua", "Kimmich", "Kimmich", 6, FieldPosition.MIDFIELDER),
+                        new Player(null, "Paulo", "Dybala", "Dybala", 10, FieldPosition.FORWARD),
+                        new Player(null, "Leonardo", "Bonucci", "Bonucci", 19, FieldPosition.DEFENDER),
+                        new Player(null, "Kylian", "Mbappe", "Mbappe", 7, FieldPosition.FORWARD),
+                        new Player(null, "Neymar", "Junior", "Neymar", 10, FieldPosition.FORWARD),
+                        new Player(null, "Mason", "Mount", "Mount", 19, FieldPosition.MIDFIELDER),
+                        new Player(null, "Thiago", "Silva", "T.Silva", 6, FieldPosition.DEFENDER),
+                        new Player(null, "Luis", "Suarez", "El Pistolero", 9, FieldPosition.FORWARD),
+                        new Player(null, "Jan", "Oblak", "Oblak", 1, FieldPosition.GOALKEEPER),
+                        new Player(null, "Romelu", "Lukaku", "Lukaku", 9, FieldPosition.FORWARD),
+                        new Player(null, "Milan", "Skriniar", "Skriniar", 37, FieldPosition.DEFENDER),
+                        // 20 joueurs sans équipes
+                        new Player(null, "Zlatan", "Ibrahimovic", "Zlatan", null, FieldPosition.FORWARD),
+                        new Player(null, "Son", "Heung-min", "Sonny", null, FieldPosition.FORWARD),
+                        new Player(null, "Henrikh", "Mkhitaryan", "Mkhitaryan", null, FieldPosition.MIDFIELDER),
+                        new Player(null, "Erling", "Haaland", "Haaland", null, FieldPosition.FORWARD),
+                        new Player(null, "Memphis", "Depay", "Memphis", null, FieldPosition.FORWARD),
+                        new Player(null, "Dusan", "Tadic", "Tadic", null, FieldPosition.MIDFIELDER),
+                        new Player(null, "Christian", "Eriksen", "Eriksen", null, FieldPosition.MIDFIELDER),
+                        new Player(null, "Eden", "Hazard", "Hazard", null, FieldPosition.FORWARD),
+                        new Player(null, "Kevin", "De Bruyne", "KDB", null, FieldPosition.MIDFIELDER),
+                        new Player(null, "Sadio", "Mane", "Mane", null, FieldPosition.FORWARD),
+                        new Player(null, "Fabinho", "Tavares", "Fabinho", null, FieldPosition.DEFENDER),
+                        new Player(null, "Antoine", "Griezmann", "Grizi", null, FieldPosition.FORWARD),
+                        new Player(null, "Jadon", "Sancho", "Sancho", null, FieldPosition.FORWARD),
+                        new Player(null, "Gareth", "Bale", "Bale", null, FieldPosition.FORWARD),
+                        new Player(null, "Alvaro", "Morata", "Morata", null, FieldPosition.FORWARD),
+                        new Player(null, "Marco", "Veratti", "Veratti", null, FieldPosition.MIDFIELDER),
+                        new Player(null, "David", "De Gea", "De Gea", null, FieldPosition.GOALKEEPER),
+                        new Player(null, "Cesar", "Azpilicueta", "Azpi", null, FieldPosition.DEFENDER),
+                        new Player(null, "Hakim", "Ziyech", "Ziyech", null, FieldPosition.MIDFIELDER),
+                        new Player(null, "N'Golo", "Kante", "Kante", null, FieldPosition.MIDFIELDER)
+                );
+                // Assigner les 30 premiers joueurs aux équipes correspondantes
+                for (int i = 0; i < 30; i++) {
+                    Player player = players.get(i);
+                    player.setTeam(teams.get(i % 10)); // Assigne un joueur à une des 10 premières équipes
+                    teams.get(i % 10).addPlayer(player);
+                }
+
+                // Sauvegarder tous les joueurs
+                playerRepository.saveAll(players);
+            }
+            // endregion
         }
-        // endregion
+//endregion
+
+
 
         // region Coach
         if (coachRepository.count() == 0) {
@@ -227,16 +286,6 @@ public class DataInitializer implements CommandLineRunner {
         // endregion
 
 
-
-      // region team
-        if (teamRepository.count() == 0) {
-            List<Team> teams = List.of(
-                    new Team(null,"New Team", new Coach("Roberto", ""), new HashSet<>())
-
-            );
-            teamRepository.saveAll(teams);
-        }
-      // endregion
 
         // region tournament
         if (tournamentRepository.count() == 0) {
