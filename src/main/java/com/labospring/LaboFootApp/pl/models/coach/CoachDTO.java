@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.pl.models;
+package com.labospring.LaboFootApp.pl.models.coach;
 
 import com.labospring.LaboFootApp.dl.entities.Coach;
 
