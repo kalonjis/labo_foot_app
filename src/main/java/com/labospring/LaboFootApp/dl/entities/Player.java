@@ -20,7 +20,7 @@ public class Player extends MatchActor{
     @Enumerated(EnumType.STRING)
     private FieldPosition fieldPosition;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "team_id")
     private Team team;
 
