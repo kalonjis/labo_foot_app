@@ -12,7 +12,7 @@ public record TeamBusiness(
 ) {
 
     public Team toEntity(){
-        return new Team(null,
+        return new Team(
                 name,
                 coach.toEntity(),
                 players.stream().map(PlayerBusiness::toEntity).collect(Collectors.toSet()));

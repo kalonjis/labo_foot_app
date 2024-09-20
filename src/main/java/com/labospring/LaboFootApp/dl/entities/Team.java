@@ -24,9 +24,15 @@ public class Team extends BaseEntity{
     private Coach coach;
 
     @Setter
-    @OneToMany(mappedBy = "team", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    private Set<Player> players = new HashSet<>();;
+    @OneToMany(mappedBy = "team", cascade ={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    private Set<Player> players = new HashSet<>();
 
+    public Team(String name, Coach coach, Set<Player> players) {
+        this.name = name;
+        this.coach = coach;
+        players.forEach(this::addPlayer);
+
+    }
 
     public void addPlayer(Player player) {
         if(players.add(player))
@@ -51,4 +57,10 @@ public class Team extends BaseEntity{
     public int hashCode() {
         return Objects.hash(super.hashCode(), id, name, coach);
     }
+
+    public void removeAllPlayers() {
+        players.forEach(player -> player.setTeam(null));
+    }
+    // Query sur tous les joueurs de la team
+    // SetTeam null dans le service Player
 }
