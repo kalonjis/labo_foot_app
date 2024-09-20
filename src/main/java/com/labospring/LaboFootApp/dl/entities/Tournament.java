@@ -33,7 +33,8 @@ public class Tournament extends BaseEntity{
     @Column(nullable = false)
     private Address address;
     @Setter
-    private TournamentType tournamentTypes;
+    @Enumerated(EnumType.STRING)
+    private TournamentType tournamentType;
     @Setter
     private boolean isClose;
 
