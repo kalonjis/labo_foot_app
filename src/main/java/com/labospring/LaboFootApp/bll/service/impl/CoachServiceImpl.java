@@ -32,7 +32,8 @@ public class CoachServiceImpl implements CoachService {
 
     @Override
     public void deleteOne(Long id) {
-        coachRepository.deleteById(id);
+        Coach coach = getOne(id);
+        coachRepository.delete(coach);
     }
 
     @Override
