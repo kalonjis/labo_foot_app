@@ -236,7 +236,6 @@ public class DataInitializer implements CommandLineRunner {
             );
             teamRepository.saveAll(teams);
         }
-    }
       // endregion
 
         // region tournament
