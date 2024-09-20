@@ -3,6 +3,7 @@ package com.labospring.LaboFootApp.dl.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor @AllArgsConstructor
@@ -23,15 +24,18 @@ public class Team extends BaseEntity{
     private Coach coach;
 
     @Setter
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private Set<Player> players;
+    @OneToMany(mappedBy = "team", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private Set<Player> players = new HashSet<>();;
 
 
-    public void addPlayer (Player player){
+    public void addPlayer(Player player) {
         players.add(player);
+        player.setTeam(this);
     }
 
-    public void removePlayer (Player player){
+    public void removePlayer(Player player) {
         players.remove(player);
+        player.setTeam(null);
     }
+
 }
