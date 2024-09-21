@@ -43,9 +43,11 @@ public class TeamServiceImpl implements TeamService {
     public void updateOne(Long id, TeamBusiness entityBusiness) {
         Team team = getOne(id);
         Team teamUpdated = entityBusiness.toEntity();
-        team.setPlayers(teamUpdated.getPlayers());
-        team.setCoach(teamUpdated.getCoach());
         team.setName(teamUpdated.getName());
+        if(team.getCoach() != null && entityBusiness.coach() != null){
+            team.getCoach().setLastname(teamUpdated.getCoach().getLastname());
+            team.getCoach().setFirstname(teamUpdated.getCoach().getFirstname());
+        }
 
         teamRepository.save(team);
     }

@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.pl.models.team.TeamDTO;
+import com.labospring.LaboFootApp.pl.models.team.TeamEditForm;
 import com.labospring.LaboFootApp.pl.models.team.TeamForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class TeamController {
     }
 
     @PutMapping("/{id:^\\d+}")
-    public ResponseEntity<Void> update(@PathVariable long id,@Valid  @RequestBody TeamForm teamForm){
+    public ResponseEntity<Void> update(@PathVariable long id,@Valid  @RequestBody TeamEditForm teamForm){
         teamService.updateOne(id, teamForm.toTeamBusiness());
         return ResponseEntity.ok().build();
     }

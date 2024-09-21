@@ -30,7 +30,8 @@ public class Team extends BaseEntity{
     public Team(String name, Coach coach, Set<Player> players) {
         this.name = name;
         this.coach = coach;
-        players.forEach(this::addPlayer);
+        if(players!= null)
+            players.forEach(this::addPlayer);
 
     }
 
@@ -59,8 +60,9 @@ public class Team extends BaseEntity{
     }
 
     public void removeAllPlayers() {
-        players.forEach(player -> player.setTeam(null));
+        for (Player player : players) {
+            player.setTeam(null);
+        }
+        players.clear();
     }
-    // Query sur tous les joueurs de la team
-    // SetTeam null dans le service Player
 }
