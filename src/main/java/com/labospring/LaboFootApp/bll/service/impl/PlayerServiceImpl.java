@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.service.PlayerService;
+import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.models.PlayerBusiness;
 import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
 import com.labospring.LaboFootApp.dal.repositories.TeamRepository;
@@ -15,14 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlayerServiceImpl implements PlayerService {
     private final PlayerRepository playerRepository;
-    private final TeamRepository teamRepository;
+    private final TeamService teamService;
 
     @Override
     public Long addOne(PlayerBusiness playerBusiness) {
-        //TODO Change une fois team service
-        Team team = null;
-        if(playerBusiness.teamID() != null)
-            team = teamRepository.findById(playerBusiness.teamID()).orElseThrow(() -> new RuntimeException());
+        Team team = teamService.getOne(playerBusiness.teamID());
         Player player = playerBusiness.toEntity();
         player.changeTeam(team);
 
@@ -48,6 +46,10 @@ public class PlayerServiceImpl implements PlayerService {
     @Override
     public void updateOne(Long id, PlayerBusiness playerBusiness) {
         Player player = getOne(id);
+        if(playerBusiness.teamID() != null)
+            player.changeTeam( teamService.getOne(playerBusiness.teamID()) );
+        else
+            player.changeTeam(null);
         player.setFirstname(playerBusiness.firstname());
         player.setLastname(playerBusiness.lastname());
         player.setFieldPosition(playerBusiness.fieldPosition());

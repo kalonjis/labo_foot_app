@@ -15,6 +15,6 @@ public record TeamBusiness(
         return new Team(
                 name,
                 coach.toEntity(),
-                players.stream().map(PlayerBusiness::toEntity).collect(Collectors.toSet()));
+                players == null ? null : players.stream().map(PlayerBusiness::toEntity).collect(Collectors.toSet()));
     }
 }
