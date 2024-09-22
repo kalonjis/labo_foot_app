@@ -2,7 +2,11 @@ package com.labospring.LaboFootApp.dal;
 
 import com.labospring.LaboFootApp.dal.repositories.*;
 import com.labospring.LaboFootApp.dl.entities.*;
+
+import java.util.*;
+
 import com.labospring.LaboFootApp.dl.enums.FieldPosition;
+import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import com.labospring.LaboFootApp.dl.enums.Role;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +27,7 @@ public class DataInitializer implements CommandLineRunner {
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
     private final ParticipatingTeamRepository participatingTeamRepository;
+    private final FootMatchRepository footMatchRepository;
 
 
     // Méthode pour choisir une équipe aléatoirement
@@ -344,6 +346,38 @@ public class DataInitializer implements CommandLineRunner {
             participatingTeamRepository.saveAll(participatingTeams);
         }
 // endregion
+
+        // region FootMatch
+        // Récupérer le tournoi avec l'ID 8 (Tournament 8)
+
+
+        // Récupérer les équipes participantes au tournoi 8
+        List<Team> tournament8Teams =new ArrayList<>(List.of(team1, team2, team3, team4, team5, team6, team7, team8));
+
+        // Création des 7 matchs pour le tournoi 8
+        Random random = new Random();
+        for (int i = 0; i < 7; i++) {
+            FootMatch match = new FootMatch();
+
+            // Mélanger les équipes pour s'assurer qu'on ne choisit pas la même
+            Collections.shuffle(tournament8Teams);
+            Team teamHome = tournament8Teams.get(0);
+            Team teamAway = tournament8Teams.get(1); // Prendre la deuxième équipe après le mélange
+            // Sélectionner un arbitre au hasard
+            Referee referee = referees.get(random.nextInt(referees.size()));
+
+            // Configuration du match
+            match.setTeamHome(teamHome);
+            match.setTeamAway(teamAway);
+            match.setMatchDateTime(LocalDateTime.now().plusDays(i)); // Date prévue, un match par jour à partir d'aujourd'hui
+            match.setMatchStatus(MatchStatus.SCHEDULED); // Statut du match comme prévu
+            match.setTournament(tournament8); // Associer le match au Tournament 8
+            match.setReferee(referee); // Associer un arbitre au match
+
+            // Sauvegarder le match dans la base de données
+            footMatchRepository.save(match);
+        }
+        // endregion
     }
 }
 
