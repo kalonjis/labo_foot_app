@@ -372,7 +372,7 @@ public class DataInitializer implements CommandLineRunner {
             match.setMatchDateTime(LocalDateTime.now().plusDays(i)); // Date prévue, un match par jour à partir d'aujourd'hui
             match.setMatchStatus(MatchStatus.SCHEDULED); // Statut du match comme prévu
             match.setTournament(tournament8); // Associer le match au Tournament 8
-            match.setReferee(referee); // Associer un arbitre au match
+            match.setReferee(referee); //  Associer un arbitre au match
 
             // Sauvegarder le match dans la base de données
             footMatchRepository.save(match);
