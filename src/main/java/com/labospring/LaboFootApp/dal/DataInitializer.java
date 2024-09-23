@@ -342,8 +342,29 @@ public class DataInitializer implements CommandLineRunner {
                 participatingTeam5, participatingTeam6, participatingTeam7, participatingTeam8
         );
 
+        // region Participating Teams for Tournament with groups
+        ParticipatingTeam participatingTeam11 = new ParticipatingTeam(tournament5, team1); // Manchester United
+        ParticipatingTeam participatingTeam12 = new ParticipatingTeam(tournament5, team2); // Real Madrid
+        ParticipatingTeam participatingTeam13 = new ParticipatingTeam(tournament5, team3); // FC Barcelona
+        ParticipatingTeam participatingTeam14 = new ParticipatingTeam(tournament5, team4); // Liverpool FC
+        ParticipatingTeam participatingTeam15 = new ParticipatingTeam(tournament5, team5); // Bayern Munich
+        ParticipatingTeam participatingTeam16 = new ParticipatingTeam(tournament5, team6); // Juventus FC
+        ParticipatingTeam participatingTeam17 = new ParticipatingTeam(tournament5, team7); // Paris Saint-Germain
+        ParticipatingTeam participatingTeam18 = new ParticipatingTeam(tournament5, team8); // Chelsea FC
+        ParticipatingTeam participatingTeam19 = new ParticipatingTeam(tournament5, team9); // Atletico Madrid
+        ParticipatingTeam participatingTeam20 = new ParticipatingTeam(tournament5, team10); // Inter Milan
+
+        List<ParticipatingTeam> participatingTeams2 = List.of(
+                participatingTeam11, participatingTeam12, participatingTeam13, participatingTeam14,
+                participatingTeam15, participatingTeam16, participatingTeam17, participatingTeam18,
+                participatingTeam19, participatingTeam20
+        );
+
+// endregion
+
         if (participatingTeamRepository.count() == 0) {
             participatingTeamRepository.saveAll(participatingTeams);
+            participatingTeamRepository.saveAll(participatingTeams2); // Sauvegarde des équipes
         }
 // endregion
 
