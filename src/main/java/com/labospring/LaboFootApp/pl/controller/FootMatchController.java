@@ -1,10 +1,7 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
-import com.labospring.LaboFootApp.pl.models.coach.CoachDTO;
-import com.labospring.LaboFootApp.pl.models.coach.CoachForm;
-import com.labospring.LaboFootApp.pl.models.footmatch.FootMatchDetailsDTO;
-import com.labospring.LaboFootApp.pl.models.footmatch.FootMatchForm;
+import com.labospring.LaboFootApp.pl.models.footmatch.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,9 +40,22 @@ public class FootMatchController {
         return ResponseEntity.ok().build();
     }
 
-//    @PutMapping("/score/{id:^\\d+}")
-//    public ResponseEntity<Void> updateScore(@PathVariable long id,@Valid @RequestBody ScoreFootMatchForm footMatchForm){
-//        footMatchService.changeScore(id, footMatchForm.toFootMatchBusiness());
-//        return ResponseEntity.ok().build();
-//    }
+    @PutMapping("/score/{id:^\\d+}")
+    public ResponseEntity<Void> updateScore(@PathVariable long id,@Valid @RequestBody ScoreFootMatchForm footMatchForm){
+        footMatchService.changeScore(id, footMatchForm.toScoreBusiness());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/status/{id:^\\d+}")
+    public ResponseEntity<Void> updateStatus(@PathVariable long id,@Valid @RequestBody StatusMatchForm statusMatchForm){
+        footMatchService.changeStatus(id, statusMatchForm.matchStatus());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/mod/{id:^\\d+}")
+    public ResponseEntity<Void> updateModerator(@PathVariable long id, @Valid @RequestBody FootMatchModeratorForm footMatchModeratorForm){
+        footMatchService.changeModerator(id, footMatchModeratorForm.moderatorId());
+        return ResponseEntity.ok().build();
+    }
+
 }

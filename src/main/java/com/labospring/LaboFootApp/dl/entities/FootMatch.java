@@ -60,4 +60,14 @@ public class FootMatch extends BaseEntity{
 
     @Setter
     private String matchStage;
+
+    public FootMatch(Team teamHome, Team teamAway, Tournament tournament, Referee referee, LocalDateTime matchDateTime, String fieldLocation, String matchStage) {
+        this.teamHome = teamHome;
+        this.teamAway = teamAway;
+        this.tournament = tournament;
+        this.referee = referee;
+        this.matchDateTime = matchDateTime;
+        this.fieldLocation = fieldLocation;
+        this.matchStage = matchStage;
+    }
 }

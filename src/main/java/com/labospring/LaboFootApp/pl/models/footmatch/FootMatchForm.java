@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record FootMatchForm(Long teamHomeId, @NotNull Long teamAwayId,@NotNull Long tournamentId, Long refereeId, LocalDateTime matchDateTime,
-                            @NotBlank String fieldLocation) {
+                            @NotBlank String fieldLocation, @NotBlank String matchStage) {
     public FootMatchBusiness toFootMatchBusiness() {
         return new FootMatchBusiness(
                 teamHomeId,
@@ -15,7 +15,8 @@ public record FootMatchForm(Long teamHomeId, @NotNull Long teamAwayId,@NotNull L
                 tournamentId,
                 refereeId,
                 matchDateTime,
-                fieldLocation
+                fieldLocation,
+                matchStage
         );
     }
 }
