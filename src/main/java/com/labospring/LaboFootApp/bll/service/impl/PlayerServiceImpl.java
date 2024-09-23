@@ -21,7 +21,7 @@ public class PlayerServiceImpl implements PlayerService {
     public Long addOne(PlayerBusiness playerBusiness) {
         Team team = teamService.getOne(playerBusiness.teamID());
         Player player = playerBusiness.toEntity();
-        player.changeTeam(team);
+        player.setTeam(team);
 
         return playerRepository.save(player).getId();
     }
@@ -46,9 +46,10 @@ public class PlayerServiceImpl implements PlayerService {
     public void updateOne(Long id, PlayerBusiness playerBusiness) {
         Player player = getOne(id);
         if(playerBusiness.teamID() != null)
-            player.changeTeam( teamService.getOne(playerBusiness.teamID()) );
+            player.setTeam( teamService.getOne(playerBusiness.teamID()) );
         else
-            player.changeTeam(null);
+            player.setTeam(null);
+
         player.setFirstname(playerBusiness.firstname());
         player.setLastname(playerBusiness.lastname());
         player.setFieldPosition(playerBusiness.fieldPosition());
@@ -57,4 +58,6 @@ public class PlayerServiceImpl implements PlayerService {
 
         playerRepository.save(player);
     }
+
+
 }
