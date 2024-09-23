@@ -26,6 +26,7 @@ public class DataInitializer implements CommandLineRunner {
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
     private final ParticipatingTeamRepository participatingTeamRepository;
+    private final RankingRepository rankingRepository;
 
 
     // Méthode pour choisir une équipe aléatoirement
@@ -325,7 +326,8 @@ public class DataInitializer implements CommandLineRunner {
         }
         // endregion
 
-        // region Participating Teams for Tournament 8
+        // region Participating Teams
+        // for Tournament without group
         ParticipatingTeam participatingTeam1 = new ParticipatingTeam(tournament8, team1);
         ParticipatingTeam participatingTeam2 = new ParticipatingTeam(tournament8, team2);
         ParticipatingTeam participatingTeam3 = new ParticipatingTeam(tournament8, team3);
@@ -340,7 +342,7 @@ public class DataInitializer implements CommandLineRunner {
                 participatingTeam5, participatingTeam6, participatingTeam7, participatingTeam8
         );
 
-        // region Participating Teams for Tournament with groups
+        //  Participating Teams for Tournament with groups
         ParticipatingTeam participatingTeam11 = new ParticipatingTeam(tournament5, team1); // Manchester United
         ParticipatingTeam participatingTeam12 = new ParticipatingTeam(tournament5, team2); // Real Madrid
         ParticipatingTeam participatingTeam13 = new ParticipatingTeam(tournament5, team3); // FC Barcelona
@@ -358,13 +360,37 @@ public class DataInitializer implements CommandLineRunner {
                 participatingTeam19, participatingTeam20
         );
 
-// endregion
 
         if (participatingTeamRepository.count() == 0) {
             participatingTeamRepository.saveAll(participatingTeams);
             participatingTeamRepository.saveAll(participatingTeams2); // Sauvegarde des équipes
         }
-// endregion
+    // endregion
+
+        //region Ranking
+        // Création des Rankings pour le tournoi avec 2 groupes de 5 équipes
+        Ranking ranking1 = new Ranking(null, participatingTeams2.get(0).getTeam(), tournament5, 1, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking2 = new Ranking(null, participatingTeams2.get(1).getTeam(), tournament5, 1, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking3 = new Ranking(null, participatingTeams2.get(2).getTeam(), tournament5, 1, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking4 = new Ranking(null, participatingTeams2.get(3).getTeam(), tournament5, 1, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking5 = new Ranking(null, participatingTeams2.get(4).getTeam(), tournament5, 1, 0, 0, 0, 0, 0, 0, 0);
+
+        Ranking ranking6 = new Ranking(null, participatingTeams2.get(5).getTeam(), tournament5, 2, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking7 = new Ranking(null, participatingTeams2.get(6).getTeam(), tournament5, 2, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking8 = new Ranking(null, participatingTeams2.get(7).getTeam(), tournament5, 2, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking9 = new Ranking(null, participatingTeams2.get(8).getTeam(), tournament5, 2, 0, 0, 0, 0, 0, 0, 0);
+        Ranking ranking10 = new Ranking(null, participatingTeams2.get(9).getTeam(), tournament5, 2, 0, 0, 0, 0, 0, 0, 0);
+
+        List<Ranking> rankings = List.of(
+                ranking1, ranking2, ranking3, ranking4, ranking5,
+                ranking6, ranking7, ranking8, ranking9, ranking10
+        );
+
+        if (rankingRepository.count() == 0) {
+            rankingRepository.saveAll(rankings);
+        }
+
+        //endregion
     }
 }
 

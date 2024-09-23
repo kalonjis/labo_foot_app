@@ -30,6 +30,8 @@ public class Ranking  extends BaseEntity{
 
     private int totalPoints;
 
+    private int rankingPosition;
+
     private int nbWins;
 
     private int nbLosses;
