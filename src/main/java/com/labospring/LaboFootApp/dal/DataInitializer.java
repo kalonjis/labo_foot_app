@@ -28,6 +28,7 @@ public class DataInitializer implements CommandLineRunner {
     private final TeamRepository teamRepository;
     private final ParticipatingTeamRepository participatingTeamRepository;
     private final FootMatchRepository footMatchRepository;
+    private final RankingRepository rankingRepository;
 
 
     // Méthode pour choisir une équipe aléatoirement
@@ -399,6 +400,31 @@ public class DataInitializer implements CommandLineRunner {
             footMatchRepository.save(match);
         }
         // endregion
+
+        //region Ranking
+        // Création des Rankings pour le tournoi avec 2 groupes de 5 équipes
+        Ranking ranking1 = new Ranking(participatingTeams2.get(0).getTeam(), tournament5, 1);
+        Ranking ranking2 = new Ranking(participatingTeams2.get(1).getTeam(), tournament5, 1);
+        Ranking ranking3 = new Ranking(participatingTeams2.get(2).getTeam(), tournament5, 1);
+        Ranking ranking4 = new Ranking(participatingTeams2.get(3).getTeam(), tournament5, 1);
+        Ranking ranking5 = new Ranking(participatingTeams2.get(4).getTeam(), tournament5, 1);
+
+        Ranking ranking6 = new Ranking(participatingTeams2.get(5).getTeam(), tournament5, 2);
+        Ranking ranking7 = new Ranking(participatingTeams2.get(6).getTeam(), tournament5, 2);
+        Ranking ranking8 = new Ranking(participatingTeams2.get(7).getTeam(), tournament5, 2);
+        Ranking ranking9 = new Ranking(participatingTeams2.get(8).getTeam(), tournament5, 2);
+        Ranking ranking10 = new Ranking(participatingTeams2.get(9).getTeam(), tournament5, 2);
+
+        // Ajouter les Rankings à une liste
+        List<Ranking> rankings = List.of(
+                ranking1, ranking2, ranking3, ranking4, ranking5,
+                ranking6, ranking7, ranking8, ranking9, ranking10
+        );
+
+        if (rankingRepository.count() == 0) {
+            rankingRepository.saveAll(rankings);
+        }
+        //endregion
     }
 }
 
