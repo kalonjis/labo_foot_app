@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/matchfoot")
+@RequestMapping("/api/footmatch")
 public class FootMatchController {
     private final FootMatchService footMatchService;
 
@@ -30,12 +30,12 @@ public class FootMatchController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FootMatchDetailsDTO>> getAll(){
-        return ResponseEntity.ok(footMatchService.getAll().stream().map(FootMatchDetailsDTO::fromEntity).toList());
+    public ResponseEntity<List<FootMatchListDetailsDTO>> getAll(){
+        return ResponseEntity.ok(footMatchService.getAll().stream().map(FootMatchListDetailsDTO::fromEntity).toList());
     }
 
     @PutMapping("/{id:^\\d+}")
-    public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody FootMatchForm footMatchForm){
+    public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody FootMatchEditForm footMatchForm){
         footMatchService.updateOne(id, footMatchForm.toFootMatchBusiness());
         return ResponseEntity.ok().build();
     }
