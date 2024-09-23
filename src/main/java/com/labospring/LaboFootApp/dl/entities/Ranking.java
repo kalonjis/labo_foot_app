@@ -28,6 +28,8 @@ public class Ranking  extends BaseEntity{
 
     private int numGroup;
 
+    private int rankingPosition;
+
     private int totalPoints;
 
     private int nbMatchPlayed;
@@ -43,6 +45,12 @@ public class Ranking  extends BaseEntity{
     private int goalsAgainst;
 
     private int goalsDiff;
+
+    public Ranking(Team team, Tournament tournament, int numGroup) {
+        this.team = team;
+        this.tournament = tournament;
+        this.numGroup = numGroup;
+    }
 
     private void calculGoalsDiff() {
         goalsDiff = goalsFor - goalsAgainst;
