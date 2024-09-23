@@ -5,11 +5,12 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ToString
 @Getter
 @Entity
 @Table(name = "tournament",
@@ -38,6 +39,21 @@ public class Tournament extends BaseEntity{
     @Setter
     private boolean isClose;
 
+    @OneToMany
+    private List<Ranking> rankingList;
+
+    public Tournament(Long id, String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, boolean isClose) {
+        this.id = id;
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.placeName = placeName;
+        this.address = address;
+        this.tournamentType = tournamentType;
+        this.isClose = isClose;
+        this.rankingList = new ArrayList<>();
+    }
+
 //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 //    @JoinTable(
 //            name = "tournament_type_list_by_tournament", // Nom de la table de jointure
@@ -46,5 +62,27 @@ public class Tournament extends BaseEntity{
 //    )
 //    private Set<TournamentType> tournamentTypes;
 
+    public void addRanking(Ranking ranking){
+        rankingList.add(ranking);
+        ranking.setTournament(this);
+    }
 
+    public void removeRanking(Ranking ranking){
+        rankingList.remove(ranking);
+        ranking.setTournament(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Tournament that = (Tournament) o;
+        return isClose == that.isClose && Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(placeName, that.placeName) && Objects.equals(address, that.address) && tournamentType == that.tournamentType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, title, startDate, endDate, placeName, address, tournamentType, isClose);
+    }
 }

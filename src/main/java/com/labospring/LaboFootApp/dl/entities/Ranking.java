@@ -4,12 +4,12 @@ package com.labospring.LaboFootApp.dl.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
+
 import static com.labospring.LaboFootApp.dl.consts.RankingPoint.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(callSuper = false)
-@ToString
 @Getter
 @Entity
 public class Ranking  extends BaseEntity{
@@ -123,4 +123,17 @@ public class Ranking  extends BaseEntity{
         this.totalPoints = (POINT_BY_WINS * nbWins) + (POINT_BY_DRAW * nbDraws) + (POINT_BY_LOSES * nbLosses);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Ranking ranking = (Ranking) o;
+        return numGroup == ranking.numGroup && totalPoints == ranking.totalPoints && nbMatchPlayed == ranking.nbMatchPlayed && nbWins == ranking.nbWins && nbLosses == ranking.nbLosses && nbDraws == ranking.nbDraws && goalsFor == ranking.goalsFor && goalsAgainst == ranking.goalsAgainst && goalsDiff == ranking.goalsDiff && Objects.equals(id, ranking.id) && Objects.equals(team, ranking.team);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id, team, numGroup, totalPoints, nbMatchPlayed, nbWins, nbLosses, nbDraws, goalsFor, goalsAgainst, goalsDiff);
+    }
 }
