@@ -39,7 +39,7 @@ public class Tournament extends BaseEntity{
     @Setter
     private boolean isClose;
 
-    @OneToMany
+    @OneToMany(mappedBy = "tournament", cascade ={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Ranking> rankingList;
 
     public Tournament(Long id, String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, boolean isClose) {
