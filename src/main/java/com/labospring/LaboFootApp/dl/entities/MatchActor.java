@@ -18,4 +18,8 @@ public class MatchActor extends BaseEntity{
     @Setter @Column(nullable = false, length = 50)
     private String lastname;
 
+    public MatchActor(String firstname, String lastname) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+    }
 }

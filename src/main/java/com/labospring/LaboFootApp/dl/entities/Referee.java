@@ -11,6 +11,6 @@ import lombok.*;
 @Entity
 public class Referee extends MatchActor{
     public Referee(String firstName, String lastName){
-        super(null, firstName, lastName);
+        super(firstName, lastName);
     }
 }

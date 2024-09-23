@@ -11,6 +11,6 @@ import lombok.*;
 @Entity
 public class Coach extends MatchActor{
     public Coach(String firstName, String lastName){
-        super(null, firstName, lastName);
+        super(firstName, lastName);
     }
 }
