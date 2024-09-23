@@ -30,6 +30,8 @@ public class Ranking  extends BaseEntity{
 
     private int totalPoints;
 
+    private int nbMatchPlayed;
+
     private int nbWins;
 
     private int nbLosses;
@@ -81,18 +83,38 @@ public class Ranking  extends BaseEntity{
         calculTotalPoints();
     }
 
-    public void addNbWins(int nbWinsAdd){
-        this.nbWins += nbWinsAdd;
+    public void addNbWin(){
+        this.nbWins++;
+        this.nbMatchPlayed++;
         calculTotalPoints();
     }
 
-    public void addNbLosses(int nbLossesAdd){
-        this.nbLosses += nbLossesAdd;
+    public void addNbLosse(){
+        this.nbLosses++;
+        this.nbMatchPlayed++;
         calculTotalPoints();
     }
 
-    public void addNbDraws(int nbDrawsAdd){
-        this.nbDraws += nbDrawsAdd;
+    public void addNbDraw(){
+        this.nbDraws++;
+        this.nbMatchPlayed++;
+        calculTotalPoints();
+    }
+    public void removeNbWin(){
+        this.nbWins--;
+        this.nbMatchPlayed--;
+        calculTotalPoints();
+    }
+
+    public void removeNbLosse(){
+        this.nbLosses--;
+        this.nbMatchPlayed--;
+        calculTotalPoints();
+    }
+
+    public void removeNbDraw(){
+        this.nbDraws--;
+        this.nbMatchPlayed--;
         calculTotalPoints();
     }
 
