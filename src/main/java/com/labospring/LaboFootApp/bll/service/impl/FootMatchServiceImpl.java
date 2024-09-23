@@ -9,13 +9,11 @@ import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dal.repositories.RefereeRepository;
 import com.labospring.LaboFootApp.dal.repositories.TeamRepository;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
-import com.labospring.LaboFootApp.dl.entities.FootMatch;
-import com.labospring.LaboFootApp.dl.entities.Referee;
-import com.labospring.LaboFootApp.dl.entities.Team;
-import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,14 +28,8 @@ public class FootMatchServiceImpl implements FootMatchService {
 
     @Override
     public Long addOne(FootMatchBusiness entityBusiness) {
-        Team teamHome = teamService.getOne(entityBusiness.teamHomeId());
-        Team teamAway = teamService.getOne(entityBusiness.teamAwayId());
-        Tournament tournament = tournamentRepository.findById(entityBusiness.tournamentId()).orElseThrow(()-> new RuntimeException("No ID " + entityBusiness.tournamentId()));
-        Referee referee = null;
-        if(entityBusiness.refereeId() != null)
-             referee = refereeService.getOne(entityBusiness.refereeId());
 
-        return footMatchRepository.save(entityBusiness.toEntity(teamHome, teamAway, tournament, referee)).getId();
+        return footMatchRepository.save(turnIntoFootMatch(entityBusiness)).getId();
     }
 
     @Override
@@ -57,9 +49,18 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
+    @Transactional
     public void updateOne(Long id, FootMatchBusiness entityBusiness) {
         FootMatch footMatch = getOne(id);
+        FootMatch footMatchUpdated= turnIntoFootMatch(entityBusiness);
 
+        footMatch.setMatchStage(footMatchUpdated.getMatchStage());
+        footMatch.setMatchDateTime(footMatchUpdated.getMatchDateTime());
+        footMatch.setFieldLocation(entityBusiness.fieldLocation());
+        footMatch.setReferee(footMatchUpdated.getReferee());
+        footMatch.setTournament(footMatchUpdated.getTournament());
+        footMatch.setTeamHome(footMatchUpdated.getTeamHome());
+        footMatch.setTeamAway(footMatchUpdated.getTeamAway());
 
         footMatchRepository.save(footMatch);
 
@@ -81,6 +82,26 @@ public class FootMatchServiceImpl implements FootMatchService {
         footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
 
         footMatchRepository.save(footMatch);
+
     }
 
+    @Override
+    public void changeModerator(Long id, Long moderatorId){
+        FootMatch footMatch = getOne(id);
+
+        //footMatch.setUserModerator(userService.getOne(id));
+
+        footMatchRepository.save(footMatch);
+    }
+
+    private FootMatch turnIntoFootMatch(FootMatchBusiness entityBusiness){
+        Team teamHome = teamService.getOne(entityBusiness.teamHomeId());
+        Team teamAway = teamService.getOne(entityBusiness.teamAwayId());
+        Tournament tournament = tournamentRepository.findById(entityBusiness.tournamentId()).orElseThrow(()-> new RuntimeException("No ID " + entityBusiness.tournamentId()));
+        Referee referee = null;
+        if(entityBusiness.refereeId() != null)
+            referee = refereeService.getOne(entityBusiness.refereeId());
+
+        return entityBusiness.toEntity(teamHome, teamAway, tournament, referee);
+    }
 }

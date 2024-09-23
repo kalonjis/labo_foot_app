@@ -1,10 +1,7 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
-import com.labospring.LaboFootApp.pl.models.footmatch.ScoreFootMatchForm;
-import com.labospring.LaboFootApp.pl.models.footmatch.FootMatchDetailsDTO;
-import com.labospring.LaboFootApp.pl.models.footmatch.FootMatchForm;
-import com.labospring.LaboFootApp.pl.models.footmatch.StatusMatchForm;
+import com.labospring.LaboFootApp.pl.models.footmatch.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -54,4 +51,11 @@ public class FootMatchController {
         footMatchService.changeStatus(id, statusMatchForm.matchStatus());
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping("/mod/{id:^\\d+}")
+    public ResponseEntity<Void> updateModerator(@PathVariable long id, @Valid @RequestBody FootMatchModeratorForm footMatchModeratorForm){
+        footMatchService.changeModerator(id, footMatchModeratorForm.moderatorId());
+        return ResponseEntity.ok().build();
+    }
+
 }
