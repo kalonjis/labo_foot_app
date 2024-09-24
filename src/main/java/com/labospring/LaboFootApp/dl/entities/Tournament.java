@@ -75,15 +75,15 @@ public class Tournament extends BaseEntity{
 //    )
 //    private Set<TournamentType> tournamentTypes;
 
-    public void addRanking(Ranking ranking){
-        rankingList.add(ranking);
-        ranking.setTournament(this);
-    }
-
-    public void removeRanking(Ranking ranking){
-        rankingList.remove(ranking);
-        ranking.setTournament(null);
-    }
+//    public void addRanking(Ranking ranking){
+//        rankingList.add(ranking);
+//        ranking.setTournament(this);
+//    }
+//
+//    public void removeRanking(Ranking ranking){
+//        rankingList.remove(ranking);
+//        ranking.setTournament(null);
+//    }
 
     @Override
     public boolean equals(Object o) {
