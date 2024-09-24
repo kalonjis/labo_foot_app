@@ -5,10 +5,7 @@ import com.labospring.LaboFootApp.dl.entities.*;
 
 import java.util.*;
 
-import com.labospring.LaboFootApp.dl.enums.FieldPosition;
-import com.labospring.LaboFootApp.dl.enums.MatchStatus;
-import com.labospring.LaboFootApp.dl.enums.Role;
-import com.labospring.LaboFootApp.dl.enums.TournamentType;
+import com.labospring.LaboFootApp.dl.enums.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -208,7 +205,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Stade de France",
                 new Address("Stadium Street", "Paris", "75000", "Ile-de-France", "France"),
                 TournamentType.CHAMPIONS_LEAGUE_32,
-                false
+                TournamentStatus.PENDING // Statut du tournoi
         );
 
         Tournament tournament2 = new Tournament(
@@ -219,7 +216,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Lusail Stadium",
                 new Address("Lusail City", "Doha", "12345", "Doha", "Qatar"),
                 TournamentType.WORLD_CUP_32,
-                false
+                TournamentStatus.BUILDING // Statut du tournoi
         );
 
         Tournament tournament3 = new Tournament(
@@ -230,7 +227,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Maracanã",
                 new Address("Av. Pres. Castelo Branco", "Rio de Janeiro", "20271-130", "RJ", "Brazil"),
                 TournamentType.COPA_AMERICA_16,
-                false
+                TournamentStatus.PENDING // Statut du tournoi
         );
 
         Tournament tournament4 = new Tournament(
@@ -241,7 +238,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Wembley Stadium",
                 new Address("Wembley", "London", "HA9 0WS", "Greater London", "United Kingdom"),
                 TournamentType.EUROPEAN_CHAMPIONSHIP_24,
-                false
+                TournamentStatus.PENDING // Statut du tournoi
         );
 
         Tournament tournament5 = new Tournament(
@@ -252,7 +249,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Stade Ahmadou Ahidjo",
                 new Address("Rue de la Solidarité", "Yaoundé", "C10", "Centre", "Cameroon"),
                 TournamentType.AFRICAN_CUP_10,
-                false
+                TournamentStatus.CLOSED // Statut du tournoi
         );
 
         Tournament tournament6 = new Tournament(
@@ -263,7 +260,7 @@ public class DataInitializer implements CommandLineRunner {
                 "National Stadium",
                 new Address("Kallang", "Singapore", "397629", "Singapore", "Singapore"),
                 TournamentType.ASIAN_CUP_12,
-                false
+                TournamentStatus.BUILDING // Statut du tournoi
         );
 
         Tournament tournament7 = new Tournament(
@@ -274,7 +271,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Allianz Arena",
                 new Address("Werner-Heisenberg-Allee 25", "Munich", "80939", "Bavaria", "Germany"),
                 TournamentType.KNOCKOUT_16,
-                false
+                TournamentStatus.PENDING // Statut du tournoi
         );
 
         Tournament tournament8 = new Tournament(
@@ -285,7 +282,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Stadio Olimpico",
                 new Address("Viale dei Gladiatori", "Rome", "00135", "Lazio", "Italy"),
                 TournamentType.KNOCKOUT_8,
-                false
+                TournamentStatus.BUILDING // Statut du tournoi
         );
 
         Tournament tournament9 = new Tournament(
@@ -296,7 +293,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Camp Nou",
                 new Address("Carrer d'Arístides Maillol", "Barcelona", "08028", "Catalonia", "Spain"),
                 TournamentType.KNOCKOUT_4,
-                false
+                TournamentStatus.PENDING // Statut du tournoi
         );
 
         Tournament tournament10 = new Tournament(
@@ -307,8 +304,10 @@ public class DataInitializer implements CommandLineRunner {
                 "Old Trafford",
                 new Address("Sir Matt Busby Way", "Manchester", "M16 0RA", "Greater Manchester", "United Kingdom"),
                 TournamentType.KNOCKOUT_2,
-                true // Tournoi clôturé
+                TournamentStatus.CLOSED // Tournoi clôturé
         );
+// endregion
+
 
         List<Tournament> tournaments = List.of(
                 tournament1,
