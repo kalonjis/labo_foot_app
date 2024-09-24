@@ -17,8 +17,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public Long addOne(TournamentBusiness entityBusiness) {
-        return
-                0L;
+        return 0L;
     }
 
     @Override
