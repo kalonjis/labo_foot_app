@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.pl.models.tournament;
 
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dl.entities.Address;
+import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +21,7 @@ public record TournamentForm(
         @NotNull
         TournamentType tournamentType,
         @NotNull
-        boolean isClose
+        TournamentStatus tournamentStatus
 ) {
 
     public TournamentBusiness toTournamentBusiness(){
@@ -31,7 +32,7 @@ public record TournamentForm(
                 placeName,
                 address,
                 tournamentType,
-                isClose
+                tournamentStatus
         );
     }
 }

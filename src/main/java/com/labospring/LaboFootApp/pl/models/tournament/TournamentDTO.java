@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.pl.models.tournament;
 
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public record TournamentDTO(
         String placeName,
         Address address,
         TournamentType tournamentType,
-        boolean isClose) {
+        TournamentStatus tournamentStatus) {
 
     public static TournamentDTO fromEntity(Tournament tournament){
         return new TournamentDTO(
@@ -25,7 +26,7 @@ public record TournamentDTO(
                 tournament.getPlaceName(),
                 tournament.getAddress(),
                 tournament.getTournamentType(),
-                tournament.isClose()
+                tournament.getTournamentStatus()
         );
     }
 }

@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.bll.service.models;
 
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ public record TournamentBusiness(
         String placeName,
         Address address,
         TournamentType tournamentType,
-        boolean isClose
+        TournamentStatus tournamentStatus
         ){
 
     public Tournament toEntity(){
@@ -25,7 +26,7 @@ public record TournamentBusiness(
                             placeName,
                             address,
                             tournamentType,
-                            isClose
+                            tournamentStatus
                             );
         if (!tournament.getTournamentType().getGroups().isEmpty()){
             tournament.setRankingList(new ArrayList<>());

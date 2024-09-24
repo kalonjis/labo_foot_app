@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.dl.entities;
 
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
+import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -36,14 +37,15 @@ public class Tournament extends BaseEntity{
     @Setter
     @Enumerated(EnumType.STRING)
     private TournamentType tournamentType;
-    @Setter
-    private boolean isClose;
+    @Setter @Enumerated(EnumType.STRING)
+    private TournamentStatus tournamentStatus;
+
 
     @Setter
     @OneToMany(mappedBy = "tournament", cascade ={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Ranking> rankingList;
 
-    public Tournament(Long id, String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, boolean isClose) {
+    public Tournament(Long id, String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, TournamentStatus tournamentStatus) {
         this.id = id;
         this.title = title;
         this.startDate = startDate;
@@ -51,18 +53,18 @@ public class Tournament extends BaseEntity{
         this.placeName = placeName;
         this.address = address;
         this.tournamentType = tournamentType;
-        this.isClose = isClose;
+        this.tournamentStatus = tournamentStatus;
         this.rankingList = new ArrayList<>();
     }
 
-    public Tournament(String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, boolean isClose) {
+    public Tournament(String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, TournamentStatus tournamentStatus) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.placeName = placeName;
         this.address = address;
         this.tournamentType = tournamentType;
-        this.isClose = isClose;
+        this.tournamentStatus = tournamentStatus;
     }
 
     //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -89,11 +91,11 @@ public class Tournament extends BaseEntity{
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Tournament that = (Tournament) o;
-        return isClose == that.isClose && Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(placeName, that.placeName) && Objects.equals(address, that.address) && tournamentType == that.tournamentType;
+        return tournamentStatus == that.tournamentStatus && Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate) && Objects.equals(placeName, that.placeName) && Objects.equals(address, that.address) && tournamentType == that.tournamentType;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), id, title, startDate, endDate, placeName, address, tournamentType, isClose);
+        return Objects.hash(super.hashCode(), id, title, startDate, endDate, placeName, address, tournamentType, tournamentStatus);
     }
 }
