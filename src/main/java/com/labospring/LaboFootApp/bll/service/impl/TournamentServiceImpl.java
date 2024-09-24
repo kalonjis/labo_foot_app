@@ -34,7 +34,7 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public void deleteOne(Long aLong) {
 
-    }
+    }//
 
     @Override
     public void updateOne(Long aLong, TournamentBusiness entityBusiness) {
