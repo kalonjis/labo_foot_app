@@ -2,6 +2,10 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
 import com.labospring.LaboFootApp.pl.models.footmatch.*;
+import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchModeratorForm;
+import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchPostForm;
+import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchScoreForm;
+import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchStatusForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/matchfoot")
+@RequestMapping("/api/footmatch")
 public class FootMatchController {
     private final FootMatchService footMatchService;
 
@@ -23,31 +27,37 @@ public class FootMatchController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> create(@Valid @RequestBody FootMatchForm footMatchForm){
+    public ResponseEntity<Void> create(@Valid @RequestBody FootMatchPostForm footMatchForm){
         Long id = footMatchService.addOne(footMatchForm.toFootMatchBusiness());
         UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
         return ResponseEntity.created(uriComponents.toUri()).build();
     }
 
     @GetMapping
-    public ResponseEntity<List<FootMatchDetailsDTO>> getAll(){
-        return ResponseEntity.ok(footMatchService.getAll().stream().map(FootMatchDetailsDTO::fromEntity).toList());
+    public ResponseEntity<List<FootMatchListDetailsDTO>> getAll(){
+        return ResponseEntity.ok(footMatchService.getAll().stream().map(FootMatchListDetailsDTO::fromEntity).toList());
+    }
+
+    @DeleteMapping("/{id:^\\d+}")
+    public ResponseEntity<Void> remove(@PathVariable long id){
+        footMatchService.deleteOne(id);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id:^\\d+}")
-    public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody FootMatchForm footMatchForm){
+    public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody FootMatchEditForm footMatchForm){
         footMatchService.updateOne(id, footMatchForm.toFootMatchBusiness());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/score/{id:^\\d+}")
-    public ResponseEntity<Void> updateScore(@PathVariable long id,@Valid @RequestBody ScoreFootMatchForm footMatchForm){
+    public ResponseEntity<Void> updateScore(@PathVariable long id,@Valid @RequestBody FootMatchScoreForm footMatchForm){
         footMatchService.changeScore(id, footMatchForm.toScoreBusiness());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/status/{id:^\\d+}")
-    public ResponseEntity<Void> updateStatus(@PathVariable long id,@Valid @RequestBody StatusMatchForm statusMatchForm){
+    public ResponseEntity<Void> updateStatus(@PathVariable long id,@Valid @RequestBody FootMatchStatusForm statusMatchForm){
         footMatchService.changeStatus(id, statusMatchForm.matchStatus());
         return ResponseEntity.ok().build();
     }

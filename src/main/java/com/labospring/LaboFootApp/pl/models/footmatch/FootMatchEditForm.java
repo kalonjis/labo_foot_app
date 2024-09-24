@@ -1,18 +1,16 @@
 package com.labospring.LaboFootApp.pl.models.footmatch;
 
-import com.labospring.LaboFootApp.bll.service.models.FootMatchBusiness;
+import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
-public record FootMatchForm(Long teamHomeId, @NotNull Long teamAwayId,@NotNull Long tournamentId, Long refereeId, LocalDateTime matchDateTime,
+public record FootMatchEditForm(Long teamHomeId, Long teamAwayId, Long refereeId, LocalDateTime matchDateTime,
                             @NotBlank String fieldLocation, @NotBlank String matchStage) {
-    public FootMatchBusiness toFootMatchBusiness() {
-        return new FootMatchBusiness(
+    public FootMatchEditBusiness toFootMatchBusiness() {
+        return new FootMatchEditBusiness(
                 teamHomeId,
                 teamAwayId,
-                tournamentId,
                 refereeId,
                 matchDateTime,
                 fieldLocation,
@@ -20,4 +18,3 @@ public record FootMatchForm(Long teamHomeId, @NotNull Long teamAwayId,@NotNull L
         );
     }
 }
-
