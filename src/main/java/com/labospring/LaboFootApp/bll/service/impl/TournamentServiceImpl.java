@@ -3,11 +3,15 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
+import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+//TODO: GERER LA CREATION DE RANKING LORS DE LA CREATION DE TOURNAMENT AVEC GROUPE
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,12 +35,23 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
-    public void deleteOne(Long aLong) {
+    public void deleteOne(Long id) {
 
     }
 
     @Override
-    public void updateOne(Long aLong, TournamentBusiness entityBusiness) {
+    public void updateOne(Long id, TournamentBusiness entityBusiness) {
+        Tournament tournament = getOne(id);
+        tournament.setTitle(entityBusiness.title());
+        tournament.setStartDate(entityBusiness.startDate());
+        tournament.setEndDate(entityBusiness.endDate());
+        tournament.setPlaceName(entityBusiness.placeName());
+        tournament.setAddress(entityBusiness.address());
+        tournament.setTournamentType(entityBusiness.tournamentType());
+        tournament.setTournamentStatus(entityBusiness.tournamentStatus());
 
+        tournamentRepository.save(tournament);
     }
+
+
 }

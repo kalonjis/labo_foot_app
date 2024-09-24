@@ -42,4 +42,10 @@ public class TournamentController {
         return ResponseEntity.created(uriComponents.toUri()).build();
     }
 
+    @PutMapping("/{id:^\\d+}")
+    public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentForm tournamentForm){
+        tournamentService.updateOne(id, tournamentForm.toTournamentBusiness());
+        return ResponseEntity.noContent().build();
+    }
+
 }
