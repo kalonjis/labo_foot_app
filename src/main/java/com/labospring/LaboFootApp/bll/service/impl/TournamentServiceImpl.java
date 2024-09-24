@@ -36,6 +36,9 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public void deleteOne(Long id) {
+        Tournament tournament = getOne(id);
+        tournament.setRankingList(null);
+        tournamentRepository.delete(tournament);
 
     }
 
