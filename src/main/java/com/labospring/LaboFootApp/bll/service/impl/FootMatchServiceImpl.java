@@ -3,11 +3,11 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
 import com.labospring.LaboFootApp.bll.service.RefereeService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
+import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
 import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
 import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
-import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
@@ -20,29 +20,36 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class FootMatchServiceImpl implements FootMatchService {
+    
     private final FootMatchRepository footMatchRepository;
     private final TeamService teamService;
     private final RefereeService refereeService;
-    private final TournamentRepository tournamentRepository; // TODO A CHANGER
+    private final TournamentService tournamentService; // TODO SERVICE
 
 
     @Override
+    @Transactional
     public Long addOne(FootMatchEditBusiness entityBusiness) {
 
-        return footMatchRepository.save(turnIntoFootMatch(entityBusiness)).getId();
+        FootMatch footMatch= turnIntoFootMatch(entityBusiness);
+        footMatch.setMatchStatus(MatchStatus.SCHEDULED);
+        return footMatchRepository.save(footMatch).getId();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public FootMatch getOne(Long id) {
         return footMatchRepository.findById(id).orElseThrow(() -> new RuntimeException("No Football Match with ID : " + id));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<FootMatch> getAll() {
         return footMatchRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void deleteOne(Long id) {
         FootMatch footMatch = getOne(id);
         footMatchRepository.delete(footMatch);
@@ -66,6 +73,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
+    @Transactional
     public void changeStatus(Long id, MatchStatus matchStatus){
         FootMatch footMatch = getOne(id);
 
@@ -75,6 +83,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
+    @Transactional
     public void changeScore(Long id, ScoreBusiness scoreBusiness) {
         FootMatch footMatch = getOne(id);
         footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
@@ -85,6 +94,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
+    @Transactional
     public void changeModerator(Long id, Long moderatorId){
         FootMatch footMatch = getOne(id);
 
@@ -100,7 +110,7 @@ public class FootMatchServiceImpl implements FootMatchService {
         Team teamAway = teamService.getOne(entityBusiness.getTeamAwayId());
 
         Tournament tournament = entityBusiness instanceof FootMatchCreateBusiness ?
-                tournamentRepository.findById(((FootMatchCreateBusiness) entityBusiness).getTournamentId()).orElseThrow(()-> new RuntimeException("No ID tournament")) : null;
+                tournamentService.getOne(((FootMatchCreateBusiness) entityBusiness).getTournamentId()) : null;
 
         Referee referee = null;
         if(entityBusiness.getRefereeId() != null)
