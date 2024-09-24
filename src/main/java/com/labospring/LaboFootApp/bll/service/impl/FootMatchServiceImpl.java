@@ -1,9 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
-import com.labospring.LaboFootApp.bll.service.FootMatchService;
-import com.labospring.LaboFootApp.bll.service.RefereeService;
-import com.labospring.LaboFootApp.bll.service.TeamService;
-import com.labospring.LaboFootApp.bll.service.TournamentService;
+import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
 import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
@@ -24,7 +21,8 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final FootMatchRepository footMatchRepository;
     private final TeamService teamService;
     private final RefereeService refereeService;
-    private final TournamentService tournamentService; // TODO SERVICE
+    private final TournamentService tournamentService;
+    private final ValidMatchService validMatchService;
 
 
     @Override
@@ -32,6 +30,9 @@ public class FootMatchServiceImpl implements FootMatchService {
     public Long addOne(FootMatchEditBusiness entityBusiness) {
 
         FootMatch footMatch= turnIntoFootMatch(entityBusiness);
+        if(!validMatchService.isValid(footMatch))
+            throw new RuntimeException("Not valid Match");
+
         footMatch.setMatchStatus(MatchStatus.SCHEDULED);
         return footMatchRepository.save(footMatch).getId();
     }
