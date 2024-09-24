@@ -69,8 +69,10 @@ public class FootMatchServiceImpl implements FootMatchService {
         footMatch.setTeamHome(footMatchUpdated.getTeamHome());
         footMatch.setTeamAway(footMatchUpdated.getTeamAway());
 
-        footMatchRepository.save(footMatch);
+        if(!validMatchService.isValid(footMatch))
+            throw new RuntimeException("Not valid Match");
 
+        footMatchRepository.save(footMatch);
     }
 
     @Override
