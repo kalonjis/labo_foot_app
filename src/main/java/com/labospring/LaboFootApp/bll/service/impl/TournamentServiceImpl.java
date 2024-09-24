@@ -21,8 +21,8 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
-    public Tournament getOne(Long aLong) {
-        return null;
+    public Tournament getOne(Long id) {
+        return tournamentRepository.findById(id).orElseThrow(() -> new RuntimeException("No Tournament with ID " + id));
     }
 
     @Override

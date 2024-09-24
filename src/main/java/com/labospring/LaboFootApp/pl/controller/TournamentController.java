@@ -5,6 +5,7 @@ import com.labospring.LaboFootApp.pl.models.tournament.TournamentDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,6 +24,13 @@ public class TournamentController {
                 tournamentService.getAll().stream()
                         .map(TournamentDTO::fromEntity)
                         .toList()
+        );
+    }
+
+    @GetMapping("/{id:^\\d+}")
+    public ResponseEntity<TournamentDTO> get(@PathVariable long id){
+        return ResponseEntity.ok(
+                TournamentDTO.fromEntity(tournamentService.getOne(id))
         );
     }
 
