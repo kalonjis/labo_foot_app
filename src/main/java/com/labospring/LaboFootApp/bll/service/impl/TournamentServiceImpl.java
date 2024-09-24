@@ -17,8 +17,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public Long addOne(TournamentBusiness entityBusiness) {
-        return
-                0L;
+        return tournamentRepository.save(entityBusiness.toEntity()).getId();
     }
 
     @Override
@@ -34,7 +33,7 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public void deleteOne(Long aLong) {
 
-    }//
+    }
 
     @Override
     public void updateOne(Long aLong, TournamentBusiness entityBusiness) {

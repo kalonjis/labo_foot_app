@@ -39,6 +39,7 @@ public class Tournament extends BaseEntity{
     @Setter
     private boolean isClose;
 
+    @Setter
     @OneToMany(mappedBy = "tournament", cascade ={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     private List<Ranking> rankingList;
 
@@ -54,7 +55,17 @@ public class Tournament extends BaseEntity{
         this.rankingList = new ArrayList<>();
     }
 
-//    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    public Tournament(String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, boolean isClose) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.placeName = placeName;
+        this.address = address;
+        this.tournamentType = tournamentType;
+        this.isClose = isClose;
+    }
+
+    //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 //    @JoinTable(
 //            name = "tournament_type_list_by_tournament", // Nom de la table de jointure
 //            joinColumns = @JoinColumn(name = "tournament_id", nullable = false), // Clé étrangère pour l'entité actuelle (Tournament)
