@@ -282,7 +282,7 @@ public class DataInitializer implements CommandLineRunner {
                 "Stadio Olimpico",
                 new Address("Viale dei Gladiatori", "Rome", "00135", "Lazio", "Italy"),
                 TournamentType.KNOCKOUT_8,
-                TournamentStatus.BUILDING // Statut du tournoi
+                TournamentStatus.PENDING // Statut du tournoi
         );
 
         Tournament tournament9 = new Tournament(
@@ -329,9 +329,13 @@ public class DataInitializer implements CommandLineRunner {
 
         // region Participating Teams for Tournament 8
         ParticipatingTeam participatingTeam1 = new ParticipatingTeam(tournament8, team1);
+        participatingTeam1.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam2 = new ParticipatingTeam(tournament8, team2);
+        participatingTeam2.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam3 = new ParticipatingTeam(tournament8, team3);
+        participatingTeam3.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam4 = new ParticipatingTeam(tournament8, team4);
+        participatingTeam4.setSubscriptionStatus(SubscriptionStatus.CANCELED);
         ParticipatingTeam participatingTeam5 = new ParticipatingTeam(tournament8, team5);
         ParticipatingTeam participatingTeam6 = new ParticipatingTeam(tournament8, team6);
         ParticipatingTeam participatingTeam7 = new ParticipatingTeam(tournament8, team7);
