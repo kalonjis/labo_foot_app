@@ -2,7 +2,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 
 import com.labospring.LaboFootApp.bll.service.RankingService;
-import com.labospring.LaboFootApp.bll.service.models.RankingtBusiness;
+import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.dal.repositories.RankingRepository;
 import com.labospring.LaboFootApp.dl.entities.Ranking;
 import lombok.RequiredArgsConstructor;
@@ -17,13 +17,13 @@ public class RankingServiceImpl implements RankingService {
     private final RankingRepository rankingRepository;
 
     @Override
-    public Long addOne(RankingtBusiness entityBusiness) {
+    public Long addOne(RankingBusiness entityBusiness) {
         return 0L;
     }
 
     @Override
     public Ranking getOne(Long id) {
-        return null;
+        return rankingRepository.findById(id).orElseThrow(() -> new RuntimeException("No Ranking with ID " + id));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public void updateOne(Long id, RankingtBusiness entityBusiness) {
+    public void updateOne(Long id, RankingBusiness entityBusiness) {
 
     }
 }

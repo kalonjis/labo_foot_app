@@ -1,4 +1,4 @@
 package com.labospring.LaboFootApp.bll.service.models;
 
-public record RankingtBusiness() {
+public record RankingBusiness() {
 }
