@@ -3,11 +3,13 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.pl.models.ranking.RankingDTO;
+import com.labospring.LaboFootApp.pl.models.ranking.RankingForm;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
 
 import java.util.List;
 
@@ -27,4 +29,20 @@ public class RankingController {
                 .toList()
         );
     }
+
+
+    @GetMapping("/{id:^\\d+}")
+    public ResponseEntity<RankingDTO> get(@PathVariable long id){
+        return ResponseEntity.ok(
+                RankingDTO.fromEntity(rankingService.getOne(id))
+        );
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> create(@Valid @RequestBody RankingForm rankingform){
+        Long id = rankingService.addOne(rankingform.toRankingBusiness());
+        UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
+        return ResponseEntity.created(uriComponents.toUri()).build();
+    }
+
 }
