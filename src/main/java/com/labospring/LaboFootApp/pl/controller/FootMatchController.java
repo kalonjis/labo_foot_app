@@ -2,10 +2,7 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
 import com.labospring.LaboFootApp.pl.models.footmatch.*;
-import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchModeratorForm;
-import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchPostForm;
-import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchScoreForm;
-import com.labospring.LaboFootApp.pl.models.footmatch.form.FootMatchStatusForm;
+import com.labospring.LaboFootApp.pl.models.footmatch.form.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

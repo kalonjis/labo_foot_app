@@ -1,6 +1,4 @@
-package com.labospring.il.utils;
-
-import org.springframework.stereotype.Component;
+package com.labospring.LaboFootApp.il.utils;
 
 import java.time.LocalDateTime;
 

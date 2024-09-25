@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.dl.entities;
 
+import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -58,10 +59,14 @@ public class FootMatch extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private User userModerator;
 
+    @Enumerated(EnumType.STRING)
     @Setter
-    private String matchStage;
+    private MatchStage matchStage;
 
-    public FootMatch(Team teamHome, Team teamAway, Tournament tournament, Referee referee, LocalDateTime matchDateTime, String fieldLocation, String matchStage) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    private FootMatch nextMatch;
+
+    public FootMatch(Team teamHome, Team teamAway, Tournament tournament, Referee referee, LocalDateTime matchDateTime, String fieldLocation, MatchStage matchStage) {
         this.teamHome = teamHome;
         this.teamAway = teamAway;
         this.tournament = tournament;
