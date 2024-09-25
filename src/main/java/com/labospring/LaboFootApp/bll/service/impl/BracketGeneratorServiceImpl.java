@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
-import com.labospring.LaboFootApp.bll.service.BracketService;
+import com.labospring.LaboFootApp.bll.service.BracketGeneratorService;
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
 import com.labospring.LaboFootApp.dal.repositories.BracketRepository;
 import com.labospring.LaboFootApp.dl.entities.Bracket;
@@ -18,7 +18,7 @@ import static com.labospring.LaboFootApp.dl.enums.MatchStage.*;
 
 @Service
 @RequiredArgsConstructor
-public class BracketServiceImpl implements BracketService {
+public class BracketGeneratorServiceImpl implements BracketGeneratorService {
     private final BracketRepository bracketRepository;
     private final FootMatchService footMatchService;
     // List of tournament stages in descending order (final -> round of 16)
