@@ -24,8 +24,10 @@ public class Ranking  extends BaseEntity{
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
     private Tournament tournament;
 
+    @Column(nullable = false)
     private int numGroup;
 
     private int rankingPosition;
@@ -45,6 +47,11 @@ public class Ranking  extends BaseEntity{
     private int goalsAgainst;
 
     private int goalsDiff;
+
+    public Ranking(Tournament tournament, int numGroup) {
+        this.tournament = tournament;
+        this.numGroup = numGroup;
+    }
 
     public Ranking(Team team, Tournament tournament, int numGroup) {
         this.team = team;
