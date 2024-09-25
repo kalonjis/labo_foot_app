@@ -3,6 +3,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
+import com.labospring.LaboFootApp.bll.service.models.FootMatchForBracketBusiness;
 import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
 import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
@@ -104,6 +105,15 @@ public class FootMatchServiceImpl implements FootMatchService {
         //footMatch.setUserModerator(userService.getOne(id));
 
         footMatchRepository.save(footMatch);
+    }
+
+    @Override
+    public FootMatch buildMatchForBracket(FootMatchForBracketBusiness footMatchBusiness) {
+        FootMatch footMatch = new FootMatch();
+        footMatch.setMatchStage(footMatchBusiness.matchStage());
+        footMatch.setMatchDateTime(footMatchBusiness.tournament().getStartDate());
+        footMatch.setTournament(footMatchBusiness.tournament());
+        return footMatch;
     }
 
     private FootMatch turnIntoFootMatch(FootMatchEditBusiness entityBusiness){

@@ -330,8 +330,8 @@ public class DataInitializer implements CommandLineRunner {
         // endregion
 
         // region Generate Bracket
-        bracketService.generateBracket(tournament8);
-        bracketService.generateBracket(tournament7);
+        bracketService.generateAndSaveBrackets(tournament8);
+        bracketService.generateAndSaveBrackets(tournament7);
         // end region
 
         // region Participating Teams for Tournament 8
