@@ -3,6 +3,7 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.pl.models.ranking.RankingDTO;
+import com.labospring.LaboFootApp.pl.models.ranking.RankingEditForm;
 import com.labospring.LaboFootApp.pl.models.ranking.RankingForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,18 @@ public class RankingController {
         Long id = rankingService.addOne(rankingform.toRankingBusiness());
         UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
         return ResponseEntity.created(uriComponents.toUri()).build();
+    }
+
+    @DeleteMapping("/{id:^\\d+}")
+    public ResponseEntity<Void> remove(@PathVariable long id){
+        rankingService.deleteOne(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("{id:^\\d+}")
+    public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody RankingEditForm editForm){
+        rankingService.update(id, editForm.toRankingEditBusiness());
+        return ResponseEntity.ok().build();
     }
 
 }
