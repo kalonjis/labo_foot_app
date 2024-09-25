@@ -3,11 +3,13 @@ package com.labospring.LaboFootApp.pl.models.ranking;
 import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.pl.models.team.TeamSmallDetailsDTO;
+import com.labospring.LaboFootApp.pl.models.tournament.TournamentSmallDetailsDTO;
 
 public record RankingDTO(
         Long id,
-        Team team,
-        Tournament tournament,
+        TeamSmallDetailsDTO team,
+        TournamentSmallDetailsDTO tournament,
         int numGroup,
         int rankingPosition,
         int totalPoints,
@@ -22,8 +24,8 @@ public record RankingDTO(
     public static RankingDTO fromEntity(Ranking ranking) {
         return new RankingDTO(
                 ranking.getId(),
-                ranking.getTeam(),
-                ranking.getTournament(),
+                TeamSmallDetailsDTO.fromEntity(ranking.getTeam()),
+                TournamentSmallDetailsDTO.fromEntity(ranking.getTournament()),
                 ranking.getNumGroup(),
                 ranking.getRankingPosition(),
                 ranking.getTotalPoints(),
