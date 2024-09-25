@@ -28,7 +28,7 @@ public record TournamentBusiness(
                             tournamentType,
                             tournamentStatus
                             );
-        if (!tournament.getTournamentType().getGroups().isEmpty()){
+        if (tournament.getTournamentType().getGroups() != null){
             tournament.setRankingList(new ArrayList<>());
         }
         return tournament;
