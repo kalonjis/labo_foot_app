@@ -3,10 +3,10 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
-import com.labospring.LaboFootApp.bll.service.models.FootMatchForBracketBusiness;
 import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
 import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
+import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -108,11 +108,14 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
-    public FootMatch buildMatchForBracket(FootMatchForBracketBusiness footMatchBusiness) {
+    public FootMatch buildMatchForBracket(Tournament tournament, MatchStage matchStage) {
+        if(tournament == null || matchStage == null)
+            throw new RuntimeException("Tournament or MatchStage is needed when building a Match for Bracket");
+
         FootMatch footMatch = new FootMatch();
-        footMatch.setMatchStage(footMatchBusiness.matchStage());
-        footMatch.setMatchDateTime(footMatchBusiness.tournament().getStartDate());
-        footMatch.setTournament(footMatchBusiness.tournament());
+        footMatch.setMatchStage(matchStage);
+        footMatch.setMatchDateTime(tournament.getStartDate());
+        footMatch.setTournament(tournament);
         return footMatch;
     }
 
