@@ -7,7 +7,7 @@ import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
-import com.labospring.il.utils.DateUtils;
+import com.labospring.LaboFootApp.il.utils.DateUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,10 @@ public class ValidMatchServiceImpl implements ValidMatchService {
         if(isSameTeam(footMatch.getTeamHome(), footMatch.getTeamAway()))
             throw new RuntimeException("The match can't have a team against each other");
 
-        if(!participatingTeamRepository.isTeamAcceptedInTournament(footMatch.getTeamHome(), footMatch.getTournament(), SubscriptionStatus.ACCEPTED) )
+        if(!participatingTeamRepository.existByTeamAndTournamentAndStatus(footMatch.getTeamHome(), footMatch.getTournament(), SubscriptionStatus.ACCEPTED) )
             throw new RuntimeException("Team " + footMatch.getTeamHome().getName() + " not in the tournament");
 
-        if(!participatingTeamRepository.isTeamAcceptedInTournament(footMatch.getTeamAway(), footMatch.getTournament(), SubscriptionStatus.ACCEPTED))
+        if(!participatingTeamRepository.existByTeamAndTournamentAndStatus(footMatch.getTeamAway(), footMatch.getTournament(), SubscriptionStatus.ACCEPTED))
             throw new RuntimeException("Team " + footMatch.getTeamAway().getName() + " not in the tournament");
 
         if (!DateUtils.isDateBetween(footMatch.getMatchDateTime(),

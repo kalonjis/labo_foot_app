@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.pl.models.footmatch;
 
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
+import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import com.labospring.LaboFootApp.pl.models.referee.RefereeDTO;
 import com.labospring.LaboFootApp.pl.models.team.TeamDTO;
@@ -17,7 +18,7 @@ public record FootMatchDetailsDTO(
         int scoreTeamHome,
         int scoreTeamAway,
         MatchStatus matchStatus,
-        String matchStage) {
+        MatchStage matchStage) {
 
 
     public static FootMatchDetailsDTO fromEntity(FootMatch footMatch) {
