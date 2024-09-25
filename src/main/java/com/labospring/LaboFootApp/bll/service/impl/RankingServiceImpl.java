@@ -5,6 +5,7 @@ import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.dal.repositories.RankingRepository;
 import com.labospring.LaboFootApp.dl.entities.Ranking;
+import com.labospring.LaboFootApp.dl.entities.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +16,18 @@ import java.util.List;
 public class RankingServiceImpl implements RankingService {
 
     private final RankingRepository rankingRepository;
+    private final TournamentServiceImpl tournamentService;
 
     @Override
     public Long addOne(RankingBusiness entityBusiness) {
-        return 0L;
+        Tournament t = tournamentService.getOne(entityBusiness.tournament_id());
+
+        if(t.getTournamentType().getGroups() == null){
+            throw new RuntimeException("Impossible to create ranking for tournament with id " +entityBusiness.tournament_id() +"  because it hasn't any group...");
+        }
+
+        Ranking r = new Ranking(t, entityBusiness.numGroup());
+        return rankingRepository.save(r).getId();
     }
 
     @Override
