@@ -29,23 +29,23 @@ public class Ranking  extends BaseEntity{
 
     @Column(nullable = false)
     private int numGroup;
-
+    @Setter
     private int rankingPosition;
-
+    @Setter
     private int totalPoints;
-
+    @Setter
     private int nbMatchPlayed;
-
+    @Setter
     private int nbWins;
-
+    @Setter
     private int nbLosses;
-
+    @Setter
     private int nbDraws;
-
+    @Setter
     private int goalsFor;
-
+    @Setter
     private int goalsAgainst;
-
+    @Setter
     private int goalsDiff;
 
     public Ranking(Tournament tournament, int numGroup) {
@@ -59,84 +59,6 @@ public class Ranking  extends BaseEntity{
         this.numGroup = numGroup;
     }
 
-    private void calculGoalsDiff() {
-        goalsDiff = goalsFor - goalsAgainst;
-    }
-
-    public void setGoalsFor(int goalsFor){
-        this.goalsFor = goalsFor;
-        calculGoalsDiff();
-    }
-
-    public void setGoalsAgainst(int goalsAgainst){
-        this.goalsAgainst = goalsAgainst;
-        calculGoalsDiff();
-    }
-
-    public void addGoalsFor(int goalsForAdd){
-        this.goalsFor += goalsForAdd;
-        calculGoalsDiff();
-    }
-
-    public void addGoalsAgainst(int goalsAgainstAdd){
-        this.goalsAgainst += goalsAgainst;
-        calculGoalsDiff();
-    }
-
-    public void setNbWins(int nbWins) {
-        this.nbWins = nbWins;
-        calculTotalPoints();
-    }
-
-    public void setNbLosses(int nbLosses) {
-        this.nbLosses = nbLosses;
-        calculTotalPoints();
-    }
-
-    public void setNbDraws(int nbDraws) {
-        this.nbDraws = nbDraws;
-        calculTotalPoints();
-    }
-
-    public void addNbWin(){
-        this.nbWins++;
-        this.nbMatchPlayed++;
-        calculTotalPoints();
-    }
-
-    public void addNbLosse(){
-        this.nbLosses++;
-        this.nbMatchPlayed++;
-        calculTotalPoints();
-    }
-
-    public void addNbDraw(){
-        this.nbDraws++;
-        this.nbMatchPlayed++;
-        calculTotalPoints();
-    }
-    public void removeNbWin(){
-        this.nbWins--;
-        this.nbMatchPlayed--;
-        calculTotalPoints();
-    }
-
-    public void removeNbLosse(){
-        this.nbLosses--;
-        this.nbMatchPlayed--;
-        calculTotalPoints();
-    }
-
-    public void removeNbDraw(){
-        this.nbDraws--;
-        this.nbMatchPlayed--;
-        calculTotalPoints();
-    }
-
-
-    private void calculTotalPoints(){
-        this.totalPoints = (POINT_BY_WINS * nbWins) + (POINT_BY_DRAW * nbDraws) + (POINT_BY_LOSES * nbLosses);
-    }
 
     @Override
     public boolean equals(Object o) {
