@@ -21,7 +21,6 @@ public class Bracket extends BaseEntity{
     private Tournament tournament;
 
     @OneToOne
-    @JoinColumn(nullable = false)
     @Setter
     private FootMatch match;
 

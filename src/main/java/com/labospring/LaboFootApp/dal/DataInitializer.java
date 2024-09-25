@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.dal;
 
+import com.labospring.LaboFootApp.bll.service.BracketService;
 import com.labospring.LaboFootApp.dal.repositories.*;
 import com.labospring.LaboFootApp.dl.entities.*;
 
@@ -27,6 +28,7 @@ public class DataInitializer implements CommandLineRunner {
     private final FootMatchRepository footMatchRepository;
     private final RankingRepository rankingRepository;
 
+    private final BracketService bracketService;
 
     // Méthode pour choisir une équipe aléatoirement
     public Team getRandomTeam(List<Team> teams) {
@@ -326,6 +328,11 @@ public class DataInitializer implements CommandLineRunner {
             tournamentRepository.saveAll(tournaments);
         }
         // endregion
+
+        // region Generate Bracket
+        bracketService.generateBracket(tournament8);
+        bracketService.generateBracket(tournament7);
+        // end region
 
         // region Participating Teams for Tournament 8
         ParticipatingTeam participatingTeam1 = new ParticipatingTeam(tournament8, team1);
