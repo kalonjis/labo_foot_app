@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface ParticipatingTeamRepository extends JpaRepository<ParticipatingTeam, ParticipatingTeam.ParticipatingTeamId> {
     @Query("select count(p) > 0 from ParticipatingTeam p where p.tournament = :tournament AND p.team = :team AND p.subscriptionStatus = :status")
-    boolean isTeamAcceptedInTournament(@Param("team")Team team, @Param("tournament")Tournament tournament, @Param("status") SubscriptionStatus status);
+    boolean existByTeamAndTournamentAndStatus(@Param("team")Team team, @Param("tournament")Tournament tournament, @Param("status") SubscriptionStatus status);
 
 
 }
