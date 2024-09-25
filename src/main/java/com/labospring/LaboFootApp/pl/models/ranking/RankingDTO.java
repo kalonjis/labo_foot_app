@@ -24,7 +24,7 @@ public record RankingDTO(
     public static RankingDTO fromEntity(Ranking ranking) {
         return new RankingDTO(
                 ranking.getId(),
-                TeamSmallDetailsDTO.fromEntity(ranking.getTeam()),
+                ranking.getTeam() != null ? TeamSmallDetailsDTO.fromEntity(ranking.getTeam()) : null,
                 TournamentSmallDetailsDTO.fromEntity(ranking.getTournament()),
                 ranking.getNumGroup(),
                 ranking.getRankingPosition(),
