@@ -6,6 +6,7 @@ import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
 import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
 import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
+import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -104,6 +105,18 @@ public class FootMatchServiceImpl implements FootMatchService {
         //footMatch.setUserModerator(userService.getOne(id));
 
         footMatchRepository.save(footMatch);
+    }
+
+    @Override
+    public FootMatch buildMatchForBracket(Tournament tournament, MatchStage matchStage) {
+        if(tournament == null || matchStage == null)
+            throw new RuntimeException("Tournament or MatchStage is needed when building a Match for Bracket");
+
+        FootMatch footMatch = new FootMatch();
+        footMatch.setMatchStage(matchStage);
+        footMatch.setMatchDateTime(tournament.getStartDate());
+        footMatch.setTournament(tournament);
+        return footMatch;
     }
 
     private FootMatch turnIntoFootMatch(FootMatchEditBusiness entityBusiness){

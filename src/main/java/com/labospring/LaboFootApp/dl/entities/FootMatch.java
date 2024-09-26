@@ -21,12 +21,12 @@ public class FootMatch extends BaseEntity{
 
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Team teamHome;
 
     @Setter
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Team teamAway;
 
     @Setter
@@ -36,7 +36,7 @@ public class FootMatch extends BaseEntity{
 
     @Setter
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = false)
+    @JoinColumn
     private Referee referee;
 
     @Setter @Temporal(TemporalType.TIMESTAMP)
@@ -64,6 +64,7 @@ public class FootMatch extends BaseEntity{
     private MatchStage matchStage;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @Setter
     private FootMatch nextMatch;
 
     public FootMatch(Team teamHome, Team teamAway, Tournament tournament, Referee referee, LocalDateTime matchDateTime, String fieldLocation, MatchStage matchStage) {
