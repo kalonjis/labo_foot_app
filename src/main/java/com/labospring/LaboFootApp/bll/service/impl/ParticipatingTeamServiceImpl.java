@@ -35,9 +35,14 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 
         return 0L;
     }
+    @Override
+    public ParticipatingTeam getOneById(ParticipatingTeam.ParticipatingTeamId id) {
+        return participatingTeamRepository.findById(id).orElseThrow(() -> new RuntimeException(
+                "the team with id : " + id.getTeamId() + " isn't participating to the tournament with id: " + id.getTournamentId() ));
+    }
 
     @Override
-    public ParticipatingTeam getOne(Long aLong) {
+    public ParticipatingTeam getOne(Long id) {
         return null;
     }
 
@@ -47,7 +52,7 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
     @Override
-    public void deleteOne(Long aLong) {
+    public void deleteOne(Long id) {
 
     }
 
