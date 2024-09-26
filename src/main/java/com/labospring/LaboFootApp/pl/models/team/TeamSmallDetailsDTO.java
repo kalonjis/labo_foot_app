@@ -6,6 +6,6 @@ public record TeamSmallDetailsDTO(Long id,
                                   String name) {
 
     public static TeamSmallDetailsDTO fromEntity(Team team) {
-        return new TeamSmallDetailsDTO(team.getId(), team.getName());
+        return team == null ? null : new TeamSmallDetailsDTO(team.getId(), team.getName());
     }
 }
