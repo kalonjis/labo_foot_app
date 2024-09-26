@@ -61,6 +61,7 @@ public class ParticipatingTeam extends BaseEntity{
         this.id = new ParticipatingTeamId(tournament.getId(), team.getId());
         this.tournament = tournament;
         this.team = team;
+        this.subscriptionStatus = SubscriptionStatus.PENDING;
     }
 
 }
