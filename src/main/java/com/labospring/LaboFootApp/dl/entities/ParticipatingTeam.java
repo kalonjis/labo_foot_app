@@ -15,7 +15,7 @@ import java.util.Objects;
 @Getter
 @Entity
 public class ParticipatingTeam extends BaseEntity{
-
+//
     @EmbeddedId
     private ParticipatingTeamId id;
 
