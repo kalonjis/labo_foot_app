@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
-import com.labospring.LaboFootApp.bll.exceptions.BadStatusException;
+import com.labospring.LaboFootApp.bll.exceptions.BadStatusTournamentException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectDateException;
 import com.labospring.LaboFootApp.bll.exceptions.NotInTournamentException;
 import com.labospring.LaboFootApp.bll.exceptions.SameTeamException;
@@ -28,7 +28,7 @@ public class ValidMatchServiceImpl implements ValidMatchService {
     public boolean isValid(FootMatch footMatch) {
         Tournament tournament = footMatch.getTournament();
         if(!canBuildMatch(tournament))
-            throw new BadStatusException("Status Tournament need to be PENDING or STARTED");
+            throw new BadStatusTournamentException("Status Tournament need to be PENDING or STARTED");
 
         if(isSameTeam(footMatch.getTeamHome(), footMatch.getTeamAway()))
             throw new SameTeamException("The match can't have a team against each other");
