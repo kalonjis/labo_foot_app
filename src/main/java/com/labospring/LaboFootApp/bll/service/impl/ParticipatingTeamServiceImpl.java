@@ -7,9 +7,12 @@ import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
 import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
+import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.enums.MatchStatus;
+import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,15 +27,6 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     private final TournamentService tournamentService;
     private final TeamService teamService;
 
-//    Tournament tournament = entityBusiness.tournament();
-//        if(tournament.getTournamentType().isGroupStage()){
-//        if(tournament.getRankingList().isEmpty()){
-//            for (int i = 0; i < tournament.getTournamentType().getNbGroups(); i++) {
-//                rankingService.addOne(new RankingBusiness(tournament.getId(), 1));
-//            }
-//
-//        }
-//    }
 
     @Override
     public List<ParticipatingTeam> getAll() {
@@ -57,6 +51,18 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
         ParticipatingTeam pt = getOneById(id);
         participatingTeamRepository.delete(pt);
     }
+
+    @Override
+    public void changeStatus(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus status) {
+        ParticipatingTeam pt = getOneById(id);
+        pt.setSubscriptionStatus(status);
+        if(status == SubscriptionStatus.ACCEPTED){
+            Tournament tournament = tournamentService.getOne(pt.getTournament().getId());
+            Team team = teamService.getOne(pt.getTeam().getId());
+            rankingService.createOne(tournament, team);
+        }
+    }
+
 
     @Override
     public ParticipatingTeam getOne(Long id) {
