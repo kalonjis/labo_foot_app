@@ -27,7 +27,7 @@ public class Ranking  extends BaseEntity{
     @JoinColumn(nullable = false)
     private Tournament tournament;
 
-    @Column(nullable = false)
+    @Setter
     private int numGroup;
     @Setter
     private int rankingPosition;
@@ -51,6 +51,11 @@ public class Ranking  extends BaseEntity{
     public Ranking(Tournament tournament, int numGroup) {
         this.tournament = tournament;
         this.numGroup = numGroup;
+    }
+
+    public Ranking(Tournament tournament, Team team) {
+        this.tournament = tournament;
+        this.team = team;
     }
 
     public Ranking(Team team, Tournament tournament, int numGroup) {
