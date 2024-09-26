@@ -15,7 +15,7 @@ import java.util.Objects;
 @Getter
 @Entity
 public class ParticipatingTeam extends BaseEntity{
-//
+
     @EmbeddedId
     private ParticipatingTeamId id;
 
@@ -61,6 +61,7 @@ public class ParticipatingTeam extends BaseEntity{
         this.id = new ParticipatingTeamId(tournament.getId(), team.getId());
         this.tournament = tournament;
         this.team = team;
+        this.subscriptionStatus = SubscriptionStatus.PENDING;
     }
 
 }

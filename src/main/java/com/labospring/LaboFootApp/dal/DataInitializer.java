@@ -345,6 +345,7 @@ public class DataInitializer implements CommandLineRunner {
         participatingTeam4.setSubscriptionStatus(SubscriptionStatus.CANCELED);
         ParticipatingTeam participatingTeam5 = new ParticipatingTeam(tournament8, team5);
         ParticipatingTeam participatingTeam6 = new ParticipatingTeam(tournament8, team6);
+        participatingTeam6.setSubscriptionStatus(SubscriptionStatus.CANCELED);
         ParticipatingTeam participatingTeam7 = new ParticipatingTeam(tournament8, team7);
         ParticipatingTeam participatingTeam8 = new ParticipatingTeam(tournament8, team8);
 
