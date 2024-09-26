@@ -5,6 +5,7 @@ import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamDTO;
 import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamForm;
+import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamStatusForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +57,17 @@ public class ParticipatingTeamController {
         ParticipatingTeam.ParticipatingTeamId id = new ParticipatingTeam.ParticipatingTeamId(tournamentId, teamId);
         participatingTeamService.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/status/")
+    public ResponseEntity<Void> updateStatus(
+            @RequestParam Long tournamentId,
+            @RequestParam Long teamId,
+            @Valid @RequestBody ParticipatingTeamStatusForm form
+    ){
+        ParticipatingTeam.ParticipatingTeamId id = new ParticipatingTeam.ParticipatingTeamId(tournamentId, teamId);
+        participatingTeamService.changeStatus(id, form.subscriptionStatus());
+        return ResponseEntity.ok().build();
     }
 
 }
