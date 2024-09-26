@@ -5,13 +5,10 @@ import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
-import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
-import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
-import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -72,24 +69,4 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
 
-    @Override
-    public ParticipatingTeam getOne(Long id) {
-        return null;
-    }
-
-
-    @Override
-    public void deleteOne(Long id) {
-
-    }
-
-    @Override
-    public void updateOne(Long aLong, ParticipatingTeamBusiness entityBusiness) {
-
-    }
-
-    @Override
-    public Long addOne(ParticipatingTeamBusiness entityBusiness) {
-        return 0L;
-    }
 }
