@@ -5,6 +5,7 @@ import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.bll.service.models.RankingEditBusiness;
 import com.labospring.LaboFootApp.dal.repositories.RankingRepository;
 import com.labospring.LaboFootApp.dl.entities.Ranking;
+import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,14 @@ public class RankingServiceImpl implements RankingService {
 
         Ranking r = new Ranking(t, entityBusiness.numGroup());
         return rankingRepository.save(r).getId();
+    }
+
+
+    @Override
+    public Long createOne(Tournament tournament, Team team) {
+        Ranking r = new Ranking(tournament, team);
+        return rankingRepository.save(r).getId();
+
     }
 
     @Override
