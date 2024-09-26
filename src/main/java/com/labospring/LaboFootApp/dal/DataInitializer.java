@@ -30,6 +30,7 @@ public class DataInitializer implements CommandLineRunner {
 
     private final BracketGeneratorService bracketGeneratorService;
 
+
     // Méthode pour choisir une équipe aléatoirement
     public Team getRandomTeam(List<Team> teams) {
         Random random = new Random();

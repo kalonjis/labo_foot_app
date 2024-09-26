@@ -13,7 +13,8 @@ public record FootMatchListDetailsDTO(Long id,
                                       MatchStatus matchStatus){
 
     public static FootMatchListDetailsDTO fromEntity(FootMatch footMatch) {
-        return new FootMatchListDetailsDTO(
+
+        return footMatch == null ? null : new FootMatchListDetailsDTO(
                 footMatch.getId(),
                 TeamSmallDetailsDTO.fromEntity(footMatch.getTeamHome()),
                 TeamSmallDetailsDTO.fromEntity(footMatch.getTeamAway()),

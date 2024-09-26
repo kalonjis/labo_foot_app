@@ -20,7 +20,7 @@ public class Bracket extends BaseEntity{
     @Setter
     private Tournament tournament;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(nullable = false)
     @Setter
     private FootMatch match;
