@@ -4,6 +4,7 @@ import com.labospring.LaboFootApp.bll.service.BracketService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.dal.repositories.BracketRepository;
 import com.labospring.LaboFootApp.dl.entities.Bracket;
+import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class BracketServiceImpl implements BracketService {
     public List<Bracket> getListByTournament(Long tournamentId) {
         Tournament tournament = tournamentService.getOne(tournamentId);
         return bracketRepository.findAllByTournament(tournament);
+    }
+
+    public Integer getBracketPosition(FootMatch footMatch){
+        return bracketRepository.findPositionByFootMatch(footMatch);
     }
 }

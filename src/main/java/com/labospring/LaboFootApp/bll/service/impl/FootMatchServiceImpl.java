@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
+import com.labospring.LaboFootApp.bll.exceptions.FootMatchNeedWinnerException;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
@@ -25,6 +26,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final RefereeService refereeService;
     private final TournamentService tournamentService;
     private final ValidMatchService validMatchService;
+    private final BracketService bracketService;
 
 
     @Override
@@ -81,10 +83,29 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Transactional
     public void changeStatus(Long id, MatchStatus matchStatus){
         FootMatch footMatch = getOne(id);
-
         footMatch.setMatchStatus(matchStatus);
 
+        if(matchStatus == MatchStatus.FINISHED)
+            updateBracket(footMatch);
+
         footMatchRepository.save(footMatch);
+    }
+
+    private void updateBracket(FootMatch footMatch) {
+        Integer positionBracket = bracketService.getBracketPosition(footMatch);
+        if(positionBracket != null){
+            FootMatch nextMatch = footMatch.getNextMatch();
+            Team winnerTeam = getWinnerTeam(footMatch);
+            if(winnerTeam == null)
+                throw new FootMatchNeedWinnerException("Need a winner with bracket");
+
+            if(positionBracket % 2 == 0)
+                nextMatch.setTeamAway(winnerTeam);
+            else
+                nextMatch.setTeamHome(winnerTeam);
+
+            footMatchRepository.save(nextMatch);
+        }
     }
 
     @Override
@@ -134,5 +155,11 @@ public class FootMatchServiceImpl implements FootMatchService {
             referee = refereeService.getOne(entityBusiness.getRefereeId());
 
         return entityBusiness.toEntity(teamHome, teamAway, tournament, referee);
+    }
+
+    private Team getWinnerTeam(FootMatch footMatch){
+        return footMatch.getScoreTeamHome() > footMatch.getScoreTeamAway() ? footMatch.getTeamHome() :
+                footMatch.getScoreTeamAway() > footMatch.getScoreTeamHome() ? footMatch.getTeamAway() :
+                        null;
     }
 }
