@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.RefereeService;
 import com.labospring.LaboFootApp.bll.service.models.RefereeBusiness;
 import com.labospring.LaboFootApp.dal.repositories.RefereeRepository;
@@ -21,7 +22,7 @@ public class RefereeServiceImpl implements RefereeService {
 
     @Override
     public Referee getOne(Long id) {
-        return refereeRepository.findById(id).orElseThrow(() -> new RuntimeException("No Referee with ID : " + id));
+        return refereeRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No Referee with ID : " + id));
     }
 
     @Override

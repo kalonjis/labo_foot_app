@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.bll.service.models.RankingEditBusiness;
@@ -34,7 +35,7 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public Ranking getOne(Long id) {
-        return rankingRepository.findById(id).orElseThrow(() -> new RuntimeException("No Ranking with ID " + id));
+        return rankingRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No Ranking with ID " + id));
     }
 
     @Override

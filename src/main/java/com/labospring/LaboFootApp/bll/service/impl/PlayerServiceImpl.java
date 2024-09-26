@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.PlayerService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.models.PlayerBusiness;
@@ -28,7 +29,7 @@ public class PlayerServiceImpl implements PlayerService {
 
     @Override
     public Player getOne(Long id) {
-        return playerRepository.findById(id).orElseThrow(() -> new RuntimeException("No player with ID : " + id));
+        return playerRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No player with ID : " + id));
     }
 
     @Override

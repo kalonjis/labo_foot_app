@@ -1,5 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectTeamSizeException;
+import com.labospring.LaboFootApp.bll.exceptions.MultipleStagesException;
 import com.labospring.LaboFootApp.bll.service.FootMatchBracketGeneratorService;
 import com.labospring.LaboFootApp.dl.entities.Bracket;
 import com.labospring.LaboFootApp.dl.entities.Team;
@@ -27,13 +29,13 @@ public class FootMatchBracketGeneratorServiceImpl implements FootMatchBracketGen
     @Override
     public void generateFootMatch(List<Bracket> brackets, List<Team> teams) {
         // Validate input: ensure neither brackets nor teams are null or empty
-        if (brackets == null || teams == null || brackets.isEmpty() || teams.isEmpty()) {
-            throw new RuntimeException("Can't generate brackets with no brackets or teams");
+        if (brackets == null || teams == null) {
+            throw new NullPointerException("Can't generate brackets with no brackets or teams");
         }
 
         // Ensure all brackets belong to the same match stage
         if (!isAllSameStage(brackets)) {
-            throw new RuntimeException("Can't generate brackets on multiple stages");
+            throw new MultipleStagesException("Can't generate brackets on multiple stages");
         }
 
         // Fill the brackets with the teams
@@ -50,7 +52,7 @@ public class FootMatchBracketGeneratorServiceImpl implements FootMatchBracketGen
     private void fillBracketsWithTeams(List<Bracket> brackets, List<Team> teams) {
         // Validate the number of teams; there should be exactly 2 teams per bracket
         if (!isTeamsSizeEnough(brackets, teams)) {
-            throw new RuntimeException("Teams are not enough or too much [teams size: " + teams.size() + "]");
+            throw new IncorrectTeamSizeException("Teams are not enough or too much [teams size: " + teams.size() + "]");
         }
 
         // Create a copy of the teams list to randomly assign teams to brackets

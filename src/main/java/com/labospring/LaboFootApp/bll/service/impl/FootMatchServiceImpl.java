@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
@@ -41,7 +42,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Override
     @Transactional(readOnly = true)
     public FootMatch getOne(Long id) {
-        return footMatchRepository.findById(id).orElseThrow(() -> new RuntimeException("No Football Match with ID : " + id));
+        return footMatchRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No Football Match with ID : " + id));
     }
 
     @Override
