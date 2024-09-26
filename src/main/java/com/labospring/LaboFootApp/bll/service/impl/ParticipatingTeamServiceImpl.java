@@ -38,7 +38,8 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     @Override
     public ParticipatingTeam getOneById(ParticipatingTeam.ParticipatingTeamId id) {
         return participatingTeamRepository.findById(id).orElseThrow(() -> new RuntimeException(
-                "the team with id : " + id.getTeamId() + " isn't participating to the tournament with id: " + id.getTournamentId() ));
+                "the team with id : " + id.getTeamId() + " isn't participating to the tournament with id: " + id.getTournamentId() )
+        );
     }
 
     @Override

@@ -36,7 +36,6 @@ public class ParticipatingTeamController {
         return ResponseEntity.ok(
                 ParticipatingTeamDTO.fromEntity(participatingTeamService.getOneById(id))
         );
-
     }
 
 

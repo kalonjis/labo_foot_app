@@ -9,7 +9,7 @@ public record ParticipatingTeamDTO(
         TournamentSmallDetailsDTO tournament,
         TeamSmallDetailsDTO team,
         SubscriptionStatus subscriptionStatus
-) {
+){
     public static ParticipatingTeamDTO fromEntity(ParticipatingTeam pt){
         return new ParticipatingTeamDTO(
                 TournamentSmallDetailsDTO.fromEntity(pt.getTournament()),
