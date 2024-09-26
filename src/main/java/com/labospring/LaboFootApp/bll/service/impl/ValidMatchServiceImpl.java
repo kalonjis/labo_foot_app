@@ -1,5 +1,9 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.BadStatusTournamentException;
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectDateException;
+import com.labospring.LaboFootApp.bll.exceptions.NotInTournamentException;
+import com.labospring.LaboFootApp.bll.exceptions.SameTeamException;
 import com.labospring.LaboFootApp.bll.service.ValidMatchService;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
@@ -24,20 +28,20 @@ public class ValidMatchServiceImpl implements ValidMatchService {
     public boolean isValid(FootMatch footMatch) {
         Tournament tournament = footMatch.getTournament();
         if(!canBuildMatch(tournament))
-            throw new RuntimeException("Status Tournament need to be PENDING or STARTED");
+            throw new BadStatusTournamentException("Status Tournament need to be PENDING or STARTED");
 
         if(isSameTeam(footMatch.getTeamHome(), footMatch.getTeamAway()))
-            throw new RuntimeException("The match can't have a team against each other");
+            throw new SameTeamException("The match can't have a team against each other");
 
         if(!participatingTeamRepository.existByTeamAndTournamentAndStatus(footMatch.getTeamHome(), footMatch.getTournament(), SubscriptionStatus.ACCEPTED) )
-            throw new RuntimeException("Team " + footMatch.getTeamHome().getName() + " not in the tournament");
+            throw new NotInTournamentException("Team " + footMatch.getTeamHome().getName() + " not in the tournament");
 
         if(!participatingTeamRepository.existByTeamAndTournamentAndStatus(footMatch.getTeamAway(), footMatch.getTournament(), SubscriptionStatus.ACCEPTED))
-            throw new RuntimeException("Team " + footMatch.getTeamAway().getName() + " not in the tournament");
+            throw new NotInTournamentException("Team " + footMatch.getTeamAway().getName() + " not in the tournament");
 
         if (!DateUtils.isDateBetween(footMatch.getMatchDateTime(),
                 tournament.getStartDate(), tournament.getEndDate()) )
-            throw new RuntimeException("The match date have to be between the tournament date (" + tournament.getStartDate() + "," + tournament.getEndDate());
+            throw new IncorrectDateException("The match date have to be between the tournament date (" + tournament.getStartDate() + "," + tournament.getEndDate());
 
         return true;
     }

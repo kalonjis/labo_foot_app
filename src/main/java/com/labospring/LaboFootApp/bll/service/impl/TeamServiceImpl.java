@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.models.TeamBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TeamRepository;
@@ -22,7 +23,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Team getOne(Long id) {
-        return teamRepository.findById(id).orElseThrow(() -> new RuntimeException("No Team with ID " + id));
+        return teamRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No Team with ID " + id));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.CoachService;
 import com.labospring.LaboFootApp.bll.service.models.CoachBusiness;
 import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
@@ -22,7 +23,7 @@ public class CoachServiceImpl implements CoachService {
 
     @Override
     public Coach getOne(Long id) {
-        return coachRepository.findById(id).orElseThrow(() -> new RuntimeException("No coach with ID : " + id));
+        return coachRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No coach with ID : " + id));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
@@ -26,7 +27,7 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public Tournament getOne(Long id) {
-        return tournamentRepository.findById(id).orElseThrow(() -> new RuntimeException("No Tournament with ID " + id));
+        return tournamentRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No Tournament with ID " + id));
     }
 
     @Override
