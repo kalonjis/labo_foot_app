@@ -60,6 +60,7 @@ public class ParticipatingTeamController {
     }
 
     @PutMapping("/status/")
+    // Route reservée à l'organisateur/modérateur
     public ResponseEntity<Void> updateStatus(
             @RequestParam Long tournamentId,
             @RequestParam Long teamId,
@@ -67,6 +68,17 @@ public class ParticipatingTeamController {
     ){
         ParticipatingTeam.ParticipatingTeamId id = new ParticipatingTeam.ParticipatingTeamId(tournamentId, teamId);
         participatingTeamService.changeStatus(id, form.subscriptionStatus());
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/status-canceled/")
+    // Route reservée au user responsable de sa Team
+    public ResponseEntity<Void> updateStatusToCanceled(
+            @RequestParam Long tournamentId,
+            @RequestParam Long teamId
+    ){
+        ParticipatingTeam.ParticipatingTeamId id = new ParticipatingTeam.ParticipatingTeamId(tournamentId, teamId);
+        participatingTeamService.changeStatusToCanceled(id);
         return ResponseEntity.ok().build();
     }
 

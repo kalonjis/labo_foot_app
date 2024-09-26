@@ -61,6 +61,14 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
             Team team = teamService.getOne(pt.getTeam().getId());
             rankingService.createOne(tournament, team);
         }
+        participatingTeamRepository.save(pt);
+    }
+
+    @Override
+    public void changeStatusToCanceled(ParticipatingTeam.ParticipatingTeamId id) {
+        ParticipatingTeam pt = getOneById(id);
+        pt.setSubscriptionStatus(SubscriptionStatus.CANCELED);
+        participatingTeamRepository.save(pt);
     }
 
 
