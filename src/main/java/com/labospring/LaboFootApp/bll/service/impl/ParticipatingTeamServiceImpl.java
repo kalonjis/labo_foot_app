@@ -35,6 +35,11 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 //    }
 
     @Override
+    public List<ParticipatingTeam> getAll() {
+        return participatingTeamRepository.findAll();
+    }
+
+    @Override
     public ParticipatingTeam.ParticipatingTeamId createOne(ParticipatingTeamBusiness entityBusiness) {
         Tournament tournament = tournamentService.getOne(entityBusiness.tournamentId());
         Team team = teamService.getOne(entityBusiness.teamId());
@@ -48,14 +53,16 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
     @Override
+    public void deleteById(ParticipatingTeam.ParticipatingTeamId id){
+        ParticipatingTeam pt = getOneById(id);
+        participatingTeamRepository.delete(pt);
+    }
+
+    @Override
     public ParticipatingTeam getOne(Long id) {
         return null;
     }
 
-    @Override
-    public List<ParticipatingTeam> getAll() {
-        return participatingTeamRepository.findAll();
-    }
 
     @Override
     public void deleteOne(Long id) {
