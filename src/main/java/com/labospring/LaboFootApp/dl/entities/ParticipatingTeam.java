@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.dl.entities;
 
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -31,6 +32,7 @@ public class ParticipatingTeam extends BaseEntity{
 
     @Setter
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SubscriptionStatus subscriptionStatus;
 
     @Embeddable
