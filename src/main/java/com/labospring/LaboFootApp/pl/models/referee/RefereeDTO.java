@@ -8,6 +8,6 @@ public record RefereeDTO(
         String lastname
 ) {
     public static RefereeDTO fromEntity(Referee referee) {
-        return new RefereeDTO(referee.getId(), referee.getFirstname(), referee.getLastname());
+        return referee==null? null: new RefereeDTO(referee.getId(), referee.getFirstname(), referee.getLastname());
     }
 }

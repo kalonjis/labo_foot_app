@@ -1,6 +1,8 @@
 package com.labospring.LaboFootApp.dal;
 
 import com.labospring.LaboFootApp.bll.service.BracketGeneratorService;
+import com.labospring.LaboFootApp.bll.service.BracketService;
+import com.labospring.LaboFootApp.bll.service.FootMatchBracketGeneratorService;
 import com.labospring.LaboFootApp.dal.repositories.*;
 import com.labospring.LaboFootApp.dl.entities.*;
 
@@ -29,6 +31,12 @@ public class DataInitializer implements CommandLineRunner {
     private final RankingRepository rankingRepository;
 
     private final BracketGeneratorService bracketGeneratorService;
+
+    private final BracketRepository bracketRepository;
+
+    private final BracketService bracketService;
+    private final FootMatchBracketGeneratorService footMatchInBracketGeneratorService;
+
 
 
     // Méthode pour choisir une équipe aléatoirement
@@ -333,7 +341,22 @@ public class DataInitializer implements CommandLineRunner {
         // region Generate Bracket
         bracketGeneratorService.generateAndSaveBrackets(tournament8);
         bracketGeneratorService.generateAndSaveBrackets(tournament7);
-        // end region
+        // endregion
+
+        // region Fill Matches in Bracket
+        List<Bracket> brackets = bracketService.getListByTournament(tournament8.getId());
+        List<Bracket> lastBrackets = bracketGeneratorService.getBracketsByMatchStage(brackets).get(MatchStage.QUARTER_FINAL);
+        List<Team> teamsForBracket = List.of(team1, team2, team3, team4, team5, team6, team7, team8);
+        footMatchInBracketGeneratorService.generateFootMatch(lastBrackets, teamsForBracket);
+        bracketRepository.saveAll(lastBrackets);
+
+        brackets = bracketService.getListByTournament(tournament7.getId());
+        lastBrackets = bracketGeneratorService.getBracketsByMatchStage(brackets).get(MatchStage.ROUND_OF_16);
+        teamsForBracket = List.of(team1, team2, team3, team4, team5, team6, team7, team8,
+                team9, team10, team11, team12, team13, team14, team15, team16);
+        footMatchInBracketGeneratorService.generateFootMatch(lastBrackets, teamsForBracket);
+        bracketRepository.saveAll(lastBrackets);
+        // endregion
 
         // region Participating Teams for Tournament 8
         ParticipatingTeam participatingTeam1 = new ParticipatingTeam(tournament8, team1);
