@@ -2,10 +2,13 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.bll.service.RankingService;
+import com.labospring.LaboFootApp.bll.service.TeamService;
+import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
 import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
+import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,8 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 
     private final RankingService rankingService;
     private final ParticipatingTeamRepository participatingTeamRepository;
+    private final TournamentService tournamentService;
+    private final TeamService teamService;
 
 //    Tournament tournament = entityBusiness.tournament();
 //        if(tournament.getTournamentType().isGroupStage()){
@@ -30,10 +35,10 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 //    }
 
     @Override
-    public Long addOne(ParticipatingTeamBusiness entityBusiness) {
-
-
-        return 0L;
+    public ParticipatingTeam.ParticipatingTeamId createOne(ParticipatingTeamBusiness entityBusiness) {
+        Tournament tournament = tournamentService.getOne(entityBusiness.tournamentId());
+        Team team = teamService.getOne(entityBusiness.teamId());
+        return new ParticipatingTeam(tournament, team).getId();
     }
     @Override
     public ParticipatingTeam getOneById(ParticipatingTeam.ParticipatingTeamId id) {
@@ -60,5 +65,10 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     @Override
     public void updateOne(Long aLong, ParticipatingTeamBusiness entityBusiness) {
 
+    }
+
+    @Override
+    public Long addOne(ParticipatingTeamBusiness entityBusiness) {
+        return 0L;
     }
 }

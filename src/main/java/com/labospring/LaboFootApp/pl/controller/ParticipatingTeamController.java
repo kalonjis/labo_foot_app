@@ -4,10 +4,14 @@ package com.labospring.LaboFootApp.pl.controller;
 import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamDTO;
+import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamForm;
+import com.labospring.LaboFootApp.pl.models.tournament.TournamentForm;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
 
 import java.util.List;
 
@@ -36,6 +40,13 @@ public class ParticipatingTeamController {
         return ResponseEntity.ok(
                 ParticipatingTeamDTO.fromEntity(participatingTeamService.getOneById(id))
         );
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> create(@Valid @RequestBody ParticipatingTeamForm form){
+        ParticipatingTeam.ParticipatingTeamId id = participatingTeamService.createOne(form.toParticipatingTeamBusiness());
+        UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
+        return ResponseEntity.created(uriComponents.toUri()).build();
     }
 
 }
