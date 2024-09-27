@@ -72,23 +72,23 @@ public class DataInitializer implements CommandLineRunner {
         //endregion
 
         // region Team
-        Team team1 = new Team(null, "Manchester United", new Coach("Alex", "Ferguson"), new HashSet<>());
-        Team team2 = new Team(null, "Real Madrid", new Coach("Zinedine", "Zidane"), new HashSet<>());
-        Team team3 = new Team(null, "FC Barcelona", new Coach("Pep", "Guardiola"), new HashSet<>());
-        Team team4 = new Team(null, "Liverpool FC", new Coach("Jurgen", "Klopp"), new HashSet<>());
-        Team team5 = new Team(null, "Bayern Munich", new Coach("Carlo", "Ancelotti"), new HashSet<>());
-        Team team6 = new Team(null, "Juventus FC", new Coach("Massimiliano", "Allegri"), new HashSet<>());
-        Team team7 = new Team(null, "Paris Saint-Germain", new Coach("Mauricio", "Pochettino"), new HashSet<>());
-        Team team8 = new Team(null, "Chelsea FC", new Coach("Thomas", "Tuchel"), new HashSet<>());
-        Team team9 = new Team(null, "Atletico Madrid", new Coach("Diego", "Simeone"), new HashSet<>());
-        Team team10 = new Team(null, "Inter Milan", new Coach("Simone", "Inzaghi"), new HashSet<>());
+        Team team1 = new Team( "Manchester United", new Coach("Alex", "Ferguson"), new HashSet<>());
+        Team team2 = new Team( "Real Madrid", new Coach("Zinedine", "Zidane"), new HashSet<>());
+        Team team3 = new Team( "FC Barcelona", new Coach("Pep", "Guardiola"), new HashSet<>());
+        Team team4 = new Team( "Liverpool FC", new Coach("Jurgen", "Klopp"), new HashSet<>());
+        Team team5 = new Team( "Bayern Munich", new Coach("Carlo", "Ancelotti"), new HashSet<>());
+        Team team6 = new Team( "Juventus FC", new Coach("Massimiliano", "Allegri"), new HashSet<>());
+        Team team7 = new Team( "Paris Saint-Germain", new Coach("Mauricio", "Pochettino"), new HashSet<>());
+        Team team8 = new Team( "Chelsea FC", new Coach("Thomas", "Tuchel"), new HashSet<>());
+        Team team9 = new Team( "Atletico Madrid", new Coach("Diego", "Simeone"), new HashSet<>());
+        Team team10 = new Team( "Inter Milan", new Coach("Simone", "Inzaghi"), new HashSet<>());
         // 6 équipes sans joueurs
-        Team team11 = new Team(null, "AC Milan", new Coach("Pippo", "Inzaghi"), new HashSet<>());
-        Team team12 = new Team(null, "Tottenham Hotspur", new Coach("Antonio", "Conte"), new HashSet<>());
-        Team team13 = new Team(null, "AS Roma", new Coach("Marcelo", "Bielsa"), new HashSet<>());
-        Team team14 = new Team(null, "Borussia Dortmund", new Coach("Thomas", "Tuchel"), new HashSet<>());
-        Team team15 = new Team(null, "Olympique Lyonnais", new Coach("Roberto", "Mancini"), new HashSet<>());
-        Team team16 = new Team(null, "Ajax Amsterdam", new Coach("Luis", "Enrique"), new HashSet<>());
+        Team team11 = new Team( "AC Milan", new Coach("Pippo", "Inzaghi"), new HashSet<>());
+        Team team12 = new Team( "Tottenham Hotspur", new Coach("Antonio", "Conte"), new HashSet<>());
+        Team team13 = new Team( "AS Roma", new Coach("Marcelo", "Bielsa"), new HashSet<>());
+        Team team14 = new Team( "Borussia Dortmund", new Coach("Thomas", "Tuchel"), new HashSet<>());
+        Team team15 = new Team( "Olympique Lyonnais", new Coach("Roberto", "Mancini"), new HashSet<>());
+        Team team16 = new Team( "Ajax Amsterdam", new Coach("Luis", "Enrique"), new HashSet<>());
 
         List<Team> teams = List.of(
                 team1, team2, team3, team4, team5, team6, team7, team8, team9, team10, team11, team12, team13, team14, team15, team16
@@ -360,6 +360,7 @@ public class DataInitializer implements CommandLineRunner {
         bracketRepository.saveAll(lastBrackets);
         // endregion
 
+        // region ParticipatingTeam
         // region Participating Teams for Tournament 8
         ParticipatingTeam participatingTeam1 = new ParticipatingTeam(tournament8, team1);
         participatingTeam1.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
@@ -379,6 +380,7 @@ public class DataInitializer implements CommandLineRunner {
                 participatingTeam1, participatingTeam2, participatingTeam3, participatingTeam4,
                 participatingTeam5, participatingTeam6, participatingTeam7, participatingTeam8
         );
+        //endregion
 
         // region Participating Teams for Tournament with groups
         ParticipatingTeam participatingTeam11 = new ParticipatingTeam(tournament5, team1); // Manchester United
@@ -398,13 +400,29 @@ public class DataInitializer implements CommandLineRunner {
                 participatingTeam19, participatingTeam20
         );
 
-// endregion
+        // endregion
+
+        // region ParticipatingTeam for tournament6
+
+        List<ParticipatingTeam> participatingTeams3 = new ArrayList<>();
+
+        for (int i = 1; i <= teams.size() - 4; i++) {
+            ParticipatingTeam participatingTeamName = new ParticipatingTeam(tournament6, teams.get(i - 1));
+            //participatingTeamName.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
+            participatingTeams3.add(participatingTeamName);
+        }
+
+
+        // endregion
 
         if (participatingTeamRepository.count() == 0) {
             participatingTeamRepository.saveAll(participatingTeams);
-            participatingTeamRepository.saveAll(participatingTeams2); // Sauvegarde des équipes
+            participatingTeamRepository.saveAll(participatingTeams2);
+            participatingTeamRepository.saveAll(participatingTeams3);
         }
-// endregion
+        //  endregion
+
+
 
         // region FootMatch
         // Récupérer le tournoi avec l'ID 8 (Tournament 8)
