@@ -13,4 +13,5 @@ public interface ParticipatingTeamService {
     void deleteById(ParticipatingTeam.ParticipatingTeamId id);
     void changeStatus(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus status);
     void changeStatusToCanceled(ParticipatingTeam.ParticipatingTeamId id);
+    void dispatchTeamsToGroups(Long tournamentId);
 }
