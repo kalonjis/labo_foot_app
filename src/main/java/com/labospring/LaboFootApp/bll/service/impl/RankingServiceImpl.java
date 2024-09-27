@@ -106,4 +106,10 @@ public class RankingServiceImpl implements RankingService {
                         (POINT_BY_LOSES * ranking.getNbLosses())
         );
     }
+
+    @Override
+    public void updateNumGroup(Ranking ranking, int numGroup) {
+        ranking.setNumGroup(numGroup);
+        rankingRepository.save(ranking);
+    }
 }

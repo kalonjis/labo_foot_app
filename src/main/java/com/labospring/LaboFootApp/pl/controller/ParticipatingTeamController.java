@@ -82,4 +82,10 @@ public class ParticipatingTeamController {
         return ResponseEntity.ok().build();
     }
 
+
+    @PutMapping("/dipatching-teams")
+    public ResponseEntity<Void> dispatchTeamsInGroups(@RequestParam Long tournamentId){
+        participatingTeamService.dispatchTeamsToGroups(tournamentId);
+        return ResponseEntity.ok().build();
+    }
 }
