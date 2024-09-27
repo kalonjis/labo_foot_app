@@ -8,8 +8,14 @@ import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 
 public interface RankingService extends BaseService<Long, Ranking, RankingBusiness>{
+    Long createOne(Tournament tournament, Team team);
+    Ranking getByTournamentIdAndTeamId(Long tournamentId, Long TeamId);
     void update(Long id, RankingEditBusiness entityBusiness);
     void updateNumGroup(Ranking ranking, int numGroup);
-    Long createOne(Tournament tournament, Team team);
-
+    void updateWinnerRanking(Ranking ranking);
+    void updateLooserRanking(Ranking ranking);
+    void updateDrawerRanking(Ranking ranking);
+    void updateNbMatchPlayed(Ranking ranking);
+    void updateGoalsFor(Ranking ranking, int goals);
+    void updateGoalsAgainst(Ranking ranking, int goals);
 }
