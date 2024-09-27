@@ -27,6 +27,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final TournamentService tournamentService;
     private final ValidMatchService validMatchService;
     private final BracketService bracketService;
+    private final RankingService rankingService;
 
 
     @Override
@@ -85,9 +86,34 @@ public class FootMatchServiceImpl implements FootMatchService {
         FootMatch footMatch = getOne(id);
         footMatch.setMatchStatus(matchStatus);
 
-        if(matchStatus == MatchStatus.FINISHED)
+        Long tournamentId = footMatch.getTournament().getId();
+        Team teamHome = footMatch.getTeamHome();
+        Team teamAway = footMatch.getTeamAway();
+        Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
+        Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
+
+        if(matchStatus == MatchStatus.INPROGRESS){
+            rankingService.updateNbMatchPlayed(rankingTeamHome);
+            rankingService.updateNbMatchPlayed(rankingTeamAway);
+        }
+
+        if(matchStatus == MatchStatus.FINISHED) {
             updateBracket(footMatch);
 
+            if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE){
+                Team winner = getWinnerTeam(footMatch);
+                if(winner == teamHome){
+                    rankingService.updateWinnerRanking(rankingTeamHome);
+                    rankingService.updateLooserRanking(rankingTeamAway);
+                } else if (winner == teamAway) {
+                    rankingService.updateWinnerRanking(rankingTeamAway);
+                    rankingService.updateLooserRanking(rankingTeamHome);
+                }else{
+                    rankingService.updateDrawerRanking(rankingTeamHome);
+                    rankingService.updateDrawerRanking(rankingTeamAway);
+                }
+            }
+        }
         footMatchRepository.save(footMatch);
     }
 
@@ -112,8 +138,25 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Transactional
     public void changeScore(Long id, ScoreBusiness scoreBusiness) {
         FootMatch footMatch = getOne(id);
-        footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
+        Long tournamentId = footMatch.getTournament().getId();
+        Team teamHome = footMatch.getTeamHome();
+        Team teamAway = footMatch.getTeamAway();
+        Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
+        Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
+        int existingScoreTeamHome = footMatch.getScoreTeamHome();
+        int existingScoreTeamAway = footMatch.getScoreTeamAway();
+
+        if(existingScoreTeamHome != scoreBusiness.scoreHome()){
+            rankingService.updateGoalsFor(rankingTeamHome, scoreBusiness.scoreHome() - existingScoreTeamHome);
+            rankingService.updateGoalsAgainst(rankingTeamAway, scoreBusiness.scoreHome() - existingScoreTeamHome);
+        }
+        if(existingScoreTeamAway != scoreBusiness.scoreAway()){
+            rankingService.updateGoalsFor(rankingTeamAway, scoreBusiness.scoreAway() - existingScoreTeamAway);
+            rankingService.updateGoalsAgainst(rankingTeamHome, scoreBusiness.scoreAway() - existingScoreTeamAway);
+        }
+
         footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
+        footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
 
         footMatchRepository.save(footMatch);
 

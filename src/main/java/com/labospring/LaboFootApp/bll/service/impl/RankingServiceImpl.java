@@ -25,11 +25,9 @@ public class RankingServiceImpl implements RankingService {
     @Override
     public Long addOne(RankingBusiness entityBusiness) {
         Tournament t = tournamentService.getOne(entityBusiness.tournament_id());
-
         if (t.getTournamentType().getGroups() == null) {
             throw new RuntimeException("Impossible to create ranking for tournament with id " + entityBusiness.tournament_id() + " because it hasn't any group...");
         }
-
         Ranking r = new Ranking(t, entityBusiness.numGroup());
         return rankingRepository.save(r).getId();
     }
@@ -39,12 +37,16 @@ public class RankingServiceImpl implements RankingService {
     public Long createOne(Tournament tournament, Team team) {
         Ranking r = new Ranking(tournament, team);
         return rankingRepository.save(r).getId();
-
     }
 
     @Override
     public Ranking getOne(Long id) {
         return rankingRepository.findById(id).orElseThrow(() -> new DoesntExistsException("No Ranking with ID " + id));
+    }
+
+    @Override
+    public Ranking getByTournamentIdAndTeamId(Long tournamentId, Long TeamId) {
+        return rankingRepository.findByTournamentIdAndTeamId(tournamentId, TeamId);
     }
 
     @Override
@@ -59,9 +61,46 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public void updateOne(Long id, RankingBusiness entityBusiness) {
-
+    public void updateWinnerRanking(Ranking ranking){
+        ranking.setNbWins(ranking.getNbWins() + 1);
+        calculTotalPoints(ranking);
+        rankingRepository.save(ranking);
     }
+
+    @Override
+    public void updateLooserRanking(Ranking ranking){
+        ranking.setNbLosses(ranking.getNbLosses() + 1);
+        calculTotalPoints(ranking);
+        rankingRepository.save(ranking);
+    }
+
+    @Override
+    public void updateDrawerRanking(Ranking ranking){
+        ranking.setNbDraws(ranking.getNbDraws() + 1);
+        calculTotalPoints(ranking);
+        rankingRepository.save(ranking);
+    }
+
+    @Override
+    public void updateNbMatchPlayed(Ranking ranking){
+        ranking.setNbMatchPlayed(ranking.getNbMatchPlayed() + 1);
+        rankingRepository.save(ranking);
+    }
+
+    @Override
+    public void updateGoalsFor(Ranking ranking, int goals){
+        ranking.setGoalsFor(ranking.getGoalsFor() + goals);
+        calculGoalsDiff(ranking);
+        rankingRepository.save(ranking);
+    }
+
+    @Override
+    public void updateGoalsAgainst(Ranking ranking, int goals){
+        ranking.setGoalsAgainst(ranking.getGoalsAgainst() + goals);
+        calculGoalsDiff(ranking);
+        rankingRepository.save(ranking);
+    }
+
 
     @Override
     public void update(Long id, RankingEditBusiness entityBusiness) {
@@ -96,7 +135,9 @@ public class RankingServiceImpl implements RankingService {
     }
 
     private void calculGoalsDiff(Ranking ranking) {
-        ranking.setGoalsDiff(ranking.getGoalsFor() - ranking.getGoalsAgainst());
+        ranking.setGoalsDiff(
+                ranking.getGoalsFor() - ranking.getGoalsAgainst()
+        );
     }
 
     private void calculTotalPoints(Ranking ranking) {
@@ -111,5 +152,9 @@ public class RankingServiceImpl implements RankingService {
     public void updateNumGroup(Ranking ranking, int numGroup) {
         ranking.setNumGroup(numGroup);
         rankingRepository.save(ranking);
+    }
+
+    @Override
+    public void updateOne(Long id, RankingBusiness entityBusiness) {
     }
 }
