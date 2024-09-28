@@ -96,7 +96,9 @@ public class FootMatchServiceImpl implements FootMatchService {
 
             if (matchStatus == MatchStatus.INPROGRESS) {
                 if(matchStatusBeforeChange == MatchStatus.SCHEDULED){
+                    matchStatusBeforeChange = MatchStatus.INPROGRESS;
                     rankingService.updateStartingMatch(rankingTeamHome, rankingTeamAway);
+                    rankingService.updatePosition(rankingTeamHome);
                 }
             }
         }
