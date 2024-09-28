@@ -1,12 +1,16 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
+import com.labospring.LaboFootApp.bll.security.AccessControlService;
+import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
 import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.entities.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +26,12 @@ public class TournamentServiceImpl implements TournamentService {
 
     @Override
     public Long addOne(TournamentBusiness entityBusiness) {
-        return tournamentRepository.save(entityBusiness.toEntity()).getId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Tournament tournament = entityBusiness.toEntity();
+        if(user != null)
+            tournament.setCreator(user);
+
+        return tournamentRepository.save(tournament).getId();
     }
 
     @Override

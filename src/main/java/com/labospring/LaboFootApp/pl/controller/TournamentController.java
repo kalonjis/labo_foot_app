@@ -6,6 +6,7 @@ import com.labospring.LaboFootApp.pl.models.tournament.TournamentForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -43,6 +44,7 @@ public class TournamentController {
     }
 
     @PutMapping("/{id:^\\d+}")
+    //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentForm tournamentForm){
         tournamentService.updateOne(id, tournamentForm.toTournamentBusiness());
         return ResponseEntity.noContent().build();
