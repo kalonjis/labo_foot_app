@@ -50,6 +50,11 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
+    public List<Ranking> getAllByTournamentIdAndNumGroup(Long tournamentId, int numGroup){
+        return rankingRepository.findByTournamentIdAndNumGroup(tournamentId, numGroup);
+    }
+
+    @Override
     public List<Ranking> getAll() {
         return rankingRepository.findAll();
     }
