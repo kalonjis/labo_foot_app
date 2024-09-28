@@ -39,6 +39,19 @@ public class RankingController {
         );
     }
 
+    @GetMapping("by-group")
+    public ResponseEntity<List<RankingDTO>> getByGroup(
+            @RequestParam Long tournamentId,
+            @RequestParam int numGroup
+            ){
+        return ResponseEntity.ok(
+                rankingService.getAllByTournamentIdAndNumGroup(tournamentId, numGroup)
+                        .stream()
+                        .map(RankingDTO::fromEntity)
+                        .toList()
+        );
+    }
+
     @PostMapping
     public ResponseEntity<Void> create(@Valid @RequestBody RankingForm rankingform){
         Long id = rankingService.addOne(rankingform.toRankingBusiness());
