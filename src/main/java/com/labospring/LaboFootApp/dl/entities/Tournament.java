@@ -40,6 +40,11 @@ public class Tournament extends BaseEntity{
     @Setter @Enumerated(EnumType.STRING)
     private TournamentStatus tournamentStatus;
 
+    @Setter
+    @ManyToOne
+//    @JoinColumn(nullable = false, updatable = false)
+    private User creator;
+
 
     @Setter
     @OneToMany(mappedBy = "tournament", cascade ={CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
