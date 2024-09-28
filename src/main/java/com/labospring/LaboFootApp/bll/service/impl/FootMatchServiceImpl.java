@@ -86,33 +86,39 @@ public class FootMatchServiceImpl implements FootMatchService {
         FootMatch footMatch = getOne(id);
         footMatch.setMatchStatus(matchStatus);
 
-        Long tournamentId = footMatch.getTournament().getId();
-        Team teamHome = footMatch.getTeamHome();
-        Team teamAway = footMatch.getTeamAway();
-        Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
-        Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
+        if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE) {
+            Long tournamentId = footMatch.getTournament().getId();
+            Team teamHome = footMatch.getTeamHome();
+            Team teamAway = footMatch.getTeamAway();
+            Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
+            Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
 
-        if(matchStatus == MatchStatus.INPROGRESS){
-            rankingService.updateNbMatchPlayed(rankingTeamHome);
-            rankingService.updateNbMatchPlayed(rankingTeamAway);
-        }
+            if (matchStatus == MatchStatus.INPROGRESS) {
+                rankingService.updateNbMatchPlayed(rankingTeamHome);
+                rankingService.updateNbMatchPlayed(rankingTeamAway);
+                // Update de la position en fonction du nbMatchPlayed
+                rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
+            }
 
-        if(matchStatus == MatchStatus.FINISHED) {
-            updateBracket(footMatch);
-
-            if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE){
+            if (matchStatus == MatchStatus.FINISHED) {
                 Team winner = getWinnerTeam(footMatch);
-                if(winner == teamHome){
+                if (winner == teamHome) {
                     rankingService.updateWinnerRanking(rankingTeamHome);
                     rankingService.updateLooserRanking(rankingTeamAway);
                 } else if (winner == teamAway) {
                     rankingService.updateWinnerRanking(rankingTeamAway);
                     rankingService.updateLooserRanking(rankingTeamHome);
-                }else{
+                } else {
                     rankingService.updateDrawerRanking(rankingTeamHome);
                     rankingService.updateDrawerRanking(rankingTeamAway);
                 }
+                // Update de la position en fonction du totalPoints
+                rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
             }
+        }
+
+        if(matchStatus == MatchStatus.FINISHED) {
+            updateBracket(footMatch);
         }
         footMatchRepository.save(footMatch);
     }
@@ -138,28 +144,31 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Transactional
     public void changeScore(Long id, ScoreBusiness scoreBusiness) {
         FootMatch footMatch = getOne(id);
-        Long tournamentId = footMatch.getTournament().getId();
-        Team teamHome = footMatch.getTeamHome();
-        Team teamAway = footMatch.getTeamAway();
-        Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
-        Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
-        int existingScoreTeamHome = footMatch.getScoreTeamHome();
-        int existingScoreTeamAway = footMatch.getScoreTeamAway();
 
-        if(existingScoreTeamHome != scoreBusiness.scoreHome()){
-            rankingService.updateGoalsFor(rankingTeamHome, scoreBusiness.scoreHome() - existingScoreTeamHome);
-            rankingService.updateGoalsAgainst(rankingTeamAway, scoreBusiness.scoreHome() - existingScoreTeamHome);
-        }
-        if(existingScoreTeamAway != scoreBusiness.scoreAway()){
-            rankingService.updateGoalsFor(rankingTeamAway, scoreBusiness.scoreAway() - existingScoreTeamAway);
-            rankingService.updateGoalsAgainst(rankingTeamHome, scoreBusiness.scoreAway() - existingScoreTeamAway);
+        if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE) {
+            Long tournamentId = footMatch.getTournament().getId();
+            Team teamHome = footMatch.getTeamHome();
+            Team teamAway = footMatch.getTeamAway();
+            Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
+            Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
+            int existingScoreTeamHome = footMatch.getScoreTeamHome();
+            int existingScoreTeamAway = footMatch.getScoreTeamAway();
+
+            if (existingScoreTeamHome != scoreBusiness.scoreHome()) {
+                rankingService.updateGoalsFor(rankingTeamHome, scoreBusiness.scoreHome() - existingScoreTeamHome);
+                rankingService.updateGoalsAgainst(rankingTeamAway, scoreBusiness.scoreHome() - existingScoreTeamHome);
+            }
+            if (existingScoreTeamAway != scoreBusiness.scoreAway()) {
+                rankingService.updateGoalsFor(rankingTeamAway, scoreBusiness.scoreAway() - existingScoreTeamAway);
+                rankingService.updateGoalsAgainst(rankingTeamHome, scoreBusiness.scoreAway() - existingScoreTeamAway);
+            }
+            // update de la postion en fonction des nbgoals
+            rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
         }
 
         footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
         footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
-
         footMatchRepository.save(footMatch);
-
     }
 
     @Override

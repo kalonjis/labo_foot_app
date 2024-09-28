@@ -21,4 +21,5 @@ public interface RankingService extends BaseService<Long, Ranking, RankingBusine
     void updateNbMatchPlayed(Ranking ranking);
     void updateGoalsFor(Ranking ranking, int goals);
     void updateGoalsAgainst(Ranking ranking, int goals);
+    void updatePosition(Ranking ranking);
 }
