@@ -20,7 +20,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class FootMatchServiceImpl implements FootMatchService {
-    
+
     private final FootMatchRepository footMatchRepository;
     private final TeamService teamService;
     private final RefereeService refereeService;
