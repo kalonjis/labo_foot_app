@@ -28,6 +28,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final ValidMatchService validMatchService;
     private final BracketService bracketService;
     private final RankingService rankingService;
+    private final UserService userService;
 
 
     @Override
@@ -176,7 +177,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     public void changeModerator(Long id, Long moderatorId){
         FootMatch footMatch = getOne(id);
 
-        //footMatch.setUserModerator(userService.getOne(id));
+        footMatch.setUserModerator(userService.getOne(moderatorId));
 
         footMatchRepository.save(footMatch);
     }

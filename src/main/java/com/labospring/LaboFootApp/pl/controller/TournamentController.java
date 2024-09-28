@@ -44,7 +44,7 @@ public class TournamentController {
     }
 
     @PutMapping("/{id:^\\d+}")
-@PreAuthorize("hasAuthority('ADMIN') || @accessControlService.canManageTournament(#id)")
+    //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentForm tournamentForm){
         tournamentService.updateOne(id, tournamentForm.toTournamentBusiness());
         return ResponseEntity.noContent().build();
