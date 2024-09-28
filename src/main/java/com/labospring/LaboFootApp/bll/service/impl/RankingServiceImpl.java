@@ -106,6 +106,33 @@ public class RankingServiceImpl implements RankingService {
         rankingRepository.save(ranking);
     }
 
+    @Override
+    public void updatePosition(Ranking ranking) {
+        // Récupérer tous les classements du même tournoi et du même groupe
+        List<Ranking> rankings = getAllByTournamentIdAndNumGroup(ranking.getTournament().getId(), ranking.getNumGroup());
+
+        // Trier les classements par `totalPoints` (du plus élevé au plus faible) puis par `goalsDiff` en cas d'égalité
+        rankings.sort((r1, r2) -> {
+            if (r2.getTotalPoints() != r1.getTotalPoints()) {
+                return Integer.compare(r2.getTotalPoints(), r1.getTotalPoints()); // Tri décroissant par `totalPoints`
+            } else if (r2.getGoalsDiff()!= r1.getGoalsDiff()){
+                return Integer.compare(r2.getGoalsDiff(), r1.getGoalsDiff()); // En cas d'égalité, tri décroissant par `goalsDiff`
+            } else if(r2.getGoalsFor() != r1.getGoalsFor()){
+                return Integer.compare(r2.getGoalsFor(), r1.getGoalsFor()); // En cas d'égalité, tri décroissant par `goalsFor
+            } else {
+                return Integer.compare(r1.getNbMatchPlayed(), r2.getNbMatchPlayed()); // En cas d'égalité, tri croissant par nbMatchPlayed
+            }
+        });
+
+        // Mettre à jour la position des équipes après le tri
+        for (int i = 0; i < rankings.size(); i++) {
+            Ranking r = rankings.get(i);
+            r.setRankingPosition(i + 1); // La position est `i + 1` car la liste est indexée à partir de 0
+            rankingRepository.save(r);   // Sauvegarder chaque changement de position
+        }
+    }
+
+
 
     @Override
     public void update(Long id, RankingEditBusiness entityBusiness) {
