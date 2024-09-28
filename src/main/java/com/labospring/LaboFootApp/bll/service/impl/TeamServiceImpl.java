@@ -5,7 +5,9 @@ import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.models.TeamBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TeamRepository;
 import com.labospring.LaboFootApp.dl.entities.Team;
+import com.labospring.LaboFootApp.dl.entities.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,10 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Long addOne(TeamBusiness entityBusiness) {
-        return teamRepository.save(entityBusiness.toEntity()).getId();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Team team = entityBusiness.toEntity();
+        team.setCreator(user);
+        return teamRepository.save(team).getId();
     }
 
     @Override
