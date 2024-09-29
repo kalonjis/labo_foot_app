@@ -3,7 +3,7 @@ package com.labospring.LaboFootApp.pl.controller.security;
 import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.il.utils.JwtUtils;
-import com.labospring.LaboFootApp.pl.models.user.UserForm;
+import com.labospring.LaboFootApp.pl.models.user.UserCreateForm;
 import com.labospring.LaboFootApp.pl.models.user.UserLoginForm;
 import com.labospring.LaboFootApp.pl.models.user.UserTokenDTO;
 import jakarta.validation.Valid;
@@ -32,7 +32,7 @@ public class AuthController {
      */
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public ResponseEntity<UserTokenDTO> register(@Valid @RequestBody UserForm form) {
+    public ResponseEntity<UserTokenDTO> register(@Valid @RequestBody UserCreateForm form) {
         // Register the user using the provided form and obtain the newly registered user object.
         User u = authService.register(form.toUser());
         // Map the user to a UserTokenDTO (which includes a JWT token) and return it in the response.
