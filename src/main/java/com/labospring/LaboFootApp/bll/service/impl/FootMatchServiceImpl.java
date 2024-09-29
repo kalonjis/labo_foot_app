@@ -20,7 +20,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class FootMatchServiceImpl implements FootMatchService {
-    
+
     private final FootMatchRepository footMatchRepository;
     private final TeamService teamService;
     private final RefereeService refereeService;
@@ -85,6 +85,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Transactional
     public void changeStatus(Long id, MatchStatus matchStatus){
         FootMatch footMatch = getOne(id);
+        MatchStatus matchStatusBeforeChange = footMatch.getMatchStatus();
         footMatch.setMatchStatus(matchStatus);
 
         if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE) {
@@ -95,26 +96,11 @@ public class FootMatchServiceImpl implements FootMatchService {
             Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
 
             if (matchStatus == MatchStatus.INPROGRESS) {
-                rankingService.updateNbMatchPlayed(rankingTeamHome);
-                rankingService.updateNbMatchPlayed(rankingTeamAway);
-                // Update de la position en fonction du nbMatchPlayed
-                rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
-            }
-
-            if (matchStatus == MatchStatus.FINISHED) {
-                Team winner = getWinnerTeam(footMatch);
-                if (winner == teamHome) {
-                    rankingService.updateWinnerRanking(rankingTeamHome);
-                    rankingService.updateLooserRanking(rankingTeamAway);
-                } else if (winner == teamAway) {
-                    rankingService.updateWinnerRanking(rankingTeamAway);
-                    rankingService.updateLooserRanking(rankingTeamHome);
-                } else {
-                    rankingService.updateDrawerRanking(rankingTeamHome);
-                    rankingService.updateDrawerRanking(rankingTeamAway);
+                if(matchStatusBeforeChange == MatchStatus.SCHEDULED){
+                    matchStatusBeforeChange = MatchStatus.INPROGRESS;
+                    rankingService.updateStartingMatch(rankingTeamHome, rankingTeamAway);
+                    rankingService.updatePosition(rankingTeamHome);
                 }
-                // Update de la position en fonction du totalPoints
-                rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
             }
         }
 
@@ -163,7 +149,40 @@ public class FootMatchServiceImpl implements FootMatchService {
                 rankingService.updateGoalsFor(rankingTeamAway, scoreBusiness.scoreAway() - existingScoreTeamAway);
                 rankingService.updateGoalsAgainst(rankingTeamHome, scoreBusiness.scoreAway() - existingScoreTeamAway);
             }
-            // update de la postion en fonction des nbgoals
+
+            if(existingScoreTeamHome == existingScoreTeamAway) {
+                // les equipes faisaient match nul et la teamHome passe devant
+                if (scoreBusiness.scoreHome() > scoreBusiness.scoreAway()) {
+                    rankingService.updateGettingWinner(rankingTeamHome, rankingTeamAway);
+                }
+                // les equipes faisaient match nul et la teamAway passe devant
+                if (scoreBusiness.scoreAway()> scoreBusiness.scoreHome()){
+                    rankingService.updateGettingWinner(rankingTeamAway, rankingTeamHome);
+                }
+            }
+
+            if(existingScoreTeamHome > existingScoreTeamAway){
+                // L'equipe teamHome gagnait et se fait rejoindre au score
+                if(scoreBusiness.scoreHome() == scoreBusiness.scoreAway()){
+                    rankingService.updateGettingDrawer(rankingTeamHome, rankingTeamAway);
+                }
+                // L'equipe teamHome gagnait et perd (dans le cas où il n'y a pas eu d'étape d'égalisation
+                if(scoreBusiness.scoreHome() < scoreBusiness.scoreAway()){
+                    rankingService.updateGettingWinnerFromLoser(rankingTeamAway, rankingTeamHome);
+                }
+            }
+
+            if(existingScoreTeamAway > existingScoreTeamHome){
+                // L'equipe teamAway gagnait et se fait rejoindre au score
+                if (scoreBusiness.scoreAway() == scoreBusiness.scoreHome()){
+                    rankingService.updateGettingDrawer(rankingTeamAway, rankingTeamHome);
+                }
+                // L'equipe teamHome gagnait et perd (dans le cas où il n'y a pas eu d'étape d'égalisation
+                if(scoreBusiness.scoreAway() < scoreBusiness.scoreHome()){
+                    rankingService.updateGettingWinnerFromLoser(rankingTeamHome, rankingTeamAway);
+                }
+            }
+
             rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
         }
 

@@ -15,11 +15,11 @@ public interface RankingService extends BaseService<Long, Ranking, RankingBusine
     List<Ranking> getAllByTournamentIdAndNumGroup(Long tournamentId, int numGroup);
     void update(Long id, RankingEditBusiness entityBusiness);
     void updateNumGroup(Ranking ranking, int numGroup);
-    void updateWinnerRanking(Ranking ranking);
-    void updateLooserRanking(Ranking ranking);
-    void updateDrawerRanking(Ranking ranking);
-    void updateNbMatchPlayed(Ranking ranking);
     void updateGoalsFor(Ranking ranking, int goals);
     void updateGoalsAgainst(Ranking ranking, int goals);
     void updatePosition(Ranking ranking);
+    void updateStartingMatch(Ranking rankingTeamHome, Ranking rankingTeamAway);
+    void updateGettingWinner(Ranking winningRanking, Ranking losingRanking);
+    void updateGettingDrawer(Ranking fromwinnerRanking, Ranking fromLoserRanking);
+    void updateGettingWinnerFromLoser(Ranking winningRanking, Ranking losingRanking);
 }

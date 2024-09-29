@@ -74,6 +74,7 @@ public class FootMatch extends BaseEntity{
         this.referee = referee;
         this.matchDateTime = matchDateTime;
         this.fieldLocation = fieldLocation;
+        this.matchStatus = MatchStatus.SCHEDULED;
         this.matchStage = matchStage;
     }
 }
