@@ -49,11 +49,16 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     public User(String username, String password, String firstname, String lastname, String email, LocalDate birthdate, String phoneNumber, Address address) {
+        this(firstname, lastname, birthdate, phoneNumber, address);
         this.username = username;
         this.password = password;
+        this.email = email;
+    }
+
+    public User(String firstname, String lastname, LocalDate birthdate, String phoneNumber, Address address) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.email = email;
+
         this.birthdate = birthdate;
         this.phoneNumber = phoneNumber;
         this.address = address;
