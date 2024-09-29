@@ -12,6 +12,8 @@ import static com.labospring.LaboFootApp.dl.consts.RankingPoint.*;
 @AllArgsConstructor
 @Getter
 @Entity
+@Table(name = "ranking",
+        uniqueConstraints = @UniqueConstraint(name = "UK_team_tournament", columnNames = {"team_id", "tournament_id"}))
 public class Ranking  extends BaseEntity{
 
     @Id

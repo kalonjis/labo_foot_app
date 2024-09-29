@@ -66,30 +66,51 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public void updateWinnerRanking(Ranking ranking){
-        ranking.setNbWins(ranking.getNbWins() + 1);
-        calculTotalPoints(ranking);
-        rankingRepository.save(ranking);
+    public void updateStartingMatch(Ranking rankingTeamHome, Ranking rankingTeamAway){
+        rankingTeamHome.setNbMatchPlayed(rankingTeamHome.getNbMatchPlayed() + 1);
+        rankingTeamAway.setNbMatchPlayed(rankingTeamAway.getNbMatchPlayed() + 1);
+        rankingTeamHome.setNbDraws(rankingTeamHome.getNbDraws() + 1);
+        rankingTeamAway.setNbDraws(rankingTeamAway.getNbDraws() + 1);
+        calculTotalPoints(rankingTeamHome);
+        calculTotalPoints(rankingTeamAway);
+        rankingRepository.save(rankingTeamHome);
+        rankingRepository.save(rankingTeamAway);
+    }
+    @Override
+    public void updateGettingWinner(Ranking winningRanking, Ranking losingRanking){
+        winningRanking.setNbDraws(winningRanking.getNbDraws() - 1);
+        losingRanking.setNbDraws(losingRanking.getNbDraws() - 1);
+        winningRanking.setNbWins(winningRanking.getNbWins() + 1);
+        losingRanking.setNbLosses(losingRanking.getNbLosses() + 1);
+        calculTotalPoints(winningRanking);
+        calculTotalPoints(losingRanking);
+        rankingRepository.save(winningRanking);
+        rankingRepository.save(losingRanking);
     }
 
     @Override
-    public void updateLooserRanking(Ranking ranking){
-        ranking.setNbLosses(ranking.getNbLosses() + 1);
-        calculTotalPoints(ranking);
-        rankingRepository.save(ranking);
+    public void updateGettingWinnerFromLoser(Ranking winningRanking, Ranking losingRanking){
+        winningRanking.setNbWins(winningRanking.getNbWins() + 1);
+        winningRanking.setNbLosses(winningRanking.getNbLosses() - 1);
+        losingRanking.setNbLosses(losingRanking.getNbLosses() + 1);
+        losingRanking.setNbWins(losingRanking.getNbWins() - 1);
+        calculTotalPoints(winningRanking);
+        calculTotalPoints(losingRanking);
+        rankingRepository.save(winningRanking);
+        rankingRepository.save(losingRanking);
+
     }
 
     @Override
-    public void updateDrawerRanking(Ranking ranking){
-        ranking.setNbDraws(ranking.getNbDraws() + 1);
-        calculTotalPoints(ranking);
-        rankingRepository.save(ranking);
-    }
-
-    @Override
-    public void updateNbMatchPlayed(Ranking ranking){
-        ranking.setNbMatchPlayed(ranking.getNbMatchPlayed() + 1);
-        rankingRepository.save(ranking);
+    public void updateGettingDrawer(Ranking fromwinnerRanking, Ranking fromLoserRanking){
+        fromwinnerRanking.setNbWins(fromwinnerRanking.getNbWins() - 1);
+        fromwinnerRanking.setNbDraws(fromwinnerRanking.getNbDraws() + 1);
+        fromLoserRanking.setNbLosses(fromLoserRanking.getNbLosses() - 1);
+        fromLoserRanking.setNbDraws(fromLoserRanking.getNbDraws() + 1);
+        calculTotalPoints(fromwinnerRanking);
+        calculTotalPoints(fromLoserRanking);
+        rankingRepository.save(fromwinnerRanking);
+        rankingRepository.save(fromLoserRanking);
     }
 
     @Override
