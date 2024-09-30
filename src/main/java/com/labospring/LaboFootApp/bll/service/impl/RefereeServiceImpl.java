@@ -9,9 +9,8 @@ import com.labospring.LaboFootApp.dl.entities.Referee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
-import java.sql.Ref;
 import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RefereeServiceImpl implements RefereeService {

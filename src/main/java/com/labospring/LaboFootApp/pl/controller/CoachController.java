@@ -2,11 +2,8 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.CoachService;
 import com.labospring.LaboFootApp.dl.entities.Coach;
-import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.pl.models.coach.CoachDTO;
 import com.labospring.LaboFootApp.pl.models.coach.CoachForm;
-import com.labospring.LaboFootApp.pl.models.player.PlayerDTO;
-import com.labospring.LaboFootApp.pl.models.player.PlayerSpecificationForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

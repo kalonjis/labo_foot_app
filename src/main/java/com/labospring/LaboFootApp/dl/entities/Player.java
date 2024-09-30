@@ -36,16 +36,6 @@ public class Player extends MatchActor{
         this(null, firstname, lastname, playerName, teamNumber, fieldPosition);
     }
 
-    public void changeTeam(Team team) {
-        if (team != null) {
-            team.addPlayer(this);
-        }
-        else {
-            if(this.team != null){
-                this.team.removePlayer(this);
-            }
-        }
-    }
 
     @Override
     public boolean equals(Object o) {

@@ -4,7 +4,6 @@ import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.CoachService;
 import com.labospring.LaboFootApp.bll.service.models.CoachBusiness;
 import com.labospring.LaboFootApp.bll.specification.CoachSpecification;
-import com.labospring.LaboFootApp.bll.specification.PlayerSpecification;
 import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
 import com.labospring.LaboFootApp.dl.entities.Coach;
 import lombok.RequiredArgsConstructor;
