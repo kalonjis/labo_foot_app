@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor{
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>{
 @Query("select u from User u where u.username ilike :username")
     Optional<User> findByUsername(@Param("username") String username);
 

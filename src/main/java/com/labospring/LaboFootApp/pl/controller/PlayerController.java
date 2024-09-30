@@ -1,8 +1,10 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.PlayerService;
+import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.pl.models.player.PlayerDTO;
 import com.labospring.LaboFootApp.pl.models.player.PlayerForm;
+import com.labospring.LaboFootApp.pl.models.player.PlayerSpecificationForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,7 @@ public class PlayerController {
     }
 
     @PutMapping("/{id:^\\d+}")
-    public ResponseEntity<Void> update(@PathVariable long id,@Valid  @RequestBody PlayerForm playerForm){
+    public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody PlayerForm playerForm){
         playerService.updateOne(id, playerForm.toPlayerBusiness());
         return ResponseEntity.ok().build();
     }
@@ -45,5 +47,13 @@ public class PlayerController {
     public ResponseEntity<Void> remove(@PathVariable long id){
         playerService.deleteOne(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PlayerDTO>> search(@RequestBody PlayerSpecificationForm playerForm){
+        List<Player> players = playerService.getByCriteria(playerForm.toEntity());
+
+        return ResponseEntity.ok(players.stream().map(PlayerDTO::fromEntity).toList());
+
     }
 }
