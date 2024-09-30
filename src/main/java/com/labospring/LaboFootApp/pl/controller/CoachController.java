@@ -1,8 +1,12 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.CoachService;
+import com.labospring.LaboFootApp.dl.entities.Coach;
+import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.pl.models.coach.CoachDTO;
 import com.labospring.LaboFootApp.pl.models.coach.CoachForm;
+import com.labospring.LaboFootApp.pl.models.player.PlayerDTO;
+import com.labospring.LaboFootApp.pl.models.player.PlayerSpecificationForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,5 +49,13 @@ public class CoachController {
     public ResponseEntity<Void> remove(@PathVariable long id){
         coachService.deleteOne(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CoachDTO>> search(@RequestBody CoachForm coachForm){
+        List<Coach> coaches = coachService.getByCriteria(coachForm.toCoachBusiness().toEntity());
+
+        return ResponseEntity.ok(coaches.stream().map(CoachDTO::fromEntity).toList());
+
     }
 }

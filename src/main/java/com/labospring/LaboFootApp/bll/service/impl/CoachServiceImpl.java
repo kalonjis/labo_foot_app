@@ -3,9 +3,12 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.CoachService;
 import com.labospring.LaboFootApp.bll.service.models.CoachBusiness;
+import com.labospring.LaboFootApp.bll.specification.CoachSpecification;
+import com.labospring.LaboFootApp.bll.specification.PlayerSpecification;
 import com.labospring.LaboFootApp.dal.repositories.CoachRepository;
 import com.labospring.LaboFootApp.dl.entities.Coach;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,5 +47,19 @@ public class CoachServiceImpl implements CoachService {
         coach.setLastname(entityBusiness.lastname());
 
         coachRepository.save(coach);
+    }
+
+    public List<Coach> getByCriteria(Coach coach){
+        Specification<Coach> specification = Specification.where(null);
+
+        if(coach.getLastname() != null && !coach.getLastname().isEmpty()){
+            specification = specification.and(CoachSpecification.hasLastname(coach.getLastname()));
+        }
+
+        if(coach.getFirstname() != null && !coach.getFirstname().isEmpty()){
+            specification = specification.and(CoachSpecification.hasFirstname(coach.getFirstname()));
+        }
+
+        return coachRepository.findAll(specification);
     }
 }
