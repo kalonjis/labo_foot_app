@@ -3,6 +3,7 @@ package com.labospring.LaboFootApp.pl.controller;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentDTO;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentForm;
+import com.labospring.LaboFootApp.pl.models.tournament.TournamentStatusForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +48,13 @@ public class TournamentController {
     //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentForm tournamentForm){
         tournamentService.updateOne(id, tournamentForm.toTournamentBusiness());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/status/{id:^\\d+}")
+    //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
+    public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentStatusForm tournamentStatusForm ){
+        tournamentService.updateStatus(id, tournamentStatusForm.tournamentStatus());
         return ResponseEntity.noContent().build();
     }
 

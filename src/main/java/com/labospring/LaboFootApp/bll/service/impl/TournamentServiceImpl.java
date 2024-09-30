@@ -9,6 +9,7 @@ import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
 import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.entities.User;
+import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -66,5 +67,10 @@ public class TournamentServiceImpl implements TournamentService {
         tournamentRepository.save(tournament);
     }
 
-
+    @Override
+    public void updateStatus(Long id, TournamentStatus tournamentStatus) {
+        Tournament tournament = getOne(id);
+        tournament.setTournamentStatus(tournamentStatus);
+        tournamentRepository.save(tournament);
+    }
 }
