@@ -4,10 +4,12 @@ import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.PlayerService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.models.PlayerBusiness;
+import com.labospring.LaboFootApp.bll.specification.PlayerSpecification;
 import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
 import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.dl.entities.Team;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -58,6 +60,28 @@ public class PlayerServiceImpl implements PlayerService {
         player.setPlayerName(playerBusiness.playername());
 
         playerRepository.save(player);
+    }
+
+    public List<Player> getByCriteria(Player player){
+        Specification<Player> playerSpecification = Specification.where(null);
+
+       if(player.getPlayerName() != null && !player.getPlayerName().isEmpty()){
+           playerSpecification = playerSpecification.and(PlayerSpecification.hasPlayerName(player.getPlayerName()));
+       }
+        if(player.getLastname() != null && !player.getLastname().isEmpty()){
+            playerSpecification = playerSpecification.and(PlayerSpecification.hasLastname(player.getLastname()));
+        }
+        if(player.getFirstname() != null && !player.getFirstname().isEmpty()){
+            playerSpecification = playerSpecification.and(PlayerSpecification.hasFirstname(player.getFirstname()));
+        }
+        if(player.getTeamNumber() != null){
+            playerSpecification = playerSpecification.and(PlayerSpecification.hasTeamNumber(player.getTeamNumber()));
+        }
+        if(player.getFieldPosition() != null){
+            playerSpecification = playerSpecification.and(PlayerSpecification.hasFieldPosition(player.getFieldPosition()));
+        }
+
+        return playerRepository.findAll(playerSpecification);
     }
 
 

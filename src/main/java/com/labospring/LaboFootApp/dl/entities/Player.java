@@ -32,6 +32,10 @@ public class Player extends MatchActor{
         this.fieldPosition = fieldPosition;
     }
 
+    public Player(String playerName, String firstname, String lastname, Integer teamNumber, FieldPosition fieldPosition) {
+        this(null, firstname, lastname, playerName, teamNumber, fieldPosition);
+    }
+
     public void changeTeam(Team team) {
         if (team != null) {
             team.addPlayer(this);
