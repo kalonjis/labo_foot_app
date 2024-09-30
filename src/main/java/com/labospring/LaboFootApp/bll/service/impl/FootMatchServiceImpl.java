@@ -6,12 +6,15 @@ import com.labospring.LaboFootApp.bll.exceptions.IncorrectMatchStatusException;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
+import com.labospring.LaboFootApp.bll.service.models.FootMatchSpecificationDTO;
 import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
+import com.labospring.LaboFootApp.bll.specification.FootMatchSpecification;
 import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -245,6 +248,34 @@ public class FootMatchServiceImpl implements FootMatchService {
         footMatch.setMatchDateTime(tournament.getStartDate());
         footMatch.setTournament(tournament);
         return footMatch;
+    }
+
+    @Override
+    public List<FootMatch> getByCriteria(FootMatchSpecificationDTO footMatch) {
+        Specification<FootMatch> specification = Specification.where(null);
+
+        if(footMatch.team1() != null && !footMatch.team1().isEmpty()){
+            specification = specification.and(FootMatchSpecification.hasTeamName(footMatch.team1()));
+        }
+
+        if(footMatch.team2() != null && !footMatch.team2().isEmpty()){
+            specification = specification.and(FootMatchSpecification.hasTeamName(footMatch.team2()));
+        }
+        if(footMatch.after() != null){
+            specification = specification.and(FootMatchSpecification.hasMatchDateTimeAfter(footMatch.after()));
+        }
+        if(footMatch.before() != null){
+            specification = specification.and(FootMatchSpecification.hasMatchDateTimeBefore(footMatch.before()));
+        }
+        if(footMatch.fieldLocation() != null && !footMatch.fieldLocation().isEmpty()){
+            specification = specification.and(FootMatchSpecification.hasFieldLocation(footMatch.fieldLocation()));
+        }
+
+        if(footMatch.referee() != null && !footMatch.referee().isEmpty()){
+            specification = specification.and(FootMatchSpecification.hasRefereeName(footMatch.referee()));
+        }
+
+        return footMatchRepository.findAll(specification);
     }
 
     private FootMatch turnIntoFootMatch(FootMatchEditBusiness entityBusiness){

@@ -5,7 +5,6 @@ import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
