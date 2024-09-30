@@ -1,6 +1,5 @@
 package com.labospring.LaboFootApp.bll.service;
 
-import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.entities.User;
 
 import java.util.List;
