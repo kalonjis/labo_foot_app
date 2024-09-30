@@ -60,6 +60,11 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
+    public List<FootMatch> findAllByUser(User user) {
+        return footMatchRepository.findAllByUser(user);
+    }
+
+    @Override
     @Transactional
     public void deleteOne(Long id) {
         FootMatch footMatch = getOne(id);
@@ -87,11 +92,18 @@ public class FootMatchServiceImpl implements FootMatchService {
 
     @Override
     @Transactional
-    public void changeStatus(Long id, MatchStatus matchStatus){
+    public void changeStatus(Long id, MatchStatus newStatus) {
         FootMatch footMatch = getOne(id);
-        MatchStatus matchStatusBeforeChange = footMatch.getMatchStatus();
-        footMatch.setMatchStatus(matchStatus);
+        MatchStatus currentStatus = footMatch.getMatchStatus();
 
+        // Validation des transitions de statut
+        if (!isValidMatchStatusTransition(currentStatus, newStatus)) {
+            throw new IncorrectMatchStatusException(
+                    String.format("Cannot change match status from %s to %s", currentStatus, newStatus), 409
+            );
+        }
+
+        // Mettre à jour les effets en fonction du nouveau statut
         if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE) {
             Long tournamentId = footMatch.getTournament().getId();
             Team teamHome = footMatch.getTeamHome();
@@ -99,19 +111,37 @@ public class FootMatchServiceImpl implements FootMatchService {
             Ranking rankingTeamHome = rankingService.getByTournamentIdAndTeamId(tournamentId, teamHome.getId());
             Ranking rankingTeamAway = rankingService.getByTournamentIdAndTeamId(tournamentId, teamAway.getId());
 
-            if (matchStatus == MatchStatus.INPROGRESS) {
-                if(matchStatusBeforeChange == MatchStatus.SCHEDULED){
-                    matchStatusBeforeChange = MatchStatus.INPROGRESS;
-                    rankingService.updateStartingMatch(rankingTeamHome, rankingTeamAway);
-                    rankingService.updatePosition(rankingTeamHome);
-                }
+            if (newStatus == MatchStatus.INPROGRESS && currentStatus == MatchStatus.SCHEDULED) {
+                rankingService.updateStartingMatch(rankingTeamHome, rankingTeamAway);
+                rankingService.updatePosition(rankingTeamHome);
             }
         }
 
-        if(matchStatus == MatchStatus.FINISHED) {
+        if (newStatus == MatchStatus.FINISHED) {
             updateBracket(footMatch);
         }
+
+        // Mise à jour du statut du match
+        footMatch.setMatchStatus(newStatus);
         footMatchRepository.save(footMatch);
+    }
+
+    // Méthode pour valider les transitions de statut de match
+    private boolean isValidMatchStatusTransition(MatchStatus currentStatus, MatchStatus newStatus) {
+        switch (currentStatus) {
+            case SCHEDULED:
+                return newStatus == MatchStatus.INPROGRESS || newStatus == MatchStatus.CANCELED;
+            case INPROGRESS:
+                return newStatus == MatchStatus.FINISHED || newStatus == MatchStatus.INTERRUPTED || newStatus == MatchStatus.CANCELED;
+            case FINISHED:
+                return false; // Un match terminé ne peut pas changer de statut
+            case INTERRUPTED:
+                return newStatus == MatchStatus.INPROGRESS || newStatus == MatchStatus.CANCELED;
+            case CANCELED:
+                return false; // Un match annulé ne peut pas changer de statut
+            default:
+                return false;
+        }
     }
 
     private void updateBracket(FootMatch footMatch) {
@@ -269,4 +299,5 @@ public class FootMatchServiceImpl implements FootMatchService {
                 footMatch.getScoreTeamAway() > footMatch.getScoreTeamHome() ? footMatch.getTeamAway() :
                         null;
     }
+
 }

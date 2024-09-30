@@ -53,7 +53,7 @@ public class TournamentController {
 
     @PutMapping("/status/{id:^\\d+}")
     //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
-    public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentStatusForm tournamentStatusForm ){
+    public ResponseEntity<Void> updateStatus(@PathVariable long id, @Valid @RequestBody TournamentStatusForm tournamentStatusForm ){
         tournamentService.updateStatus(id, tournamentStatusForm.tournamentStatus());
         return ResponseEntity.noContent().build();
     }
