@@ -73,4 +73,9 @@ public class TournamentServiceImpl implements TournamentService {
         tournament.setTournamentStatus(tournamentStatus);
         tournamentRepository.save(tournament);
     }
+
+    @Override
+    public List<Tournament> findAllByUser(User user) {
+        return tournamentRepository.findAllByUser(user);
+    }
 }

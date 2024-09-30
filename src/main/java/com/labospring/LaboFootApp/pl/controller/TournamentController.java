@@ -1,13 +1,16 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.TournamentService;
+import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentDTO;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentForm;
+import com.labospring.LaboFootApp.pl.models.tournament.TournamentSmallDetailsDTO;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentStatusForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
