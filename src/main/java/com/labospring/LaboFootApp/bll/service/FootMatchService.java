@@ -7,7 +7,7 @@ import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 
-public interface FootMatchService extends BaseService<Long, FootMatch, FootMatchEditBusiness> {
+public interface FootMatchService extends BaseService<Long, FootMatch, FootMatchEditBusiness>, BaseByUser<FootMatch> {
     void changeStatus(Long id, MatchStatus matchStatus);
     void changeScore(Long id, ScoreBusiness scoreBusiness);
     void changeModerator(Long id, Long moderatorId);

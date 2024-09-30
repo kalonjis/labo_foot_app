@@ -1,12 +1,9 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
-import com.labospring.LaboFootApp.bll.security.AccessControlService;
-import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
-import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
@@ -72,5 +69,10 @@ public class TournamentServiceImpl implements TournamentService {
         Tournament tournament = getOne(id);
         tournament.setTournamentStatus(tournamentStatus);
         tournamentRepository.save(tournament);
+    }
+
+    @Override
+    public List<Tournament> findAllByUser(User user) {
+        return tournamentRepository.findAllByUser(user);
     }
 }
