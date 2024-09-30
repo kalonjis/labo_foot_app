@@ -1,8 +1,10 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.AccountService;
+import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.dl.entities.User;
+import com.labospring.LaboFootApp.pl.models.team.TeamSmallDetailsDTO;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentSmallDetailsDTO;
 import com.labospring.LaboFootApp.pl.models.user.UserPasswordForm;
 import com.labospring.LaboFootApp.pl.models.user.UserDTO;
@@ -22,6 +24,7 @@ import java.util.List;
 public class AccountController {
     private final AccountService accountService;
     private final TournamentService tournamentService;
+    private final TeamService teamService;
 
     @GetMapping("/info")
     @PreAuthorize("isAuthenticated()")
@@ -54,10 +57,18 @@ public class AccountController {
 
     @GetMapping("/tournaments")
     @PreAuthorize("isAuthenticated")
-    public ResponseEntity<List<TournamentSmallDetailsDTO>> getUserTournament(Authentication authentication){
+    public ResponseEntity<List<TournamentSmallDetailsDTO>> getUserTournaments(Authentication authentication){
         User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(tournamentService.findAllByUser(user).stream().map(TournamentSmallDetailsDTO::fromEntity).toList());
+    }
+
+    @GetMapping("/teams")
+    @PreAuthorize("isAuthenticated")
+    public ResponseEntity<List<TeamSmallDetailsDTO>> getUserTeams(Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(teamService.findAllByUser(user).stream().map(TeamSmallDetailsDTO::fromEntity).toList());
     }
 
 }

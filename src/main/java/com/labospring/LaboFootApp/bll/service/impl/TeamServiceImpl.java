@@ -57,4 +57,9 @@ public class TeamServiceImpl implements TeamService {
 
         teamRepository.save(team);
     }
+
+    @Override
+    public List<Team> findAllByUser(User user) {
+        return teamRepository.findAllByUser(user);
+    }
 }
