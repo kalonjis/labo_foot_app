@@ -31,6 +31,16 @@ public class ParticipatingTeamController {
         );
     }
 
+    @GetMapping("/by-tournament/{id:^\\d+}")
+    public ResponseEntity<List<ParticipatingTeamDTO>> getAllTeamsByTournament(@PathVariable long id){
+        return ResponseEntity.ok(
+                participatingTeamService.getAllTeamsByTournament(id)
+                        .stream()
+                        .map(ParticipatingTeamDTO::fromEntity)
+                        .toList()
+        );
+    }
+
     @GetMapping("/by-ids")
     public ResponseEntity<ParticipatingTeamDTO> getOne(
             @RequestParam Long tournamentId,
