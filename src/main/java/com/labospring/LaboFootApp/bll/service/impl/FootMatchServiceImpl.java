@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.FootMatchNeedWinnerException;
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectMatchStatusException;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
@@ -130,6 +131,9 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Transactional
     public void changeScore(Long id, ScoreBusiness scoreBusiness) {
         FootMatch footMatch = getOne(id);
+        if (footMatch.getMatchStatus() == MatchStatus.SCHEDULED) {
+            throw new IncorrectMatchStatusException("Cannot change score for a match that has not started yet.", 409);
+        }
 
         if (footMatch.getMatchStage() == MatchStage.GROUP_STAGE) {
             Long tournamentId = footMatch.getTournament().getId();
