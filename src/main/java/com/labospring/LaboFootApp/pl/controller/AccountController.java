@@ -1,9 +1,11 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.AccountService;
+import com.labospring.LaboFootApp.bll.service.FootMatchService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.dl.entities.User;
+import com.labospring.LaboFootApp.pl.models.footmatch.FootMatchListDetailsDTO;
 import com.labospring.LaboFootApp.pl.models.team.TeamSmallDetailsDTO;
 import com.labospring.LaboFootApp.pl.models.tournament.TournamentSmallDetailsDTO;
 import com.labospring.LaboFootApp.pl.models.user.UserPasswordForm;
@@ -25,6 +27,7 @@ public class AccountController {
     private final AccountService accountService;
     private final TournamentService tournamentService;
     private final TeamService teamService;
+    private final FootMatchService footMatchService;
 
     @GetMapping("/info")
     @PreAuthorize("isAuthenticated()")
@@ -69,6 +72,14 @@ public class AccountController {
         User user = (User) authentication.getPrincipal();
 
         return ResponseEntity.ok(teamService.findAllByUser(user).stream().map(TeamSmallDetailsDTO::fromEntity).toList());
+    }
+
+    @GetMapping("/matches-moderated")
+    @PreAuthorize("isAuthenticated")
+    public ResponseEntity<List<FootMatchListDetailsDTO>> getFootMatchModerated(Authentication authentication){
+        User user = (User) authentication.getPrincipal();
+
+        return ResponseEntity.ok(footMatchService.findAllByUser(user).stream().map(FootMatchListDetailsDTO::fromEntity).toList());
     }
 
 }
