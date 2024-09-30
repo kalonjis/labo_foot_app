@@ -7,14 +7,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 
-//scoreTeamHome
-//scoreTeamAway
 public class FootMatchSpecification {
 
     // Search if team name is either in teamHome or teamAway
     public static Specification<FootMatch> hasTeamName(String teamName) {
         return (root, _, builder) -> {
-            // Join with the teamHome and teamAway entities
             Join<FootMatch, Team> teamHomeJoin = root.join("teamHome", JoinType.INNER);
             Join<FootMatch, Team> teamAwayJoin = root.join("teamAway", JoinType.INNER);
 

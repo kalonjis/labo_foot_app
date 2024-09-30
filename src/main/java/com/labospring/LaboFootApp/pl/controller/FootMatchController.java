@@ -2,10 +2,7 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
 import com.labospring.LaboFootApp.bll.service.models.FootMatchSpecificationDTO;
-import com.labospring.LaboFootApp.dl.entities.Coach;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
-import com.labospring.LaboFootApp.pl.models.coach.CoachDTO;
-import com.labospring.LaboFootApp.pl.models.coach.CoachForm;
 import com.labospring.LaboFootApp.pl.models.footmatch.*;
 import com.labospring.LaboFootApp.pl.models.footmatch.form.*;
 import jakarta.validation.Valid;
