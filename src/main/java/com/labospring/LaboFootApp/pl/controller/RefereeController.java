@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.RefereeService;
+import com.labospring.LaboFootApp.dl.entities.Referee;
 import com.labospring.LaboFootApp.pl.models.referee.RefereeDTO;
 import com.labospring.LaboFootApp.pl.models.referee.RefereeForm;
 import jakarta.validation.Valid;
@@ -45,5 +46,12 @@ public class RefereeController {
     public ResponseEntity<Void> remove(@PathVariable long id){
         refereeService.deleteOne(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<RefereeDTO>> search(@RequestBody RefereeForm refereeForm){
+        List<Referee> referees = refereeService.getByCriteria(refereeForm.toRefereeBusiness().toEntity());
+        return ResponseEntity.ok(referees.stream().map(RefereeDTO::fromEntity).toList());
+
     }
 }

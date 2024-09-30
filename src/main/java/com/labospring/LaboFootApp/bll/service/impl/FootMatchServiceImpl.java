@@ -238,4 +238,9 @@ public class FootMatchServiceImpl implements FootMatchService {
                 footMatch.getScoreTeamAway() > footMatch.getScoreTeamHome() ? footMatch.getTeamAway() :
                         null;
     }
+
+    @Override
+    public List<FootMatch> findAllByUser(User user) {
+        return footMatchRepository.findAllByUser(user);
+    }
 }

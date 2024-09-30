@@ -7,7 +7,6 @@ import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
-import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
@@ -16,8 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
-//TODO: GERER LA CREATION DE RANKING LORS DE LA CREATION DE TOURNAMENT AVEC GROUPE
 
 
 @Service
@@ -83,6 +80,7 @@ public class TournamentServiceImpl implements TournamentService {
         tournamentRepository.save(tournament);
     }
 
+
     private boolean isValidStatusTransition(TournamentStatus currentStatus, TournamentStatus newStatus) {
         // Logique de validation des transitions possibles
         switch (currentStatus) {
@@ -102,4 +100,9 @@ public class TournamentServiceImpl implements TournamentService {
         }
     }
 
+
+    @Override
+    public List<Tournament> findAllByUser(User user) {
+        return tournamentRepository.findAllByUser(user);
+    }
 }
