@@ -1,6 +1,11 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
+import com.labospring.LaboFootApp.bll.service.models.FootMatchSpecificationDTO;
+import com.labospring.LaboFootApp.dl.entities.Coach;
+import com.labospring.LaboFootApp.dl.entities.FootMatch;
+import com.labospring.LaboFootApp.pl.models.coach.CoachDTO;
+import com.labospring.LaboFootApp.pl.models.coach.CoachForm;
 import com.labospring.LaboFootApp.pl.models.footmatch.*;
 import com.labospring.LaboFootApp.pl.models.footmatch.form.*;
 import jakarta.validation.Valid;
@@ -67,6 +72,14 @@ public class FootMatchController {
     public ResponseEntity<Void> updateModerator(@PathVariable long id, @Valid @RequestBody FootMatchModeratorForm footMatchModeratorForm){
         footMatchService.changeModerator(id, footMatchModeratorForm.moderatorId());
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<FootMatchListDetailsDTO>> search(@RequestBody FootMatchSpecificationDTO footDTO){
+        List<FootMatch> footMatches = footMatchService.getByCriteria(footDTO);
+
+        return ResponseEntity.ok(footMatches.stream().map(FootMatchListDetailsDTO::fromEntity).toList());
+
     }
 
 }
