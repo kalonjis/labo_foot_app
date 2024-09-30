@@ -127,7 +127,6 @@ public class RankingServiceImpl implements RankingService {
         rankingRepository.save(ranking);
     }
 
-
     public void updatePosition(Ranking ranking) {
         // Récupérer tous les classements du même tournoi et du même groupe
         List<Ranking> rankings = getAllByTournamentIdAndNumGroup(ranking.getTournament().getId(), ranking.getNumGroup());
