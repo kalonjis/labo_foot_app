@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectTournamentStatusException;
 import com.labospring.LaboFootApp.bll.security.AccessControlService;
 import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
@@ -70,7 +71,35 @@ public class TournamentServiceImpl implements TournamentService {
     @Override
     public void updateStatus(Long id, TournamentStatus tournamentStatus) {
         Tournament tournament = getOne(id);
+        TournamentStatus currentStatus = tournament.getTournamentStatus();
+
+        if (!isValidStatusTransition(currentStatus, tournamentStatus)) {
+            throw new IncorrectTournamentStatusException(
+                    String.format("Cannot change tournament status from %s to %s", currentStatus, tournamentStatus), 409
+            );
+        }
+
         tournament.setTournamentStatus(tournamentStatus);
         tournamentRepository.save(tournament);
     }
+
+    private boolean isValidStatusTransition(TournamentStatus currentStatus, TournamentStatus newStatus) {
+        // Logique de validation des transitions possibles
+        switch (currentStatus) {
+            case BUILDING:
+                return newStatus == TournamentStatus.PENDING || newStatus == TournamentStatus.CANCELED;
+            case PENDING:
+                return newStatus == TournamentStatus.STARTED || newStatus == TournamentStatus.CANCELED;
+            case STARTED:
+                return newStatus == TournamentStatus.INTERRUPTED || newStatus == TournamentStatus.CLOSED;
+            case INTERRUPTED:
+                return newStatus == TournamentStatus.STARTED || newStatus == TournamentStatus.CANCELED;
+            case CLOSED:
+            case CANCELED:
+                return false; // Un tournoi fermé ou annulé ne peut plus changer de statut
+            default:
+                return false;
+        }
+    }
+
 }
