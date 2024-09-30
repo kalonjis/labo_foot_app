@@ -42,12 +42,22 @@ public class ControllerAdvisor {
         // Extraire le message pertinent concernant les erreurs d'enum
         if (fullMessage != null && fullMessage.contains("not one of the values accepted for Enum class")) {
             int index = fullMessage.indexOf("not one of the values accepted for Enum class");
-            return fullMessage.substring(index).split("\r\n")[0].replace("Enum class", "the Tournament Status");
+            String enumType = extractEnumType(fullMessage);
+            return fullMessage.substring(index).split("\r\n")[0].replace("Enum class", "the " + enumType);
         }
         return "Invalid request payload.";
     }
 
-
-
+    private String extractEnumType(String fullMessage) {
+        // Extraire le nom de l'enum du message d'erreur
+        if (fullMessage != null) {
+            int startIndex = fullMessage.indexOf("`com.labospring.LaboFootApp.dl.enums.") + "com.labospring.LaboFootApp.dl.enums.".length();
+            int endIndex = fullMessage.indexOf("`", startIndex);
+            if (startIndex > 0 && endIndex > startIndex) {
+                return fullMessage.substring(startIndex, endIndex);
+            }
+        }
+        return "Enum type";
+    }
 
 }
