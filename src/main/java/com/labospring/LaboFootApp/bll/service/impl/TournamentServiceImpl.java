@@ -39,6 +39,11 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
+    public boolean tournamentExists(Long id){
+        return tournamentRepository.existsById(id);
+    }
+
+    @Override
     public List<Tournament> getAll() {
         return tournamentRepository.findAll();
     }
