@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
@@ -32,6 +33,15 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     @Override
     public List<ParticipatingTeam> getAll() {
         return participatingTeamRepository.findAll();
+    }
+
+    @Override
+    public List<ParticipatingTeam> getAllTeamsByTournament(Long tournamentId){
+        if(! tournamentService.tournamentExists(tournamentId)){
+            throw new DoesntExistsException("The tournament with id : "+ tournamentId + " doesn't exists", 404);
+        }else{
+            return participatingTeamRepository.findAllTeamsByTournamentId(tournamentId);
+        }
     }
 
     @Override

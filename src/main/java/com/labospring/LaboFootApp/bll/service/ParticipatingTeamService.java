@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ParticipatingTeamService {
     List<ParticipatingTeam> getAll();
+    List<ParticipatingTeam> getAllTeamsByTournament(Long tournamentId);
     ParticipatingTeam getOneById(ParticipatingTeam.ParticipatingTeamId id);
     ParticipatingTeam.ParticipatingTeamId createOne(ParticipatingTeamBusiness ptb);
     void deleteById(ParticipatingTeam.ParticipatingTeamId id);
