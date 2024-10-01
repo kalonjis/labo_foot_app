@@ -3,10 +3,13 @@ package com.labospring.LaboFootApp.dl.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @ToString
-@AllArgsConstructor @NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode
 public class FavoriteFootMatch {
 
@@ -19,17 +22,31 @@ public class FavoriteFootMatch {
     private User user;
 
     @ManyToOne
-    @MapsId("teamId")
+    @MapsId("footMatchId")
     @JoinColumn(name = "foot_match_id", nullable = false)
     private FootMatch footMatch;
 
+    @Setter
+    private boolean notificationActivated;
+
+    public FavoriteFootMatch(User user, FootMatch footMatch) {
+        this.user = user;
+        this.footMatch = footMatch;
+        notificationActivated = false;
+        this.id = new FavoriteFootMatchId(user.getId(), footMatch.getId());
+    }
+
     @Embeddable
-    @Getter @Setter @ToString
-    @AllArgsConstructor @NoArgsConstructor
-    public class FavoriteFootMatchId {
+    @Getter
+    @Setter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @EqualsAndHashCode
+    public static class FavoriteFootMatchId implements Serializable {
 
         private Long userId;
-        private Long teamId;
+        private Long footMatchId;
 
     }
 }

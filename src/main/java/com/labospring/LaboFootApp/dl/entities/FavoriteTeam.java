@@ -22,6 +22,15 @@ public class FavoriteTeam {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
+    @Setter
+    private boolean notificationActivated;
+
+    public FavoriteTeam(User user, Team team) {
+        this.user = user;
+        this.team = team;
+        notificationActivated = false;
+    }
+
     @Embeddable
     @Getter
     @Setter
