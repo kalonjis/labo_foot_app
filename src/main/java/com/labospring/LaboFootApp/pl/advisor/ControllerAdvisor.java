@@ -43,7 +43,7 @@ public class ControllerAdvisor {
         if (fullMessage != null && fullMessage.contains("not one of the values accepted for Enum class")) {
             int index = fullMessage.indexOf("not one of the values accepted for Enum class");
             String enumType = extractEnumType(fullMessage);
-            return fullMessage.substring(index).split("\r\n")[0].replace("Enum class", "the " + enumType);
+            return fullMessage.substring(index).split("\r\n")[0].replace("Enum class", "the " + enumType.replace(".",""));
         }
         return "Invalid request payload.";
     }
