@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectRankingListSize;
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
 import com.labospring.LaboFootApp.bll.service.models.RankingEditBusiness;
@@ -10,6 +11,7 @@ import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,21 +22,15 @@ import static com.labospring.LaboFootApp.dl.consts.RankingPoint.*;
 public class RankingServiceImpl implements RankingService {
 
     private final RankingRepository rankingRepository;
-    private final TournamentServiceImpl tournamentService;
-
-    @Override
-    public Long addOne(RankingBusiness entityBusiness) {
-        Tournament t = tournamentService.getOne(entityBusiness.tournament_id());
-        if (t.getTournamentType().getGroups() == null) {
-            throw new RuntimeException("Impossible to create ranking for tournament with id " + entityBusiness.tournament_id() + " because it hasn't any group...");
-        }
-        Ranking r = new Ranking(t, entityBusiness.numGroup());
-        return rankingRepository.save(r).getId();
-    }
 
 
+    @Transactional
     @Override
     public Long createOne(Tournament tournament, Team team) {
+        if (tournament == null || team == null) {
+            throw new IllegalArgumentException("Tournament or Team cannot be null");
+        }
+        validateRankingListSize(tournament);
         Ranking r = new Ranking(tournament, team);
         return rankingRepository.save(r).getId();
     }
@@ -76,6 +72,7 @@ public class RankingServiceImpl implements RankingService {
         rankingRepository.save(rankingTeamHome);
         rankingRepository.save(rankingTeamAway);
     }
+
     @Override
     public void updateGettingWinner(Ranking winningRanking, Ranking losingRanking){
         winningRanking.setNbDraws(winningRanking.getNbDraws() - 1);
@@ -166,11 +163,9 @@ public class RankingServiceImpl implements RankingService {
             previousRanking = currentRanking; // Mettre à jour le classement précédent
             currentPosition++; // Avancer la position actuelle pour la prochaine équipe
 
-            rankingRepository.save(currentRanking); // Sauvegarder chaque changement de position
+            rankingRepository.save(currentRanking);
         }
     }
-
-
 
 
     @Override
@@ -202,7 +197,7 @@ public class RankingServiceImpl implements RankingService {
         calculGoalsDiff(ranking);
         calculTotalPoints(ranking);
 
-        rankingRepository.save(ranking);  // Sauvegarder les changements
+        rankingRepository.save(ranking);
     }
 
     private void calculGoalsDiff(Ranking ranking) {
@@ -225,7 +220,24 @@ public class RankingServiceImpl implements RankingService {
         rankingRepository.save(ranking);
     }
 
+
+    private void validateRankingListSize(Tournament tournament) {
+        int nbMaxRankings = tournament.getTournamentType().getNbTeams();
+        if (tournament.getRankingList().size() >= nbMaxRankings) {
+            throw new IncorrectRankingListSize("Impossible to create more ranking than teams allowed for this tournament");
+        }
+    }
+
+
+
+    // region Methode non implementées de BaseService
     @Override
     public void updateOne(Long id, RankingBusiness entityBusiness) {
     }
+
+    @Override
+    public Long addOne(RankingBusiness entityBusiness) {
+        return 0L;
+    }
+    // endregion
 }
