@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.events.ScoreUpdateEvent;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.FootMatchNeedWinnerException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectMatchStatusException;
@@ -14,6 +15,7 @@ import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,7 +35,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final BracketService bracketService;
     private final RankingService rankingService;
     private final UserService userService;
-
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Transactional
@@ -226,6 +228,8 @@ public class FootMatchServiceImpl implements FootMatchService {
         footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
         footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
         footMatchRepository.save(footMatch);
+        // Publish the event to trigger WebSocket notifications
+        eventPublisher.publishEvent(new ScoreUpdateEvent(this, footMatch));
     }
 
     @Override
