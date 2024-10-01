@@ -17,5 +17,8 @@ public interface ParticipatingTeamRepository extends JpaRepository<Participating
     @Query("SELECT pt FROM ParticipatingTeam pt WHERE pt.tournament.id = :tournamentId")
     List<ParticipatingTeam> findAllTeamsByTournamentId(@Param("tournamentId") Long tournamentId);
 
+    @Query("SELECT pt FROM ParticipatingTeam pt where pt.tournament.id = :tournamentId AND pt.subscriptionStatus = :status")
+    List<ParticipatingTeam> findAllByTournamentAndStatus(@Param("tournamentId") Long tournamentId, @Param("status") SubscriptionStatus status);
+
 
 }
