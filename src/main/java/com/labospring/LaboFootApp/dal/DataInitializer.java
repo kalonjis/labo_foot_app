@@ -6,6 +6,7 @@ import com.labospring.LaboFootApp.bll.service.FootMatchBracketGeneratorService;
 import com.labospring.LaboFootApp.dal.repositories.*;
 import com.labospring.LaboFootApp.dl.entities.*;
 
+import java.time.Month;
 import java.util.*;
 
 import com.labospring.LaboFootApp.dl.enums.*;
@@ -211,7 +212,6 @@ public class DataInitializer implements CommandLineRunner {
 
         // region Tournament
         Tournament tournament1 = new Tournament(
-                null, // ID auto-généré
                 "Champions League 2024",
                 LocalDateTime.of(2024, 9, 15, 20, 45),
                 LocalDateTime.of(2025, 5, 28, 20, 45),
@@ -222,7 +222,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament2 = new Tournament(
-                null, // ID auto-généré
                 "World Cup 2026",
                 LocalDateTime.of(2026, 11, 18, 17, 0),
                 LocalDateTime.of(2026, 12, 18, 20, 0),
@@ -233,7 +232,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament3 = new Tournament(
-                null, // ID auto-généré
                 "Copa America 2024",
                 LocalDateTime.of(2024, 6, 10, 19, 0),
                 LocalDateTime.of(2024, 7, 12, 21, 0),
@@ -244,7 +242,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament4 = new Tournament(
-                null, // ID auto-généré
                 "Euro 2024",
                 LocalDateTime.of(2024, 6, 14, 21, 0),
                 LocalDateTime.of(2024, 7, 14, 20, 0),
@@ -255,7 +252,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament5 = new Tournament(
-                null, // ID auto-généré
                 "African Cup of Nations 2023",
                 LocalDateTime.of(2023, 1, 10, 18, 0),
                 LocalDateTime.of(2023, 2, 6, 20, 0),
@@ -266,7 +262,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament6 = new Tournament(
-                null, // ID auto-généré
                 "Asian Cup 2024",
                 LocalDateTime.of(2024, 1, 5, 18, 30),
                 LocalDateTime.of(2024, 2, 1, 19, 30),
@@ -277,7 +272,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament7 = new Tournament(
-                null, // ID auto-généré
                 "Knockout Tournament 16 Teams",
                 LocalDateTime.of(2024, 10, 20, 20, 0),
                 LocalDateTime.of(2024, 11, 10, 20, 0),
@@ -288,7 +282,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament8 = new Tournament(
-                null, // ID auto-généré
                 "Knockout Tournament 8 Teams",
                 LocalDateTime.of(2024, 3, 18, 18, 0),
                 LocalDateTime.of(2024, 4, 2, 20, 0),
@@ -299,7 +292,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament9 = new Tournament(
-                null, // ID auto-généré
                 "Knockout Tournament 4 Teams",
                 LocalDateTime.of(2024, 5, 25, 20, 0),
                 LocalDateTime.of(2024, 5, 28, 20, 0),
@@ -310,7 +302,6 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         Tournament tournament10 = new Tournament(
-                null, // ID auto-généré
                 "Final Match",
                 LocalDateTime.of(2024, 6, 8, 20, 45),
                 LocalDateTime.of(2024, 6, 8, 22, 45),
@@ -319,20 +310,77 @@ public class DataInitializer implements CommandLineRunner {
                 TournamentType.KNOCKOUT_2,
                 TournamentStatus.CLOSED // Tournoi clôturé
         );
-// endregion
 
+        // region championship
+        Tournament championship_4 = new Tournament(
+                "Championship 4 Teams",
+                LocalDateTime.of(2024, Month.OCTOBER, 1, 0, 0),
+                LocalDateTime.of(2024, Month.OCTOBER, 6, 23, 59),
+                "Stadium A",
+                TournamentType.CHAMPIONSHIP_4
+        );
+
+        Tournament championship_6 = new Tournament(
+                "Championship 6 Teams",
+                LocalDateTime.of(2024, Month.NOVEMBER, 1, 0, 0),
+                LocalDateTime.of(2024, Month.NOVEMBER, 10, 23, 59),
+                "Stadium B",
+                TournamentType.CHAMPIONSHIP_6
+        );
+
+        Tournament championship_8 = new Tournament(
+                "Championship 8 Teams",
+                LocalDateTime.of(2024, Month.DECEMBER, 1, 0, 0),
+                LocalDateTime.of(2024, Month.DECEMBER, 12, 23, 59),
+                "Stadium C",
+                TournamentType.CHAMPIONSHIP_8
+        );
+
+        Tournament championship_10 = new Tournament(
+                "Championship 10 Teams",
+                LocalDateTime.of(2025, Month.JANUARY, 5, 0, 0),
+                LocalDateTime.of(2025, Month.JANUARY, 20, 23, 59),
+                "Stadium D",
+                TournamentType.CHAMPIONSHIP_10
+        );
+
+        Tournament championship_12 = new Tournament(
+                "Championship 12 Teams",
+                LocalDateTime.of(2025, Month.FEBRUARY, 1, 0, 0),
+                LocalDateTime.of(2025, Month.FEBRUARY, 15, 23, 59),
+                "Stadium E",
+                TournamentType.CHAMPIONSHIP_12
+        );
+
+        Tournament championship_16 = new Tournament(
+                "Championship 16 Teams",
+                LocalDateTime.of(2025, Month.MARCH, 1, 0, 0),
+                LocalDateTime.of(2025, Month.MARCH, 20, 23, 59),
+                "Stadium F",
+                TournamentType.CHAMPIONSHIP_16
+        );
+
+        Tournament championship_18 = new Tournament(
+                "Championship 18 Teams",
+                LocalDateTime.of(2025, Month.APRIL, 1, 0, 0),
+                LocalDateTime.of(2025, Month.APRIL, 25, 23, 59),
+                "Stadium G",
+                TournamentType.CHAMPIONSHIP_18
+        );
+
+        Tournament championship_20 = new Tournament(
+                "Championship 20 Teams",
+                LocalDateTime.of(2025, Month.MAY, 1, 0, 0),
+                LocalDateTime.of(2025, Month.MAY, 30, 23, 59),
+                "Stadium H",
+                TournamentType.CHAMPIONSHIP_20
+        );
 
         List<Tournament> tournaments = List.of(
-                tournament1,
-                tournament2,
-                tournament3,
-                tournament4,
-                tournament5,
-                tournament6,
-                tournament7,
-                tournament8,
-                tournament9,
-                tournament10
+                tournament1, tournament2, tournament3, tournament4, tournament5,
+                tournament6, tournament7, tournament8, tournament9, tournament10,
+                championship_4, championship_6, championship_8, championship_10,
+                championship_12, championship_16, championship_18, championship_20
         );
 
         if (tournamentRepository.count() == 0) {
@@ -407,18 +455,24 @@ public class DataInitializer implements CommandLineRunner {
         List<ParticipatingTeam> participatingTeams3 = new ArrayList<>();
 
         for (int i = 1; i <= teams.size() - 4; i++) {
-            ParticipatingTeam participatingTeamName = new ParticipatingTeam(tournament6, teams.get(i - 1));
-            //participatingTeamName.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
-            participatingTeams3.add(participatingTeamName);
+            participatingTeams3.add(new ParticipatingTeam(tournament6, teams.get(i - 1)));
         }
-
-
         // endregion
+
+        // region Participating Teams for championship_8
+        List<ParticipatingTeam> participatingTeams4 = new ArrayList<>();
+
+        for (int i = 1; i <= teams.size() - 8; i++) {
+            participatingTeams4.add(new ParticipatingTeam(championship_8, teams.get(i - 1)));
+        }
+        // endregion
+
 
         if (participatingTeamRepository.count() == 0) {
             participatingTeamRepository.saveAll(participatingTeams);
             participatingTeamRepository.saveAll(participatingTeams2);
             participatingTeamRepository.saveAll(participatingTeams3);
+            participatingTeamRepository.saveAll(participatingTeams4);
         }
         //  endregion
 
