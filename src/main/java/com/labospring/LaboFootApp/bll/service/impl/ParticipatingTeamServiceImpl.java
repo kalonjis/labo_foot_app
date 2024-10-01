@@ -1,6 +1,8 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectAcceptedTeamsSizeException;
+import com.labospring.LaboFootApp.bll.exceptions.IncorrectSubscriptionStatusException;
 import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
@@ -15,6 +17,7 @@ import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,14 +48,25 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
     @Override
+    public List<ParticipatingTeam> getAllByTournamentAndStatus(Long tournamentId, SubscriptionStatus status){
+        if(! tournamentService.tournamentExists(tournamentId)) {
+            throw new DoesntExistsException("The tournament with id : " + tournamentId + " doesn't exists", 404);
+        }if(! SubscriptionStatus.contains(status)){
+            throw  new IncorrectSubscriptionStatusException(status + "is not a valid SubscriptionStatus. Please use one of the followings: {PENDING, ACCEPTED, REJECTED, CANCELED}", 400);
+        }
+            return participatingTeamRepository.findAllByTournamentAndStatus(tournamentId, status);
+
+    }
+
+    @Override
     public ParticipatingTeam.ParticipatingTeamId createOne(ParticipatingTeamBusiness entityBusiness) {
         Tournament tournament = tournamentService.getOne(entityBusiness.tournamentId());
         Team team = teamService.getOne(entityBusiness.teamId());
-        return new ParticipatingTeam(tournament, team).getId();
+        return participatingTeamRepository.save(new ParticipatingTeam(tournament, team)).getId();
     }
     @Override
     public ParticipatingTeam getOneById(ParticipatingTeam.ParticipatingTeamId id) {
-        return participatingTeamRepository.findById(id).orElseThrow(() -> new RuntimeException(
+        return participatingTeamRepository.findById(id).orElseThrow(() -> new DoesntExistsException(
                 "the team with id : " + id.getTeamId() + " isn't participating to the tournament with id: " + id.getTournamentId())
         );
     }
@@ -64,15 +78,78 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
     @Override
-    public void changeStatus(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus status) {
+    @Transactional
+    public void changeStatus(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus newStatus) {
+        validateStatusChange(id, newStatus); // Utilisation de la méthode de validation avant de changer le statut
+
         ParticipatingTeam pt = getOneById(id);
-        pt.setSubscriptionStatus(status);
-        if(status == SubscriptionStatus.ACCEPTED){
+
+        if (pt.getSubscriptionStatus() == SubscriptionStatus.ACCEPTED){
+            Ranking ranking = rankingService.getByTournamentIdAndTeamId(id.getTournamentId(), id.getTeamId());
+            rankingService.deleteOne(ranking.getId());
+        }
+
+        pt.setSubscriptionStatus(newStatus);
+
+        // Si le nouveau statut est ACCEPTED, créer un ranking
+        if (newStatus == SubscriptionStatus.ACCEPTED) {
             Tournament tournament = tournamentService.getOne(pt.getTournament().getId());
             Team team = teamService.getOne(pt.getTeam().getId());
             rankingService.createOne(tournament, team);
         }
+
         participatingTeamRepository.save(pt);
+    }
+
+    private void validateStatusChange(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus newStatus) {
+        // Vérifier si le statut est valide
+        if (newStatus == null || !SubscriptionStatus.contains(newStatus)) {
+            throw new IncorrectSubscriptionStatusException(
+                    newStatus + " is not a valid SubscriptionStatus. Please use one of the following: {PENDING, ACCEPTED, REJECTED, CANCELED}", 400
+            );
+        }
+
+        // Vérifier si le tournoi existe
+        Tournament tournament = tournamentService.getOne(id.getTournamentId());
+
+        // Vérifier si l'équipe existe
+        Team team = teamService.getOne(id.getTeamId());
+
+        // Vérifier si la `ParticipatingTeam` existe
+        ParticipatingTeam participatingTeam = getOneById(id);
+
+        // Vérifier la transition de statut
+        SubscriptionStatus currentStatus = participatingTeam.getSubscriptionStatus();
+        if (!isStatusTransitionValid(currentStatus, newStatus)) {
+            throw new IncorrectSubscriptionStatusException(
+                    "Transition from " + currentStatus + " to " + newStatus + " is not allowed.", 400
+            );
+        }
+
+        // Vérifier le nombre maximum d'équipes acceptées
+        if (newStatus == SubscriptionStatus.ACCEPTED) {
+            int acceptedTeams = getAllByTournamentAndStatus(id.getTournamentId(), SubscriptionStatus.ACCEPTED).size();
+            int nbMaxAcceptedTeams = tournamentService.getOne(id.getTournamentId()).getTournamentType().getNbTeams();
+            if (acceptedTeams >= nbMaxAcceptedTeams) {
+                throw new IncorrectAcceptedTeamsSizeException("The tournament has already accepted the maximum number of participating teams.");
+            }
+        }
+    }
+
+    private boolean isStatusTransitionValid(SubscriptionStatus currentStatus, SubscriptionStatus newStatus) {
+        // Définir les transitions autorisées
+        switch (currentStatus) {
+            case PENDING:
+                return newStatus == SubscriptionStatus.ACCEPTED || newStatus == SubscriptionStatus.REJECTED || newStatus == SubscriptionStatus.CANCELED;
+            case ACCEPTED:
+                return newStatus == SubscriptionStatus.CANCELED || newStatus == SubscriptionStatus.REJECTED;
+            case REJECTED:
+                return newStatus == SubscriptionStatus.PENDING; // Exemple : on peut repasser un REJECTED à PENDING
+            case CANCELED:
+                return newStatus == SubscriptionStatus.PENDING; // Exemple : on peut repasser un CANCELED à PENDING
+            default:
+                return false;
+        }
     }
 
     @Override
