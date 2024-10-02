@@ -1,6 +1,9 @@
-package com.labospring.LaboFootApp.bll.service;
+package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
+import com.labospring.LaboFootApp.bll.service.FavoriteFootMatchService;
+import com.labospring.LaboFootApp.bll.service.FootMatchService;
+import com.labospring.LaboFootApp.bll.service.UserService;
 import com.labospring.LaboFootApp.dal.repositories.FavoriteFootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.FavoriteFootMatch;
 import com.labospring.LaboFootApp.dl.entities.FavoriteFootMatch.FavoriteFootMatchId;

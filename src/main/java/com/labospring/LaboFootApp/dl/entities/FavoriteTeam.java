@@ -27,11 +27,13 @@ public class FavoriteTeam {
     @Setter
     private boolean notificationActivated;
 
-    public FavoriteTeam(User user, Team team) {
+    public FavoriteTeam(User user, Team team, boolean notificationActivated) {
         this.user = user;
         this.team = team;
-        notificationActivated = false;
+        this.notificationActivated = notificationActivated;
+        this.id = new FavoriteTeamId(user.getId(), team.getId());
     }
+
 
     @Embeddable
     @Getter
