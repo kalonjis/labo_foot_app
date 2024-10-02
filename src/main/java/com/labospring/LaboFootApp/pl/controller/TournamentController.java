@@ -45,20 +45,21 @@ public class TournamentController {
     }
 
     @PutMapping("/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody TournamentForm tournamentForm){
         tournamentService.updateOne(id, tournamentForm.toTournamentBusiness());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/status/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> updateStatus(@PathVariable long id, @Valid @RequestBody TournamentStatusForm tournamentStatusForm ){
         tournamentService.updateStatus(id, tournamentStatusForm.tournamentStatus());
         return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerTournament(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> remove(@PathVariable long id){
         tournamentService.deleteOne(id);
         return ResponseEntity.noContent().build();
