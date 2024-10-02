@@ -375,6 +375,8 @@ public class DataInitializer implements CommandLineRunner {
                 "Stadium H",
                 TournamentType.CHAMPIONSHIP_20
         );
+        // endregion
+
 
         List<Tournament> tournaments = List.of(
                 tournament1, tournament2, tournament3, tournament4, tournament5,

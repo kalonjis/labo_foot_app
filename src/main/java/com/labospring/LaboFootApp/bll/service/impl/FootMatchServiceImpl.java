@@ -15,6 +15,7 @@ import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
+import com.labospring.LaboFootApp.il.utils.ChampionshipCalendarGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,7 +37,9 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final BracketService bracketService;
     private final RankingService rankingService;
     private final UserService userService;
+    private final ParticipatingTeamService participatingTeamService;
     private final ApplicationEventPublisher eventPublisher;
+
 
     @Override
     @Transactional
@@ -254,6 +257,7 @@ public class FootMatchServiceImpl implements FootMatchService {
         footMatchRepository.save(footMatch);
     }
 
+
     @Override
     public List<FootMatch> getByCriteria(FootMatchSpecificationDTO footMatch) {
         Specification<FootMatch> specification = Specification.where(null);
@@ -302,6 +306,16 @@ public class FootMatchServiceImpl implements FootMatchService {
         return footMatch.getScoreTeamHome() > footMatch.getScoreTeamAway() ? footMatch.getTeamHome() :
                 footMatch.getScoreTeamAway() > footMatch.getScoreTeamHome() ? footMatch.getTeamAway() :
                         null;
+    }
+
+    @Override
+    public void buildChampionshipCalendar(Long tournamentId){
+        Tournament tournament = tournamentService.getOne(tournamentId);
+        List<FootMatch> matches = ChampionshipCalendarGenerator.generateMatchSchedule(tournament, participatingTeamService);
+        for (FootMatch match: matches) {
+
+            footMatchRepository.save(match);
+        }
     }
 
 }

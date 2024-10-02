@@ -51,6 +51,7 @@ public class FootMatch extends BaseEntity{
     private int scoreTeamAway;
 
     @Setter
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private MatchStatus matchStatus;
 

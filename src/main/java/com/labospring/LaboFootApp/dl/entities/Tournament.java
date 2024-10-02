@@ -37,7 +37,10 @@ public class Tournament extends BaseEntity{
     @Setter
     @Enumerated(EnumType.STRING)
     private TournamentType tournamentType;
-    @Setter @Enumerated(EnumType.STRING)
+
+    @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private TournamentStatus tournamentStatus;
 
     @Setter
