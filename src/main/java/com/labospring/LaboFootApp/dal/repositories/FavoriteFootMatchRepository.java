@@ -18,4 +18,7 @@ public interface FavoriteFootMatchRepository extends JpaRepository<FavoriteFootM
 
     @Query("select f from FavoriteFootMatch f where f.footMatch = :footMatch and f.user = :user")
     Optional<FavoriteFootMatch> findByUserAndFootMatch(User user, FootMatch footMatch);
+
+    @Query("select f from FavoriteFootMatch f where f.user = :user")
+    List<FavoriteFootMatch> findAllByUser(User user);
 }

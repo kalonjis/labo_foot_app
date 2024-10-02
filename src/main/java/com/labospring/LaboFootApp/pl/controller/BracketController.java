@@ -1,7 +1,7 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.BracketService;
-import com.labospring.LaboFootApp.pl.models.BracketDTO;
+import com.labospring.LaboFootApp.pl.models.bracket.BracketDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

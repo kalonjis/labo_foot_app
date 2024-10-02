@@ -1,8 +1,10 @@
 package com.labospring.LaboFootApp.bll.events;
 
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
+import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
+@Getter
 public class ScoreUpdateEvent extends ApplicationEvent {
 
     private final FootMatch match;
@@ -12,8 +14,5 @@ public class ScoreUpdateEvent extends ApplicationEvent {
         this.match = match;
     }
 
-    public FootMatch getMatch() {
-        return match;
-    }
 }
 

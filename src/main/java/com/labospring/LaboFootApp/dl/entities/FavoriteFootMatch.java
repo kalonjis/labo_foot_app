@@ -29,10 +29,10 @@ public class FavoriteFootMatch {
     @Setter
     private boolean notificationActivated;
 
-    public FavoriteFootMatch(User user, FootMatch footMatch) {
+    public FavoriteFootMatch(User user, FootMatch footMatch, boolean notificationActivated) {
         this.user = user;
         this.footMatch = footMatch;
-        notificationActivated = false;
+        this.notificationActivated = notificationActivated;
         this.id = new FavoriteFootMatchId(user.getId(), footMatch.getId());
     }
 

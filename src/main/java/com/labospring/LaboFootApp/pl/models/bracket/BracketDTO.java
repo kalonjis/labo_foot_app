@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.pl.models;
+package com.labospring.LaboFootApp.pl.models.bracket;
 
 import com.labospring.LaboFootApp.dl.entities.Bracket;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;

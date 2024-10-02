@@ -3,6 +3,8 @@ package com.labospring.LaboFootApp.dl.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Entity
 @Getter
 @ToString
@@ -37,7 +39,8 @@ public class FavoriteTeam {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor
-    public class FavoriteTeamId {
+    @EqualsAndHashCode
+    public static class FavoriteTeamId implements Serializable {
 
         private Long userId;
         private Long teamId;

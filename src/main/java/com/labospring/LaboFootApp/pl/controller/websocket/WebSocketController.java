@@ -1,12 +1,16 @@
 package com.labospring.LaboFootApp.pl.controller.websocket;
 
+import com.labospring.LaboFootApp.bll.events.WebSocketNotifier;
+import com.labospring.LaboFootApp.dl.entities.FootMatch;
+import com.labospring.LaboFootApp.dl.entities.User;
+import com.labospring.LaboFootApp.pl.models.notif.NotificationFootMatchScore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Slf4j
-public class WebSocketController {
+public class WebSocketController implements WebSocketNotifier {
     // This is used to send messages to specific topics.
     private final SimpMessagingTemplate messagingTemplate;
 
@@ -14,14 +18,15 @@ public class WebSocketController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    // Send a score update to all users subscribed to the match
-    public void sendScoreUpdate(Long matchId, String message) {
-        messagingTemplate.convertAndSend("/notifications", message);
-    }
-
-    public void sendScoreUpdateToUser(String userId, String message) {
-        // Use user-specific destination (/user/{userId}/notifications) to send the message
-        log.info("Sending message to user {}: {}", userId, message);
-        messagingTemplate.convertAndSendToUser(userId, "/notifications", message);
+    @Override
+    public void sendFootMatchToUser(User user, FootMatch match, String message) {
+        // Send real-time updates via WebSocket only to users who have notifications activated
+        log.info("Sending message to user {}: {}", user.getUsername(), "");
+        messagingTemplate.convertAndSendToUser(user.getUsername(), "/notifications",  new NotificationFootMatchScore(
+                match.getTeamHome().getName(),
+                match.getTeamAway().getName(),
+                match.getScoreTeamHome(),
+                match.getScoreTeamAway(),
+                message));
     }
 }

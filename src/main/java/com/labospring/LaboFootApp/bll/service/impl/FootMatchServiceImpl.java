@@ -225,11 +225,19 @@ public class FootMatchServiceImpl implements FootMatchService {
             rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
         }
 
-        footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
-        footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
-        footMatchRepository.save(footMatch);
-        // Publish the event to trigger WebSocket notifications
-        eventPublisher.publishEvent(new ScoreUpdateEvent(this, footMatch));
+        if(haveDifferentScore(scoreBusiness, footMatch)){
+            footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
+            footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
+            footMatchRepository.save(footMatch);
+            // Publish the event to trigger WebSocket notifications
+            eventPublisher.publishEvent(new ScoreUpdateEvent(this, footMatch));
+        }
+
+    }
+
+    private static boolean haveDifferentScore(ScoreBusiness scoreBusiness, FootMatch footMatch) {
+        return footMatch.getScoreTeamHome() != scoreBusiness.scoreHome() ||
+                footMatch.getScoreTeamAway() != scoreBusiness.scoreAway();
     }
 
     @Override
