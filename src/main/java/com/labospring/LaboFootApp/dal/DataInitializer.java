@@ -391,23 +391,23 @@ public class DataInitializer implements CommandLineRunner {
         // endregion
 
         // region Generate Bracket
-        bracketGeneratorService.generateAndSaveBrackets(tournament8);
-        bracketGeneratorService.generateAndSaveBrackets(tournament7);
-        // endregion
-
-        // region Fill Matches in Bracket
-        List<Bracket> brackets = bracketService.getListByTournament(tournament8.getId());
-        List<Bracket> lastBrackets = bracketGeneratorService.getBracketsByMatchStage(brackets).get(MatchStage.QUARTER_FINAL);
-        List<Team> teamsForBracket = List.of(team1, team2, team3, team4, team5, team6, team7, team8);
-        footMatchInBracketGeneratorService.generateFootMatch(lastBrackets, teamsForBracket);
-        bracketRepository.saveAll(lastBrackets);
-
-        brackets = bracketService.getListByTournament(tournament7.getId());
-        lastBrackets = bracketGeneratorService.getBracketsByMatchStage(brackets).get(MatchStage.ROUND_OF_16);
-        teamsForBracket = List.of(team1, team2, team3, team4, team5, team6, team7, team8,
-                team9, team10, team11, team12, team13, team14, team15, team16);
-        footMatchInBracketGeneratorService.generateFootMatch(lastBrackets, teamsForBracket);
-        bracketRepository.saveAll(lastBrackets);
+//        bracketRepository.saveAll( bracketGeneratorService.generateAndSaveBrackets(tournament8) );
+//        bracketRepository.saveAll( bracketGeneratorService.generateAndSaveBrackets(tournament7) );
+//        // endregion
+//
+//        // region Fill Matches in Bracket
+//        List<Bracket> brackets = bracketService.getListByTournament(tournament8.getId());
+//        List<Bracket> lastBrackets = bracketGeneratorService.getBracketsByMatchStage(brackets).get(MatchStage.QUARTER_FINAL);
+//        List<Team> teamsForBracket = List.of(team1, team2, team3, team4, team5, team6, team7, team8);
+//        footMatchInBracketGeneratorService.generateFootMatch(lastBrackets, teamsForBracket);
+//        bracketRepository.saveAll(lastBrackets);
+//
+//        brackets = bracketService.getListByTournament(tournament7.getId());
+//        lastBrackets = bracketGeneratorService.getBracketsByMatchStage(brackets).get(MatchStage.ROUND_OF_16);
+//        teamsForBracket = List.of(team1, team2, team3, team4, team5, team6, team7, team8,
+//                team9, team10, team11, team12, team13, team14, team15, team16);
+//        footMatchInBracketGeneratorService.generateFootMatch(lastBrackets, teamsForBracket);
+//        bracketRepository.saveAll(lastBrackets);
         // endregion
 
         // region ParticipatingTeam
@@ -419,12 +419,16 @@ public class DataInitializer implements CommandLineRunner {
         ParticipatingTeam participatingTeam3 = new ParticipatingTeam(tournament8, team3);
         participatingTeam3.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam4 = new ParticipatingTeam(tournament8, team4);
-        participatingTeam4.setSubscriptionStatus(SubscriptionStatus.CANCELED);
+        participatingTeam4.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam5 = new ParticipatingTeam(tournament8, team5);
+        participatingTeam5.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam6 = new ParticipatingTeam(tournament8, team6);
-        participatingTeam6.setSubscriptionStatus(SubscriptionStatus.CANCELED);
+        participatingTeam6.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam7 = new ParticipatingTeam(tournament8, team7);
+        participatingTeam7.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
         ParticipatingTeam participatingTeam8 = new ParticipatingTeam(tournament8, team8);
+        participatingTeam8.setSubscriptionStatus(SubscriptionStatus.ACCEPTED);
+
 
         List<ParticipatingTeam> participatingTeams = List.of(
                 participatingTeam1, participatingTeam2, participatingTeam3, participatingTeam4,

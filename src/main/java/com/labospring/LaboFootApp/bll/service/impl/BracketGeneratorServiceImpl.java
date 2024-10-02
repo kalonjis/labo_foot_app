@@ -1,8 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.service.BracketGeneratorService;
-import com.labospring.LaboFootApp.bll.service.FootMatchService;
-import com.labospring.LaboFootApp.dal.repositories.BracketRepository;
 import com.labospring.LaboFootApp.dl.entities.Bracket;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
@@ -19,8 +17,6 @@ import static com.labospring.LaboFootApp.dl.enums.MatchStage.*;
 @Service
 @RequiredArgsConstructor
 public class BracketGeneratorServiceImpl implements BracketGeneratorService {
-    private final BracketRepository bracketRepository;
-    private final FootMatchService footMatchService;
     // List of tournament stages in descending order (final -> round of 16)
     private final List<MatchStage> matchStages = List.of(FINAL, SEMI_FINAL, QUARTER_FINAL, ROUND_OF_16);
 
@@ -34,13 +30,13 @@ public class BracketGeneratorServiceImpl implements BracketGeneratorService {
      */
     @Override
     @Transactional
-    public void generateAndSaveBrackets(Tournament tournament) {
+    public List<Bracket> generateBrackets(Tournament tournament) {
         if(tournament == null || tournament.getTournamentType() == null)
             throw new RuntimeException("Can't generate bracket");
 
         List<Bracket> brackets = createBracket(tournament);
         fillNextMatches(brackets);
-        bracketRepository.saveAll(brackets);
+        return brackets;
     }
 
     /**
@@ -106,14 +102,10 @@ public class BracketGeneratorServiceImpl implements BracketGeneratorService {
      * @return the list of brackets generated for the tournament.
      */
     private List<Bracket> createBracket(Tournament tournament){
-        return switch (tournament.getTournamentType()){
-            case KNOCKOUT_2 -> createBracketsForLinkedStage(tournament, FINAL);
-            case KNOCKOUT_4 -> createBracketsForLinkedStage(tournament, SEMI_FINAL);
-            case KNOCKOUT_8, COPA_AMERICA_16 -> createBracketsForLinkedStage(tournament, QUARTER_FINAL);
-            case KNOCKOUT_16, WORLD_CUP_32 -> createBracketsForLinkedStage(tournament, ROUND_OF_16);
-            default -> new ArrayList<>();
-        };
+        MatchStage matchStage = getFirstMatchStage(tournament);
+        return createBracketsForLinkedStage(tournament, matchStage);
     }
+
 
     /**
      * Creates brackets for all linked stages of a tournament up to the specified final stage.
@@ -158,7 +150,7 @@ public class BracketGeneratorServiceImpl implements BracketGeneratorService {
             bracket.setMatchStage(matchStage);
             bracket.setTournament(tournament);
 
-            FootMatch footMatch = footMatchService.buildMatchForBracket(tournament, matchStage);
+            FootMatch footMatch = buildMatchForBracket(tournament, matchStage);
             bracket.setMatch(footMatch);
             brackets.add(bracket);
         }
@@ -180,4 +172,28 @@ public class BracketGeneratorServiceImpl implements BracketGeneratorService {
                         Collectors.toList()
                 ));
     }
+
+
+    private FootMatch buildMatchForBracket(Tournament tournament, MatchStage matchStage) {
+        if(tournament == null || matchStage == null)
+            throw new RuntimeException("Tournament or MatchStage is needed when building a Match for Bracket");
+
+        FootMatch footMatch = new FootMatch();
+        footMatch.setMatchStage(matchStage);
+        footMatch.setMatchDateTime(tournament.getStartDate());
+        footMatch.setTournament(tournament);
+        return footMatch;
+    }
+
+    @Override
+    public MatchStage getFirstMatchStage(Tournament tournament){
+        return switch (tournament.getTournamentType()){
+            case KNOCKOUT_2 -> MatchStage.FINAL;
+            case KNOCKOUT_4 -> MatchStage.SEMI_FINAL;
+            case KNOCKOUT_8, COPA_AMERICA_16  -> MatchStage.QUARTER_FINAL;
+            case KNOCKOUT_16, WORLD_CUP_32 -> MatchStage.ROUND_OF_16;
+            default -> null;
+        };
+    }
+
 }

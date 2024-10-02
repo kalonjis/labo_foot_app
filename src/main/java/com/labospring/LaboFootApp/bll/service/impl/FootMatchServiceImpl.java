@@ -1,5 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.events.ScoreUpdateEvent;
+import com.labospring.LaboFootApp.bll.events.StatusUpdateEvent;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.FootMatchNeedWinnerException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectMatchStatusException;
@@ -15,6 +17,7 @@ import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import com.labospring.LaboFootApp.il.utils.ChampionshipCalendarGenerator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,6 +38,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final RankingService rankingService;
     private final UserService userService;
     private final ParticipatingTeamService participatingTeamService;
+    private final ApplicationEventPublisher eventPublisher;
 
 
     @Override
@@ -126,6 +130,9 @@ public class FootMatchServiceImpl implements FootMatchService {
         // Mise à jour du statut du match
         footMatch.setMatchStatus(newStatus);
         footMatchRepository.save(footMatch);
+        if (newStatus == MatchStatus.FINISHED || newStatus == MatchStatus.INPROGRESS) {
+            eventPublisher.publishEvent(new StatusUpdateEvent(this, footMatch));
+        }
     }
 
     // Méthode pour valider les transitions de statut de match
@@ -225,9 +232,19 @@ public class FootMatchServiceImpl implements FootMatchService {
             rankingService.updatePosition(rankingTeamHome); // choix arbitraire du ranking car cela va affecter tous les ranking du groupe
         }
 
-        footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
-        footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
-        footMatchRepository.save(footMatch);
+        if(haveDifferentScore(scoreBusiness, footMatch)){
+            footMatch.setScoreTeamHome(scoreBusiness.scoreHome());
+            footMatch.setScoreTeamAway(scoreBusiness.scoreAway());
+            footMatchRepository.save(footMatch);
+            // Publish the event to trigger WebSocket notifications
+            eventPublisher.publishEvent(new ScoreUpdateEvent(this, footMatch));
+        }
+
+    }
+
+    private static boolean haveDifferentScore(ScoreBusiness scoreBusiness, FootMatch footMatch) {
+        return footMatch.getScoreTeamHome() != scoreBusiness.scoreHome() ||
+                footMatch.getScoreTeamAway() != scoreBusiness.scoreAway();
     }
 
     @Override
@@ -240,18 +257,6 @@ public class FootMatchServiceImpl implements FootMatchService {
         footMatchRepository.save(footMatch);
     }
 
-    @Override
-    public FootMatch buildMatchForBracket(Tournament tournament, MatchStage matchStage) {
-        if(tournament == null || matchStage == null)
-            throw new RuntimeException("Tournament or MatchStage is needed when building a Match for Bracket");
-
-        FootMatch footMatch = new FootMatch();
-        footMatch.setMatchStatus(MatchStatus.SCHEDULED);
-        footMatch.setMatchStage(matchStage);
-        footMatch.setMatchDateTime(tournament.getStartDate());
-        footMatch.setTournament(tournament);
-        return footMatch;
-    }
 
     @Override
     public List<FootMatch> getByCriteria(FootMatchSpecificationDTO footMatch) {

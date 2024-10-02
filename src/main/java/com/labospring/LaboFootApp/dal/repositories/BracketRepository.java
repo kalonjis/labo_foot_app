@@ -15,4 +15,7 @@ public interface BracketRepository extends JpaRepository<Bracket, Long> {
 
     @Query("SELECT b.positionBracket FROM Bracket b WHERE b.match = :footMatch")
     Integer findPositionByFootMatch(@Param("footMatch") FootMatch footMatch);
+
+    @Query("select count(b) > 0 from Bracket b where b.tournament.id = :tournamentId")
+    boolean existsByTournamentId(Long tournamentId);
 }

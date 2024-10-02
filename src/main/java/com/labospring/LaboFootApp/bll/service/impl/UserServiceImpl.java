@@ -102,4 +102,9 @@ public class UserServiceImpl implements UserService {
 
         return userRepository.findAll(userSpecification);
     }
+
+    @Override
+    public List<User> getUsersForMatchAndTeamsWithNotifications(Long matchId, List<Long> teamIds) {
+        return userRepository.findUsersByFavoriteMatchOrTeamWithNotifications(matchId, teamIds);
+    }
 }
