@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.AlreadyExistParticipatingTeamException;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectAcceptedTeamsSizeException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectSubscriptionStatusException;
@@ -62,8 +63,13 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     public ParticipatingTeam.ParticipatingTeamId createOne(ParticipatingTeamBusiness entityBusiness) {
         Tournament tournament = tournamentService.getOne(entityBusiness.tournamentId());
         Team team = teamService.getOne(entityBusiness.teamId());
+        ParticipatingTeam.ParticipatingTeamId ptId = new ParticipatingTeam.ParticipatingTeamId(tournament.getId(), team.getId());
+        if(participatingTeamRepository.findById(ptId).isPresent()){
+            throw new AlreadyExistParticipatingTeamException("the team with id : " + team.getId() + " is already participating in the tournament with id : " + tournament.getId());
+        }
         return participatingTeamRepository.save(new ParticipatingTeam(tournament, team)).getId();
     }
+
     @Override
     public ParticipatingTeam getOneById(ParticipatingTeam.ParticipatingTeamId id) {
         return participatingTeamRepository.findById(id).orElseThrow(() -> new DoesntExistsException(
@@ -138,18 +144,15 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 
     private boolean isStatusTransitionValid(SubscriptionStatus currentStatus, SubscriptionStatus newStatus) {
         // Définir les transitions autorisées
-        switch (currentStatus) {
-            case PENDING:
-                return newStatus == SubscriptionStatus.ACCEPTED || newStatus == SubscriptionStatus.REJECTED || newStatus == SubscriptionStatus.CANCELED;
-            case ACCEPTED:
-                return newStatus == SubscriptionStatus.CANCELED || newStatus == SubscriptionStatus.REJECTED;
-            case REJECTED:
-                return newStatus == SubscriptionStatus.PENDING; // Exemple : on peut repasser un REJECTED à PENDING
-            case CANCELED:
-                return newStatus == SubscriptionStatus.PENDING; // Exemple : on peut repasser un CANCELED à PENDING
-            default:
-                return false;
-        }
+        return switch (currentStatus) {
+            case PENDING ->
+                    newStatus == SubscriptionStatus.ACCEPTED || newStatus == SubscriptionStatus.REJECTED || newStatus == SubscriptionStatus.CANCELED;
+            case ACCEPTED -> newStatus == SubscriptionStatus.CANCELED || newStatus == SubscriptionStatus.REJECTED;
+            case REJECTED ->
+                    newStatus == SubscriptionStatus.PENDING;
+            case CANCELED ->
+                    newStatus == SubscriptionStatus.PENDING;
+        };
     }
 
     @Override
