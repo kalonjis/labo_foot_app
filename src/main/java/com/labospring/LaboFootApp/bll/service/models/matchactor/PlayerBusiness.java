@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.models;
+package com.labospring.LaboFootApp.bll.service.models.matchactor;
 
 import com.labospring.LaboFootApp.dl.entities.Player;
 import com.labospring.LaboFootApp.dl.enums.FieldPosition;

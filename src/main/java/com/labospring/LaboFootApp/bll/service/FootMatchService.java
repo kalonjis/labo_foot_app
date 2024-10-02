@@ -1,8 +1,8 @@
 package com.labospring.LaboFootApp.bll.service;
 
-import com.labospring.LaboFootApp.bll.service.models.FootMatchEditBusiness;
-import com.labospring.LaboFootApp.bll.service.models.FootMatchSpecificationDTO;
-import com.labospring.LaboFootApp.bll.service.models.ScoreBusiness;
+import com.labospring.LaboFootApp.bll.service.models.footmatch.FootMatchEditBusiness;
+import com.labospring.LaboFootApp.bll.service.models.footmatch.FootMatchSpecificationDTO;
+import com.labospring.LaboFootApp.bll.service.models.footmatch.ScoreBusiness;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;

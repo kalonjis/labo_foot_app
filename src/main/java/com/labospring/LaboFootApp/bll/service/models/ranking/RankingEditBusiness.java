@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.models;
+package com.labospring.LaboFootApp.bll.service.models.ranking;
 
 public record RankingEditBusiness(
         Integer nbWins,

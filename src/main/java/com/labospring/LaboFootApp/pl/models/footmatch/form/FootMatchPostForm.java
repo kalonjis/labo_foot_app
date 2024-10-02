@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.models.footmatch.form;
 
-import com.labospring.LaboFootApp.bll.service.models.FootMatchCreateBusiness;
+import com.labospring.LaboFootApp.bll.service.models.footmatch.FootMatchCreateBusiness;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

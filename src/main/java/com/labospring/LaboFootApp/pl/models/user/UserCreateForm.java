@@ -3,7 +3,7 @@ package com.labospring.LaboFootApp.pl.models.user;
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.il.annotation.FieldsValueMatch;
-import com.labospring.LaboFootApp.il.props.LaboFootProps;
+import com.labospring.LaboFootApp.il.constances.LaboFootConsts;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class UserCreateForm extends UserEditForm{
     @Size(min=3, max = 50)
     private String username;
     @NotBlank @NotNull
-    @Pattern(regexp = LaboFootProps.PASSWORD_REGEX, message = "Password need minimum 7 characters with uppercase, lowercase, number and special characters")
+    @Pattern(regexp = LaboFootConsts.PASSWORD_REGEX, message = "Password need minimum 7 characters with uppercase, lowercase, number and special characters")
     private String password;
 
     private String confirmPassword;

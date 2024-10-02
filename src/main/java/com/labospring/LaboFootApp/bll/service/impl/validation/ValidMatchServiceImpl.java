@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.impl;
+package com.labospring.LaboFootApp.bll.service.impl.validation;
 
 import com.labospring.LaboFootApp.bll.exceptions.BadStatusTournamentException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectDateException;

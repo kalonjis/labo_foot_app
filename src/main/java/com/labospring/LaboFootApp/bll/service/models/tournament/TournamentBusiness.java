@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.models;
+package com.labospring.LaboFootApp.bll.service.models.tournament;
 
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.dl.entities.Tournament;

@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.models;
+package com.labospring.LaboFootApp.bll.service.models.footmatch;
 
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import lombok.AllArgsConstructor;

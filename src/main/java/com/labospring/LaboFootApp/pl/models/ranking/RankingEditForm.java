@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.models.ranking;
 
-import com.labospring.LaboFootApp.bll.service.models.RankingEditBusiness;
+import com.labospring.LaboFootApp.bll.service.models.ranking.RankingEditBusiness;
 
 public record RankingEditForm(
         Integer nbWins,

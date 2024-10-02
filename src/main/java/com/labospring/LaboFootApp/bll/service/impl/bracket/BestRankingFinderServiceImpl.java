@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.impl;
+package com.labospring.LaboFootApp.bll.service.impl.bracket;
 
 import com.labospring.LaboFootApp.bll.service.BestRankingFinderService;
 import com.labospring.LaboFootApp.dl.entities.Ranking;

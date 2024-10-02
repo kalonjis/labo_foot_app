@@ -2,7 +2,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.TeamService;
-import com.labospring.LaboFootApp.bll.service.models.TeamBusiness;
+import com.labospring.LaboFootApp.bll.service.models.team.TeamBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TeamRepository;
 import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.User;

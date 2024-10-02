@@ -6,7 +6,7 @@ import com.labospring.LaboFootApp.dl.entities.User;
 
 import java.util.List;
 
-public interface UserService extends BaseService<Long, User, User>{
+public interface UserService extends BaseService<Long, User, User> {
     void updateOne(Long id, UserEditBusiness entityBusiness);
     void updatePassword(Long id, UserPasswordEditBusiness passwordEditBusiness);
     List<User> findAllByUsername(String username);

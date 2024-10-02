@@ -1,14 +1,13 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.FootMatchService;
-import com.labospring.LaboFootApp.bll.service.models.FootMatchSpecificationDTO;
+import com.labospring.LaboFootApp.bll.service.models.footmatch.FootMatchSpecificationDTO;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.pl.models.footmatch.*;
 import com.labospring.LaboFootApp.pl.models.footmatch.form.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;

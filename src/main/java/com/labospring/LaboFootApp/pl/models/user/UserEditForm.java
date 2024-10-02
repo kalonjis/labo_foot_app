@@ -3,7 +3,7 @@ package com.labospring.LaboFootApp.pl.models.user;
 import com.labospring.LaboFootApp.bll.service.models.user.UserEditBusiness;
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.il.annotation.BeforeToday;
-import com.labospring.LaboFootApp.il.props.LaboFootProps;
+import com.labospring.LaboFootApp.il.constances.LaboFootConsts;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -23,7 +23,7 @@ public class UserEditForm {
     private String lastname;
     @BeforeToday
     private LocalDate birthdate;
-    @Pattern( regexp = LaboFootProps.PHONE_REGEX, message = "Not a valid phone number")
+    @Pattern( regexp = LaboFootConsts.PHONE_REGEX, message = "Not a valid phone number")
     private String phoneNumber;
     private String street;
     private String city;

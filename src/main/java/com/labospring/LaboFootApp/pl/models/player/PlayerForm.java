@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.models.player;
 
-import com.labospring.LaboFootApp.bll.service.models.PlayerBusiness;
+import com.labospring.LaboFootApp.bll.service.models.matchactor.PlayerBusiness;
 import com.labospring.LaboFootApp.dl.enums.FieldPosition;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

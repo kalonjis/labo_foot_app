@@ -7,7 +7,7 @@ import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
-import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
+import com.labospring.LaboFootApp.bll.service.models.participatingteam.ParticipatingTeamBusiness;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.dl.entities.Ranking;

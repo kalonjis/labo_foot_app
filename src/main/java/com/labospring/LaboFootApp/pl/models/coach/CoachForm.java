@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.models.coach;
 
-import com.labospring.LaboFootApp.bll.service.models.CoachBusiness;
+import com.labospring.LaboFootApp.bll.service.models.matchactor.CoachBusiness;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

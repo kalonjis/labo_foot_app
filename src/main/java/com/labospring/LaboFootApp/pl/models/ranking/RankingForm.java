@@ -1,10 +1,6 @@
 package com.labospring.LaboFootApp.pl.models.ranking;
 
-import com.labospring.LaboFootApp.bll.service.models.RankingBusiness;
-import com.labospring.LaboFootApp.dl.entities.Team;
-import com.labospring.LaboFootApp.dl.entities.Tournament;
-import jakarta.persistence.*;
-import lombok.Setter;
+import com.labospring.LaboFootApp.bll.service.models.ranking.RankingBusiness;
 
 public record RankingForm(
         Long tournament_id,

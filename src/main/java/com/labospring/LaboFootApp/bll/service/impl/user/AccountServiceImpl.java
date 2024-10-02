@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.service.impl;
+package com.labospring.LaboFootApp.bll.service.impl.user;
 
 import com.labospring.LaboFootApp.bll.service.AccountService;
 import com.labospring.LaboFootApp.bll.service.UserService;

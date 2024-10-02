@@ -3,7 +3,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.PlayerService;
 import com.labospring.LaboFootApp.bll.service.TeamService;
-import com.labospring.LaboFootApp.bll.service.models.PlayerBusiness;
+import com.labospring.LaboFootApp.bll.service.models.matchactor.PlayerBusiness;
 import com.labospring.LaboFootApp.bll.specification.PlayerSpecification;
 import com.labospring.LaboFootApp.dal.repositories.PlayerRepository;
 import com.labospring.LaboFootApp.dl.entities.Player;

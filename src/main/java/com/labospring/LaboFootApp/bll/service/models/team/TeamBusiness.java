@@ -1,5 +1,7 @@
-package com.labospring.LaboFootApp.bll.service.models;
+package com.labospring.LaboFootApp.bll.service.models.team;
 
+import com.labospring.LaboFootApp.bll.service.models.matchactor.CoachBusiness;
+import com.labospring.LaboFootApp.bll.service.models.matchactor.PlayerBusiness;
 import com.labospring.LaboFootApp.dl.entities.Team;
 
 import java.util.List;

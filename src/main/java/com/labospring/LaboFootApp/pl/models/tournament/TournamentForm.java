@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.models.tournament;
 
-import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
+import com.labospring.LaboFootApp.bll.service.models.tournament.TournamentBusiness;
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;

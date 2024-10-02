@@ -2,7 +2,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.RefereeService;
-import com.labospring.LaboFootApp.bll.service.models.RefereeBusiness;
+import com.labospring.LaboFootApp.bll.service.models.matchactor.RefereeBusiness;
 import com.labospring.LaboFootApp.bll.specification.RefereeSpecification;
 import com.labospring.LaboFootApp.dal.repositories.RefereeRepository;
 import com.labospring.LaboFootApp.dl.entities.Referee;
