@@ -11,4 +11,5 @@ public interface UserService extends BaseService<Long, User, User>{
     void updatePassword(Long id, UserPasswordEditBusiness passwordEditBusiness);
     List<User> findAllByUsername(String username);
     List<User> getByCriteria(User user);
+    List<User> getUsersForMatchAndTeamsWithNotifications(Long matchId, List<Long> teamIds);
 }

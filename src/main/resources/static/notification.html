@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Notifications</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.0/sockjs.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" defer></script>
+    <script src="/js/script.js" defer></script> 
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #notifications { margin-top: 20px; }
+        .notification { margin: 5px 0; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+    
+</head>
+<body>
+<h1>WebSocket Notifications</h1>
+<div>
+    <input type="text" id="jwtInput" placeholder="Enter JWT token" />
+    <button id="connectButton">Connect</button>
+    <button id="disconnectButton" disabled>Disconnect</button>
+</div>
+<div id="notifications"></div>
+
+</body>
+</html>
