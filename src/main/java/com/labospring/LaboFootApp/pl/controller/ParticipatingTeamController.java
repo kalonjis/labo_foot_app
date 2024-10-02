@@ -3,6 +3,7 @@ package com.labospring.LaboFootApp.pl.controller;
 
 import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
+import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamDTO;
 import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamForm;
 import com.labospring.LaboFootApp.pl.models.participatingTeam.ParticipatingTeamStatusForm;
@@ -38,6 +39,18 @@ public class ParticipatingTeamController {
                         .stream()
                         .map(ParticipatingTeamDTO::fromEntity)
                         .toList()
+        );
+    }
+
+    @GetMapping("/by-tournament-and-status")
+    public ResponseEntity<List<ParticipatingTeamDTO>> getAllByTournamentAndStatus(
+            @RequestParam long tournamentId,
+            @RequestParam SubscriptionStatus status
+            ){
+        return ResponseEntity.ok(participatingTeamService.getAllByTournamentAndStatus(tournamentId, status)
+                .stream()
+                .map(ParticipatingTeamDTO::fromEntity)
+                .toList()
         );
     }
 
