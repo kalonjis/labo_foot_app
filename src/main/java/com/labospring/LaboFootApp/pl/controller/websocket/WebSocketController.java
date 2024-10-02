@@ -5,19 +5,17 @@ import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.pl.models.notif.NotificationFootMatchScore;
 import com.labospring.LaboFootApp.pl.models.notif.NotificationFootMatchStatus;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class WebSocketController implements WebSocketNotifier {
     // This is used to send messages to specific topics.
     private final SimpMessagingTemplate messagingTemplate;
-
-    public WebSocketController(SimpMessagingTemplate messagingTemplate) {
-        this.messagingTemplate = messagingTemplate;
-    }
 
     @Override
     public void sendFootMatchToUser(User user, FootMatch match, String message) {
