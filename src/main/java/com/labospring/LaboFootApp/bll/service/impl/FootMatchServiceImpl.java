@@ -13,6 +13,7 @@ import com.labospring.LaboFootApp.dal.repositories.FootMatchRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
+import com.labospring.LaboFootApp.il.utils.ChampionshipCalendarGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     private final BracketService bracketService;
     private final RankingService rankingService;
     private final UserService userService;
+    private final ParticipatingTeamService participatingTeamService;
 
 
     @Override
@@ -244,6 +246,7 @@ public class FootMatchServiceImpl implements FootMatchService {
             throw new RuntimeException("Tournament or MatchStage is needed when building a Match for Bracket");
 
         FootMatch footMatch = new FootMatch();
+        footMatch.setMatchStatus(MatchStatus.SCHEDULED);
         footMatch.setMatchStage(matchStage);
         footMatch.setMatchDateTime(tournament.getStartDate());
         footMatch.setTournament(tournament);
@@ -298,6 +301,16 @@ public class FootMatchServiceImpl implements FootMatchService {
         return footMatch.getScoreTeamHome() > footMatch.getScoreTeamAway() ? footMatch.getTeamHome() :
                 footMatch.getScoreTeamAway() > footMatch.getScoreTeamHome() ? footMatch.getTeamAway() :
                         null;
+    }
+
+    @Override
+    public void buildChampionshipCalendar(Long tournamentId){
+        Tournament tournament = tournamentService.getOne(tournamentId);
+        List<FootMatch> matches = ChampionshipCalendarGenerator.generateMatchSchedule(tournament, participatingTeamService);
+        for (FootMatch match: matches) {
+
+            footMatchRepository.save(match);
+        }
     }
 
 }
