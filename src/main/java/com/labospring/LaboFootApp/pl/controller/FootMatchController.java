@@ -8,7 +8,6 @@ import com.labospring.LaboFootApp.pl.models.footmatch.form.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -78,5 +77,12 @@ public class FootMatchController {
         return ResponseEntity.ok(footMatches.stream().map(FootMatchListDetailsDTO::fromEntity).toList());
 
     }
+
+    @PostMapping("/championship-calendar")
+    public ResponseEntity<Void> generateCalendar(@RequestParam long tournamentId){
+        footMatchService.buildChampionshipCalendar(tournamentId);
+        return ResponseEntity.ok().build();
+    }
+
 
 }
