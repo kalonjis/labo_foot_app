@@ -3,16 +3,10 @@ package com.labospring.LaboFootApp.bll.service.impl;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectAcceptedTeamsSizeException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectSubscriptionStatusException;
-import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
-import com.labospring.LaboFootApp.bll.service.RankingService;
-import com.labospring.LaboFootApp.bll.service.TeamService;
-import com.labospring.LaboFootApp.bll.service.TournamentService;
+import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
-import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
-import com.labospring.LaboFootApp.dl.entities.Ranking;
-import com.labospring.LaboFootApp.dl.entities.Team;
-import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +25,7 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     private final ParticipatingTeamRepository participatingTeamRepository;
     private final TournamentService tournamentService;
     private final TeamService teamService;
-
+    private final BracketService bracketService;
 
     @Override
     public List<ParticipatingTeam> getAll() {
@@ -160,6 +154,7 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
     // Méthode pour dispatcher les équipes dans les groupes
+    @Transactional
     public void dispatchTeamsToGroups(Long tournamentId) {
         // Récupérer le tournoi en question
         Tournament tournament = tournamentService.getOne(tournamentId);
@@ -197,6 +192,17 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 
         // Sauvegarder tous les changements
         rankingList.forEach(ranking -> rankingService.updateOne(ranking.getId(), null));
+    }
+
+    @Transactional
+    @Override
+    public void dispatchTeamsToBrackets(Long tournamentId){
+        var acceptedTeams =  getAllByTournamentAndStatus(tournamentId, SubscriptionStatus.ACCEPTED)
+                .stream()
+                .map(ParticipatingTeam::getTeam)
+                .toList();
+        bracketService.createBracketForTournament(tournamentId, acceptedTeams);
+
     }
 
 

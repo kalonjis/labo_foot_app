@@ -239,18 +239,6 @@ public class FootMatchServiceImpl implements FootMatchService {
     }
 
     @Override
-    public FootMatch buildMatchForBracket(Tournament tournament, MatchStage matchStage) {
-        if(tournament == null || matchStage == null)
-            throw new RuntimeException("Tournament or MatchStage is needed when building a Match for Bracket");
-
-        FootMatch footMatch = new FootMatch();
-        footMatch.setMatchStage(matchStage);
-        footMatch.setMatchDateTime(tournament.getStartDate());
-        footMatch.setTournament(tournament);
-        return footMatch;
-    }
-
-    @Override
     public List<FootMatch> getByCriteria(FootMatchSpecificationDTO footMatch) {
         Specification<FootMatch> specification = Specification.where(null);
 

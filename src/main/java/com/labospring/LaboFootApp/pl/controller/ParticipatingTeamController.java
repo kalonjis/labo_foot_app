@@ -106,9 +106,15 @@ public class ParticipatingTeamController {
     }
 
 
-    @PutMapping("/dipatching-teams")
+    @PutMapping("/dipatching-teams-to-groups")
     public ResponseEntity<Void> dispatchTeamsInGroups(@RequestParam Long tournamentId){
         participatingTeamService.dispatchTeamsToGroups(tournamentId);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/dipatching-teams-to-bracket")
+    public ResponseEntity<Void> dispatchTeamsInBracket(@RequestParam Long tournamentId){
+        participatingTeamService.dispatchTeamsToBrackets(tournamentId);
         return ResponseEntity.ok().build();
     }
 }
