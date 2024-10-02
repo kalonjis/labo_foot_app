@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.controller;
 
-import com.labospring.LaboFootApp.bll.service.FavoriteFootMatchServiceImpl;
+import com.labospring.LaboFootApp.bll.service.impl.FavoriteFootMatchServiceImpl;
 import com.labospring.LaboFootApp.dl.entities.FavoriteFootMatch.FavoriteFootMatchId;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.pl.models.favoritefootmatch.FavoriteFootMatchDTO;
