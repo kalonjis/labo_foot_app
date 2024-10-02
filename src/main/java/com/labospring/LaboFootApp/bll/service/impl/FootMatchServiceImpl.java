@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.events.ScoreUpdateEvent;
+import com.labospring.LaboFootApp.bll.events.StatusUpdateEvent;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.FootMatchNeedWinnerException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectMatchStatusException;
@@ -126,6 +127,9 @@ public class FootMatchServiceImpl implements FootMatchService {
         // Mise à jour du statut du match
         footMatch.setMatchStatus(newStatus);
         footMatchRepository.save(footMatch);
+        if (newStatus == MatchStatus.FINISHED || newStatus == MatchStatus.INPROGRESS) {
+            eventPublisher.publishEvent(new StatusUpdateEvent(this, footMatch));
+        }
     }
 
     // Méthode pour valider les transitions de statut de match
