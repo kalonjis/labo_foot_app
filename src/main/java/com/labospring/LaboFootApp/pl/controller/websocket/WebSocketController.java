@@ -4,6 +4,7 @@ import com.labospring.LaboFootApp.bll.events.WebSocketNotifier;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.pl.models.notif.NotificationFootMatchScore;
+import com.labospring.LaboFootApp.pl.models.notif.NotificationFootMatchStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,15 @@ public class WebSocketController implements WebSocketNotifier {
                 match.getTeamAway().getName(),
                 match.getScoreTeamHome(),
                 match.getScoreTeamAway(),
+                message));
+    }
+
+    @Override
+    public void setStatusFootMatchUser(User user, FootMatch match, String message) {
+        messagingTemplate.convertAndSendToUser(user.getUsername(), "/notifications",  new NotificationFootMatchStatus(
+                match.getTeamHome().getName(),
+                match.getTeamAway().getName(),
+                match.getMatchStatus(),
                 message));
     }
 }
