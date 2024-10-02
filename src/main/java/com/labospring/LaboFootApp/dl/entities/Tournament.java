@@ -72,23 +72,15 @@ public class Tournament extends BaseEntity{
         this.tournamentStatus = tournamentStatus;
     }
 
-    //    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-//    @JoinTable(
-//            name = "tournament_type_list_by_tournament", // Nom de la table de jointure
-//            joinColumns = @JoinColumn(name = "tournament_id", nullable = false), // Clé étrangère pour l'entité actuelle (Tournament)
-//            inverseJoinColumns = @JoinColumn(name = "tournament_type_id", nullable = false) // Clé étrangère pour l'entité associée (TournamentType)
-//    )
-//    private Set<TournamentType> tournamentTypes;
-
-//    public void addRanking(Ranking ranking){
-//        rankingList.add(ranking);
-//        ranking.setTournament(this);
-//    }
-//
-//    public void removeRanking(Ranking ranking){
-//        rankingList.remove(ranking);
-//        ranking.setTournament(null);
-//    }
+    public Tournament(String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, TournamentType tournamentType) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.placeName = placeName;
+        this.tournamentType = tournamentType;
+        this.tournamentStatus = TournamentStatus.BUILDING;
+        this.rankingList = new ArrayList<>();
+    }
 
     @Override
     public boolean equals(Object o) {

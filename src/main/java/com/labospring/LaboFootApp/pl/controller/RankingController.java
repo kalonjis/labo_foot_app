@@ -52,12 +52,12 @@ public class RankingController {
         );
     }
 
-    @PostMapping
-    public ResponseEntity<Void> create(@Valid @RequestBody RankingForm rankingform){
-        Long id = rankingService.addOne(rankingform.toRankingBusiness());
-        UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
-        return ResponseEntity.created(uriComponents.toUri()).build();
-    }
+//    @PostMapping
+//    public ResponseEntity<Void> create(@Valid @RequestBody RankingForm rankingform){
+//        Long id = rankingService.addOne(rankingform.toRankingBusiness());
+//        UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
+//        return ResponseEntity.created(uriComponents.toUri()).build();
+//    }
 
     @DeleteMapping("/{id:^\\d+}")
     public ResponseEntity<Void> remove(@PathVariable long id){
