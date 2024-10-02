@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface BracketGeneratorService {
-    void generateAndSaveBrackets(Tournament tournament);
+    List<Bracket> generateBrackets(Tournament tournament);
     HashMap<MatchStage, List<Bracket>> getBracketsByMatchStage(List<Bracket> brackets);
+
+    MatchStage getFirstMatchStage(Tournament tournament);
 }
