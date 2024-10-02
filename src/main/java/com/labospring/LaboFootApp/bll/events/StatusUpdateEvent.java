@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class StatusUpdateEvent extends ApplicationEvent {
-    private FootMatch match;
+    private final FootMatch match;
     public StatusUpdateEvent(Object source, FootMatch footMatch) {
         super(source);
         this.match = footMatch;
