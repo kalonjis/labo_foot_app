@@ -47,5 +47,14 @@ public class FootMatchSpecification {
                     );
         };
     }
+
+    public static Specification<FootMatch> hasTournament(String tournamentName) {
+        return (root, _, builder) -> {
+            Join<FootMatch, Tournament> tournamentJoin = root.join("tournament", JoinType.INNER);
+
+            // Build condition for teamHome or teamAway having the specified name
+            return  builder.like(builder.lower(tournamentJoin.get("title")), "%" + tournamentName.toLowerCase() + "%");
+        };
+    }
 }
 
