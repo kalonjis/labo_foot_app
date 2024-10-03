@@ -41,8 +41,8 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
-    public Ranking getByTournamentIdAndTeamId(Long tournamentId, Long TeamId) {
-        return rankingRepository.findByTournamentIdAndTeamId(tournamentId, TeamId);
+    public Ranking getByTournamentIdAndTeamId(Long tournamentId, Long teamId) {
+        return rankingRepository.findByTournamentIdAndTeamId(tournamentId, teamId).orElseThrow(()-> new DoesntExistsException("There is no ranking for the team with ID : " + teamId + " related to the tournament with id : " + tournamentId ));
     }
 
     @Override
