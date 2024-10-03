@@ -282,6 +282,10 @@ public class FootMatchServiceImpl implements FootMatchService {
         if(footMatch.referee() != null && !footMatch.referee().isEmpty()){
             specification = specification.and(FootMatchSpecification.hasRefereeName(footMatch.referee()));
         }
+        if(footMatch.tournament_title() != null && !footMatch.tournament_title().isEmpty()){
+            specification = specification.and(FootMatchSpecification.hasTournament(footMatch.tournament_title()));
+        }
+
 
         return footMatchRepository.findAll(specification);
     }
