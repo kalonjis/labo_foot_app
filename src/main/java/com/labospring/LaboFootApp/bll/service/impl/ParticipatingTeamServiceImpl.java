@@ -83,22 +83,25 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
         validateStatusChange(id, newStatus); // Utilisation de la méthode de validation avant de changer le statut
 
         ParticipatingTeam pt = getOneById(id);
-
-        if (pt.getSubscriptionStatus() == SubscriptionStatus.ACCEPTED){
-            Ranking ranking = rankingService.getByTournamentIdAndTeamId(id.getTournamentId(), id.getTeamId());
-            rankingService.deleteOne(ranking.getId());
-        }
-
+        SubscriptionStatus statusBeforeChange = pt.getSubscriptionStatus();
         pt.setSubscriptionStatus(newStatus);
-
-        // Si le nouveau statut est ACCEPTED, créer un ranking
-        if (newStatus == SubscriptionStatus.ACCEPTED) {
-            Tournament tournament = tournamentService.getOne(pt.getTournament().getId());
-            Team team = teamService.getOne(pt.getTeam().getId());
-            rankingService.createOne(tournament, team);
-        }
-
         participatingTeamRepository.save(pt);
+
+        Tournament tournament = tournamentService.getOne(pt.getTournament().getId());
+        if(tournament.getTournamentType().isGroupStage()){
+            // Si le nouveau statut n'est plus "ACCEPTED", supprimer son ranking
+            if (statusBeforeChange == SubscriptionStatus.ACCEPTED){
+                Ranking ranking = rankingService.getByTournamentIdAndTeamId(id.getTournamentId(), id.getTeamId());
+                if (ranking != null){
+                    rankingService.deleteOne(ranking.getId());
+                }
+            }
+            // Si le nouveau statut est ACCEPTED, créer un ranking
+            if (newStatus == SubscriptionStatus.ACCEPTED) {
+                Team team = teamService.getOne(pt.getTeam().getId());
+                rankingService.createOne(tournament, team);
+            }
+        }
     }
 
     private void validateStatusChange(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus newStatus) {
