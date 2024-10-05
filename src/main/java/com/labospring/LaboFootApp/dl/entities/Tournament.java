@@ -62,7 +62,9 @@ public class Tournament extends BaseEntity{
         this.address = address;
         this.tournamentType = tournamentType;
         this.tournamentStatus = tournamentStatus;
-        this.rankingList = new ArrayList<>();
+        if(tournamentType.isGroupStage()){
+            this.rankingList = new ArrayList<>();
+        }
     }
 
     public Tournament(String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, Address address, TournamentType tournamentType, TournamentStatus tournamentStatus) {
@@ -73,6 +75,9 @@ public class Tournament extends BaseEntity{
         this.address = address;
         this.tournamentType = tournamentType;
         this.tournamentStatus = tournamentStatus;
+        if(tournamentType.isGroupStage()){
+            this.rankingList = new ArrayList<>();
+        }
     }
 
     public Tournament(String title, LocalDateTime startDate, LocalDateTime endDate, String placeName, TournamentType tournamentType) {
@@ -82,7 +87,9 @@ public class Tournament extends BaseEntity{
         this.placeName = placeName;
         this.tournamentType = tournamentType;
         this.tournamentStatus = TournamentStatus.BUILDING;
-        this.rankingList = new ArrayList<>();
+        if(tournamentType.isGroupStage()){
+            this.rankingList = new ArrayList<>();
+        }
     }
 
     @Override
