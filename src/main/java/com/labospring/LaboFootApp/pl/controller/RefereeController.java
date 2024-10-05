@@ -7,6 +7,7 @@ import com.labospring.LaboFootApp.pl.models.referee.RefereeForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -37,12 +38,14 @@ public class RefereeController {
     }
 
     @PutMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isRefereeCreatedByUser(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody RefereeForm RefereeForm){
         refereeService.updateOne(id, RefereeForm.toRefereeBusiness());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isRefereeCreatedByUser(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> remove(@PathVariable long id){
         refereeService.deleteOne(id);
         return ResponseEntity.ok().build();

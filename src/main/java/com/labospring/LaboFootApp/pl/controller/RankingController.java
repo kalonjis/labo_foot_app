@@ -8,9 +8,9 @@ import com.labospring.LaboFootApp.pl.models.ranking.RankingForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponents;
+
 
 import java.util.List;
 
@@ -60,12 +60,14 @@ public class RankingController {
 //    }
 
     @DeleteMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isUserRanking(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> remove(@PathVariable long id){
         rankingService.deleteOne(id);
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isUserRanking(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id, @Valid @RequestBody RankingEditForm editForm){
         rankingService.update(id, editForm.toRankingEditBusiness());
         return ResponseEntity.ok().build();

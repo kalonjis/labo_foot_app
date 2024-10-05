@@ -8,6 +8,7 @@ import com.labospring.LaboFootApp.pl.models.player.PlayerSpecificationForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -38,12 +39,14 @@ public class PlayerController {
     }
 
     @PutMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isPlayerCreatedByUser(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody PlayerForm playerForm){
         playerService.updateOne(id, playerForm.toPlayerBusiness());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isPlayerCreatedByUser(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> remove(@PathVariable long id){
         playerService.deleteOne(id);
         return ResponseEntity.ok().build();

@@ -26,7 +26,7 @@ public class TeamController {
     }
 
     @PostMapping
-   // @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> create(@Valid @RequestBody TeamForm teamForm){
         Long id = teamService.addOne(teamForm.toTeamBusiness());
         UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
@@ -39,14 +39,14 @@ public class TeamController {
     }
 
     @PutMapping("/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated() && (@accessControlService.isUserTeam(principal, #id) || hasAuthority('ADMIN'))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isUserTeam(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id,@Valid  @RequestBody TeamEditForm teamForm){
         teamService.updateOne(id, teamForm.toTeamBusiness());
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated() && (@accessControlService.isUserTeam(principal, #id) || hasAuthority('ADMIN'))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isUserTeam(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> remove(@PathVariable long id){
         teamService.deleteOne(id);
         return ResponseEntity.ok().build();

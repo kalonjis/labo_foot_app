@@ -10,6 +10,5 @@ import java.util.List;
 public interface BracketGeneratorService {
     List<Bracket> generateBrackets(Tournament tournament);
     HashMap<MatchStage, List<Bracket>> getBracketsByMatchStage(List<Bracket> brackets);
-
     MatchStage getFirstMatchStage(Tournament tournament);
 }

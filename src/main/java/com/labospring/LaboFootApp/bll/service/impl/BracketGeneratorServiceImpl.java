@@ -5,10 +5,9 @@ import com.labospring.LaboFootApp.dl.entities.Bracket;
 import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
+import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,6 @@ public class BracketGeneratorServiceImpl implements BracketGeneratorService {
      * @param tournament the tournament for which brackets are to be generated.
      */
     @Override
-    @Transactional
     public List<Bracket> generateBrackets(Tournament tournament) {
         if(tournament == null || tournament.getTournamentType() == null)
             throw new RuntimeException("Can't generate bracket");
@@ -182,6 +180,7 @@ public class BracketGeneratorServiceImpl implements BracketGeneratorService {
         footMatch.setMatchStage(matchStage);
         footMatch.setMatchDateTime(tournament.getStartDate());
         footMatch.setTournament(tournament);
+        footMatch.setMatchStatus(MatchStatus.SCHEDULED);
         return footMatch;
     }
 

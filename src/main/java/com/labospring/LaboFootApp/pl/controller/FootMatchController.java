@@ -8,6 +8,7 @@ import com.labospring.LaboFootApp.pl.models.footmatch.form.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
@@ -38,33 +39,35 @@ public class FootMatchController {
     }
 
     @DeleteMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerMatch(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> remove(@PathVariable long id){
         footMatchService.deleteOne(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id:^\\d+}")
+    @PreAuthorize("isAuthenticated && (@accessControlService.isOrganizerMatch(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> update(@PathVariable long id,@Valid @RequestBody FootMatchEditForm footMatchForm){
         footMatchService.updateOne(id, footMatchForm.toFootMatchBusiness());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/score/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerMatch(principal, #id) || @accessControlService.isModeratorMatch(principal, #id) || hasAuthority('ADMIN')))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerMatch(principal, #id) || @accessControlService.isModeratorMatch(principal, #id) || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> updateScore(@PathVariable long id,@Valid @RequestBody FootMatchScoreForm footMatchForm){
         footMatchService.changeScore(id, footMatchForm.toScoreBusiness());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/status/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerMatch(principal, #id) || @accessControlService.isModeratorMatch(principal, #id)  || hasAuthority('ADMIN')))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerMatch(principal, #id) || @accessControlService.isModeratorMatch(principal, #id)  || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> updateStatus(@PathVariable long id,@Valid @RequestBody FootMatchStatusForm statusMatchForm){
         footMatchService.changeStatus(id, statusMatchForm.matchStatus());
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/mod/{id:^\\d+}")
-    //@PreAuthorize("isAuthenticated() && @accessControlService.isOrganizerMatch(principal, #id)  || hasAuthority('ADMIN'))")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerMatch(principal, #id)  || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> updateModerator(@PathVariable long id, @Valid @RequestBody FootMatchModeratorForm footMatchModeratorForm){
         footMatchService.changeModerator(id, footMatchModeratorForm.moderatorId());
         return ResponseEntity.ok().build();
@@ -79,6 +82,7 @@ public class FootMatchController {
     }
 
     @PostMapping("/championship-calendar")
+    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerTournament(principal, #tournamentId)  || hasAuthority('ADMIN'))")
     public ResponseEntity<Void> generateCalendar(@RequestParam long tournamentId){
         footMatchService.buildChampionshipCalendar(tournamentId);
         return ResponseEntity.ok().build();

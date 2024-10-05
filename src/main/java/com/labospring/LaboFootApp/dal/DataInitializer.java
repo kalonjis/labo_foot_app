@@ -1,14 +1,11 @@
 package com.labospring.LaboFootApp.dal;
 
-import com.labospring.LaboFootApp.bll.service.BracketGeneratorService;
-import com.labospring.LaboFootApp.bll.service.BracketService;
-import com.labospring.LaboFootApp.bll.service.FootMatchBracketGeneratorService;
+import com.labospring.LaboFootApp.bll.service.FavoriteFootMatchService;
 import com.labospring.LaboFootApp.dal.repositories.*;
 import com.labospring.LaboFootApp.dl.entities.*;
-
 import java.time.Month;
 import java.util.*;
-
+import com.labospring.LaboFootApp.dl.entities.FavoriteFootMatch.FavoriteFootMatchId;
 import com.labospring.LaboFootApp.dl.enums.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -32,13 +29,7 @@ public class DataInitializer implements CommandLineRunner {
     private final FootMatchRepository footMatchRepository;
     private final RankingRepository rankingRepository;
     private final PasswordEncoder passwordEncoder;
-
-    private final BracketGeneratorService bracketGeneratorService;
-
-    private final BracketRepository bracketRepository;
-
-    private final BracketService bracketService;
-    private final FootMatchBracketGeneratorService footMatchInBracketGeneratorService;
+    private final FavoriteFootMatchService favoriteFootMatchService;
 
 
 
@@ -375,6 +366,8 @@ public class DataInitializer implements CommandLineRunner {
                 "Stadium H",
                 TournamentType.CHAMPIONSHIP_20
         );
+        tournament8.setCreator(user3);
+        tournament9.setCreator(user3);
         // endregion
 
 
@@ -513,6 +506,8 @@ public class DataInitializer implements CommandLineRunner {
 
             // Sauvegarder le match dans la base de données
             footMatchRepository.save(match);
+            favoriteFootMatchService.update(new FavoriteFootMatchId(user4.getId(), match.getId()), true);
+
         }
         // endregion
 
@@ -540,6 +535,8 @@ public class DataInitializer implements CommandLineRunner {
             rankingRepository.saveAll(rankings);
         }
         //endregion
+
+
     }
 }
 
