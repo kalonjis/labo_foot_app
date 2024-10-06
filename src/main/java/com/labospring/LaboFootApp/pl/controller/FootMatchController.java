@@ -83,10 +83,16 @@ public class FootMatchController {
 
     @PostMapping("/championship-calendar")
     @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerTournament(principal, #tournamentId)  || hasAuthority('ADMIN'))")
-    public ResponseEntity<Void> generateCalendar(@RequestParam long tournamentId){
+    public ResponseEntity<Void> generateChampionShipCalendar(@RequestParam long tournamentId){
         footMatchService.buildChampionshipCalendar(tournamentId);
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/groups-calendar")
+//    @PreAuthorize("isAuthenticated() && (@accessControlService.isOrganizerTournament(principal, #tournamentId)  || hasAuthority('ADMIN'))")
+    public ResponseEntity<Void> generateGroupsCalendar(@RequestParam long tournamentId){
+        footMatchService.buildGroupsCalendar(tournamentId);
+        return ResponseEntity.ok().build();
+    }
 
 }
