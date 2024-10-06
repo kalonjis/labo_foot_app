@@ -6,6 +6,7 @@ import com.labospring.LaboFootApp.dl.entities.FootMatch;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.dl.entities.Team;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
+import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 
@@ -112,6 +113,7 @@ public class ChampionshipCalendarGenerator {
         match.setTeamAway(teamAway);
         match.setTournament(tournament);
         match.setMatchDateTime(matchDateTime);
+        match.setMatchStage(MatchStage.GROUP_STAGE);
         match.setMatchStatus(MatchStatus.SCHEDULED);
         return match;
     }
