@@ -11,4 +11,13 @@ public enum SubscriptionStatus {
         }
         return false;
     }
+
+    public boolean isValidStatusTransition(SubscriptionStatus newStatus) {
+        return switch (this) {
+            case PENDING -> newStatus == ACCEPTED || newStatus == REJECTED || newStatus == CANCELED;
+            case ACCEPTED -> newStatus == CANCELED || newStatus == REJECTED;
+            case REJECTED -> newStatus == PENDING;
+            case CANCELED -> newStatus == PENDING;
+        };
+    }
 }
