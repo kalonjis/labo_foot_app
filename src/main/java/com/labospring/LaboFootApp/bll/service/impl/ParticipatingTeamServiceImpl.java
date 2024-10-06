@@ -52,14 +52,24 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     }
 
     @Override
+    @Transactional
     public ParticipatingTeam.ParticipatingTeamId createOne(ParticipatingTeamBusiness entityBusiness) {
         Tournament tournament = tournamentService.getOne(entityBusiness.tournamentId());
         Team team = teamService.getOne(entityBusiness.teamId());
+
+        validateTeamNotAlreadyParticipating(tournament, team);
+
+        ParticipatingTeam participatingTeam = new ParticipatingTeam(tournament, team);
+        return participatingTeamRepository.save(participatingTeam).getId();
+    }
+
+    private void validateTeamNotAlreadyParticipating(Tournament tournament, Team team) {
         ParticipatingTeam.ParticipatingTeamId ptId = new ParticipatingTeam.ParticipatingTeamId(tournament.getId(), team.getId());
-        if(participatingTeamRepository.findById(ptId).isPresent()){
-            throw new AlreadyExistParticipatingTeamException("the team with id : " + team.getId() + " is already participating in the tournament with id : " + tournament.getId());
+        if (participatingTeamRepository.findById(ptId).isPresent()) {
+            throw new AlreadyExistParticipatingTeamException(
+                    "The team with id: " + team.getId() + " is already participating in the tournament with id: " + tournament.getId()
+            );
         }
-        return participatingTeamRepository.save(new ParticipatingTeam(tournament, team)).getId();
     }
 
     @Override

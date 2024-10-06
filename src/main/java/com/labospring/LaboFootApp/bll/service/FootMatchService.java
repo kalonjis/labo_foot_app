@@ -14,5 +14,6 @@ public interface FootMatchService extends BaseService<Long, FootMatch, FootMatch
     void changeModerator(Long id, Long moderatorId);
 
     List<FootMatch> getByCriteria(FootMatchSpecificationDTO footMatch);
-    public void buildChampionshipCalendar(Long tournamentId);
+    void buildChampionshipCalendar(Long tournamentId);
+    void buildGroupsCalendar(Long tournamentId);
 }

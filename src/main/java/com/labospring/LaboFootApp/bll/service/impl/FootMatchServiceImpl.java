@@ -16,6 +16,7 @@ import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.MatchStage;
 import com.labospring.LaboFootApp.dl.enums.MatchStatus;
 import com.labospring.LaboFootApp.il.utils.ChampionshipCalendarGenerator;
+import com.labospring.LaboFootApp.il.utils.GroupCalendarGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.jpa.domain.Specification;
@@ -24,6 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+
+
+// TODO : VALIDATION A IMPLEMENTER: VERIFIER QUE LE TOURNOIS EST PRET POUR LA CREATION DE MATCH DE GROUPE
+
 
 @Service
 @RequiredArgsConstructor
@@ -297,6 +302,24 @@ public class FootMatchServiceImpl implements FootMatchService {
         for (FootMatch match: matches) {
 
             footMatchRepository.save(match);
+        }
+    }
+
+    @Override
+    public void buildGroupsCalendar(Long tournamentId){
+        Tournament tournament = tournamentService.getOne(tournamentId);
+        if (tournament.getTournamentType().isGroupStage()){
+
+            //VALIDATION A IMPLEMENTER: VERIFIER QUE LE TOURNOIS EST PRET POUR LA CREATION DE MATCH DE GROUPE
+
+            for(int i = 1; i <= tournament.getTournamentType().getNbGroups(); i++){
+                List<Ranking> rankings = rankingService.getAllByTournamentIdAndNumGroup(tournamentId, i);
+                List<Team> teams = rankings.stream().map(r->r.getTeam()).toList();
+                List<FootMatch> matches = GroupCalendarGenerator.generateMatchSchedule(tournament, teams);
+                for (FootMatch match: matches) {
+                    footMatchRepository.save(match);
+                }
+            }
         }
     }
 
