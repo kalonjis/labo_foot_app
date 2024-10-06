@@ -7,6 +7,7 @@ import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import com.labospring.LaboFootApp.il.validators.DispatchingTeamsValidator;
+import com.labospring.LaboFootApp.il.validators.ParticipatingTeamStatusValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,76 +78,30 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     @Override
     @Transactional
     public void changeStatus(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus newStatus) {
-        validateStatusChange(id, newStatus); // Utilisation de la méthode de validation avant de changer le statut
 
-        ParticipatingTeam pt = getOneById(id);
-        SubscriptionStatus statusBeforeChange = pt.getSubscriptionStatus();
-        pt.setSubscriptionStatus(newStatus);
-        participatingTeamRepository.save(pt);
+        ParticipatingTeam participatingTeam = getOneById(id);
+        if(participatingTeam != null){
+            ParticipatingTeamStatusValidator participatingTeamStatusValidator = new ParticipatingTeamStatusValidator(participatingTeam, newStatus);
+            if(!participatingTeamStatusValidator.isValidStatusChange()){
+                throw participatingTeamStatusValidator.getParticipatingTeamSatusChangeException();
+            }
+            SubscriptionStatus statusBeforeChange = participatingTeam.getSubscriptionStatus();
+            participatingTeam.setSubscriptionStatus(newStatus);
+            participatingTeamRepository.save(participatingTeam);
 
-        Tournament tournament = tournamentService.getOne(pt.getTournament().getId());
-        if(tournament.getTournamentType().isGroupStage()){
-            // Si le nouveau statut n'est plus "ACCEPTED", supprimer son ranking
-            if (statusBeforeChange == SubscriptionStatus.ACCEPTED){
-                Ranking ranking = rankingService.getByTournamentIdAndTeamId(id.getTournamentId(), id.getTeamId());
-                if (ranking != null){
-                    rankingService.deleteOne(ranking.getId());
+            if(participatingTeam.getTournament().getTournamentType().isGroupStage()){
+                if (statusBeforeChange == SubscriptionStatus.ACCEPTED){
+                    Ranking ranking = rankingService.getByTournamentIdAndTeamId(id.getTournamentId(), id.getTeamId());
+                    if (ranking != null){
+                        rankingService.deleteOne(ranking.getId());
+                    }
+                }
+                if (newStatus == SubscriptionStatus.ACCEPTED) {
+                    Team team = teamService.getOne(participatingTeam.getTeam().getId());
+                    rankingService.createOne(participatingTeam.getTournament(), team);
                 }
             }
-            // Si le nouveau statut est ACCEPTED, créer un ranking
-            if (newStatus == SubscriptionStatus.ACCEPTED) {
-                Team team = teamService.getOne(pt.getTeam().getId());
-                rankingService.createOne(tournament, team);
-            }
         }
-    }
-
-    private void validateStatusChange(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus newStatus) {
-        // Vérifier si le statut est valide
-        if (newStatus == null || !SubscriptionStatus.contains(newStatus)) {
-            throw new IncorrectSubscriptionStatusException(
-                    newStatus + " is not a valid SubscriptionStatus. Please use one of the following: {PENDING, ACCEPTED, REJECTED, CANCELED}", 400
-            );
-        }
-
-        // Vérifier si le tournoi existe
-        Tournament tournament = tournamentService.getOne(id.getTournamentId());
-
-        // Vérifier si l'équipe existe
-        Team team = teamService.getOne(id.getTeamId());
-
-        // Vérifier si la `ParticipatingTeam` existe
-        ParticipatingTeam participatingTeam = getOneById(id);
-
-        // Vérifier la transition de statut
-        SubscriptionStatus currentStatus = participatingTeam.getSubscriptionStatus();
-        if (!isStatusTransitionValid(currentStatus, newStatus)) {
-            throw new IncorrectSubscriptionStatusException(
-                    "Transition from " + currentStatus + " to " + newStatus + " is not allowed.", 400
-            );
-        }
-
-        // Vérifier le nombre maximum d'équipes acceptées
-        if (newStatus == SubscriptionStatus.ACCEPTED) {
-            int acceptedTeams = getAllByTournamentAndStatus(id.getTournamentId(), SubscriptionStatus.ACCEPTED).size();
-            int nbMaxAcceptedTeams = tournamentService.getOne(id.getTournamentId()).getTournamentType().getNbTeams();
-            if (acceptedTeams >= nbMaxAcceptedTeams) {
-                throw new IncorrectAcceptedTeamsSizeException("The tournament has already accepted the maximum number of participating teams.");
-            }
-        }
-    }
-
-    private boolean isStatusTransitionValid(SubscriptionStatus currentStatus, SubscriptionStatus newStatus) {
-        // Définir les transitions autorisées
-        return switch (currentStatus) {
-            case PENDING ->
-                    newStatus == SubscriptionStatus.ACCEPTED || newStatus == SubscriptionStatus.REJECTED || newStatus == SubscriptionStatus.CANCELED;
-            case ACCEPTED -> newStatus == SubscriptionStatus.CANCELED || newStatus == SubscriptionStatus.REJECTED;
-            case REJECTED ->
-                    newStatus == SubscriptionStatus.PENDING;
-            case CANCELED ->
-                    newStatus == SubscriptionStatus.PENDING;
-        };
     }
 
     @Override
