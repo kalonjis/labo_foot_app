@@ -6,15 +6,14 @@ import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
 import com.labospring.LaboFootApp.dal.repositories.ParticipatingTeamRepository;
 import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
-import com.labospring.LaboFootApp.il.validators.DispatchingTeamsValidator;
-import com.labospring.LaboFootApp.il.validators.ParticipatingTeamStatusValidator;
+import com.labospring.LaboFootApp.bll.validators.DispatchingTeamsValidator;
+import com.labospring.LaboFootApp.bll.validators.ParticipatingTeamStatusValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -91,10 +90,7 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 
         ParticipatingTeam participatingTeam = getOneById(id);
         if(participatingTeam != null){
-            ParticipatingTeamStatusValidator participatingTeamStatusValidator = new ParticipatingTeamStatusValidator(participatingTeam, newStatus);
-            if(!participatingTeamStatusValidator.isValidStatusChange()){
-                throw participatingTeamStatusValidator.getParticipatingTeamSatusChangeException();
-            }
+            ParticipatingTeamStatusValidator.validateNewStatus(participatingTeam, newStatus);
             SubscriptionStatus statusBeforeChange = participatingTeam.getSubscriptionStatus();
             participatingTeam.setSubscriptionStatus(newStatus);
             participatingTeamRepository.save(participatingTeam);
@@ -116,19 +112,16 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
 
     @Override
     public void changeStatusToCanceled(ParticipatingTeam.ParticipatingTeamId id) {
-        ParticipatingTeam pt = getOneById(id);
-        pt.setSubscriptionStatus(SubscriptionStatus.CANCELED);
-        participatingTeamRepository.save(pt);
+        changeStatus(id, SubscriptionStatus.CANCELED);
     }
 
     @Transactional
     public void dispatchTeamsToGroups(Long tournamentId) {
         Tournament tournament = tournamentService.getOne(tournamentId);
         if(tournament != null){
-            DispatchingTeamsValidator dispatchingTeamsValidator = new DispatchingTeamsValidator(tournament);
-            if(!dispatchingTeamsValidator.isDispatchable()){
-                throw dispatchingTeamsValidator.getTournamentNotdispatchableException();
-            }
+
+            DispatchingTeamsValidator.validateTeamDispatch(tournament); // verifie si les ParticipatingTeam tournois peuvent être réparties dans des groupes sinon lève une exception
+
             List<Ranking> rankingList = tournament.getRankingList();
             int nbGroups = tournament.getTournamentType().getNbGroups();
             List<Integer> groupIndexes = tournament.getTournamentType().getGroups();
