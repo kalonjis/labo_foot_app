@@ -4,6 +4,7 @@ import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dl.entities.Address;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import com.labospring.LaboFootApp.dl.enums.TournamentType;
+import com.labospring.LaboFootApp.il.annotation.ValidTournamentStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -21,6 +22,7 @@ public record TournamentForm(
         @NotNull
         TournamentType tournamentType,
         @NotNull
+        @ValidTournamentStatus
         TournamentStatus tournamentStatus
 ) {
 
