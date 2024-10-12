@@ -17,4 +17,6 @@ public interface RankingRepository extends JpaRepository<Ranking, Long> {
     @Query("SELECT r FROM Ranking r where r.tournament.id = :tournamentId AND r.numGroup = :numGroup")
     List<Ranking> findByTournamentIdAndNumGroup(@Param("tournamentId") Long tournamentId, @Param("numGroup") int numGroup);
 
+    @Query("SELECT r FROM Ranking r where r.tournament.id = :tournamentId")
+    List<Ranking> findByTournamentId(@Param("tournamentId") Long tournamentId);
 }
