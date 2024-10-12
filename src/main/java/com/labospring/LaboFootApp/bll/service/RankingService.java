@@ -12,6 +12,7 @@ import java.util.List;
 public interface RankingService extends BaseService<Long, Ranking, RankingBusiness>{
     Long createOne(Tournament tournament, Team team);
     Ranking getByTournamentIdAndTeamId(Long tournamentId, Long TeamId);
+    List<Ranking> getAllByTournamentId(Long tournamentId);
     List<Ranking> getAllByTournamentIdAndNumGroup(Long tournamentId, int numGroup);
     void update(Long id, RankingEditBusiness entityBusiness);
     void updateNumGroup(Ranking ranking, int numGroup);
@@ -22,4 +23,6 @@ public interface RankingService extends BaseService<Long, Ranking, RankingBusine
     void updateGettingWinner(Ranking winningRanking, Ranking losingRanking);
     void updateGettingDrawer(Ranking fromwinnerRanking, Ranking fromLoserRanking);
     void updateGettingWinnerFromLoser(Ranking winningRanking, Ranking losingRanking);
+    void openRanking(Ranking ranking);
+    void closeRanking(Ranking ranking);
 }

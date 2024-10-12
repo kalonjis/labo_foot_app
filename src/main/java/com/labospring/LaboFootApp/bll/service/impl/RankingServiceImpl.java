@@ -46,6 +46,11 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
+    public List<Ranking> getAllByTournamentId(Long tournamentId){
+        return rankingRepository.findByTournamentId(tournamentId);
+    }
+
+    @Override
     public List<Ranking> getAllByTournamentIdAndNumGroup(Long tournamentId, int numGroup){
         return rankingRepository.findByTournamentIdAndNumGroup(tournamentId, numGroup);
     }
@@ -59,6 +64,18 @@ public class RankingServiceImpl implements RankingService {
     public void deleteOne(Long id) {
         Ranking ranking = getOne(id);
         rankingRepository.delete(ranking);
+    }
+
+    @Override
+    public void openRanking(Ranking ranking){
+        ranking.setOpen(true);
+        rankingRepository.save(ranking);
+    }
+
+    @Override
+    public void closeRanking(Ranking ranking){
+        ranking.setOpen(false);
+        rankingRepository.save(ranking);
     }
 
     @Override

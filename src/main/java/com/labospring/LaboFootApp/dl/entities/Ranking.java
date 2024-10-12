@@ -30,6 +30,8 @@ public class Ranking  extends BaseEntity{
     private Tournament tournament;
 
     @Setter
+    private boolean open;
+    @Setter
     private int numGroup;
     @Setter
     private int rankingPosition;
@@ -52,17 +54,20 @@ public class Ranking  extends BaseEntity{
 
     public Ranking(Tournament tournament, int numGroup) {
         this.tournament = tournament;
+        this.open = false;
         this.numGroup = numGroup;
     }
 
     public Ranking(Tournament tournament, Team team) {
         this.tournament = tournament;
+        this.open = false;
         this.team = team;
     }
 
     public Ranking(Team team, Tournament tournament, int numGroup) {
         this.team = team;
         this.tournament = tournament;
+        this.open = false;
         this.numGroup = numGroup;
     }
 

@@ -531,6 +531,10 @@ public class DataInitializer implements CommandLineRunner {
                 ranking6, ranking7, ranking8, ranking9, ranking10
         );
 
+        for(Ranking r : rankings){
+            r.setOpen(true);
+        }
+
         if (rankingRepository.count() == 0) {
             rankingRepository.saveAll(rankings);
         }
