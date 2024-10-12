@@ -2,9 +2,11 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectTournamentStatusException;
+import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.bll.service.TournamentService;
 import com.labospring.LaboFootApp.bll.service.models.TournamentBusiness;
 import com.labospring.LaboFootApp.dal.repositories.TournamentRepository;
+import com.labospring.LaboFootApp.dl.entities.Ranking;
 import com.labospring.LaboFootApp.dl.entities.Tournament;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
@@ -20,6 +22,7 @@ import java.util.List;
 public class TournamentServiceImpl implements TournamentService {
 
     private final TournamentRepository tournamentRepository;
+    private final RankingService rankingService;
 
     @Override
     public Long addOne(TournamentBusiness entityBusiness) {
@@ -69,39 +72,36 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
-    public void updateStatus(Long id, TournamentStatus tournamentStatus) {
+    public void updateStatus(Long id, TournamentStatus newStatus) {
         Tournament tournament = getOne(id);
         TournamentStatus currentStatus = tournament.getTournamentStatus();
 
-        if (!isValidStatusTransition(currentStatus, tournamentStatus)) {
+        if (!currentStatus.isValidStatusTransition(newStatus)) {
             throw new IncorrectTournamentStatusException(
-                    String.format("Cannot change tournament status from %s to %s", currentStatus, tournamentStatus), 409
+                    String.format("Cannot change tournament status from %s to %s", currentStatus, newStatus), 409
             );
         }
 
-        tournament.setTournamentStatus(tournamentStatus);
+        tournament.setTournamentStatus(newStatus);
         tournamentRepository.save(tournament);
-    }
 
-
-    private boolean isValidStatusTransition(TournamentStatus currentStatus, TournamentStatus newStatus) {
-        // Logique de validation des transitions possibles
-        switch (currentStatus) {
-            case BUILDING:
-                return newStatus == TournamentStatus.PENDING || newStatus == TournamentStatus.CANCELED;
-            case PENDING:
-                return newStatus == TournamentStatus.STARTED || newStatus == TournamentStatus.CANCELED;
-            case STARTED:
-                return newStatus == TournamentStatus.INTERRUPTED || newStatus == TournamentStatus.CLOSED;
-            case INTERRUPTED:
-                return newStatus == TournamentStatus.STARTED || newStatus == TournamentStatus.CANCELED;
-            case CLOSED:
-            case CANCELED:
-                return false; // Un tournoi fermé ou annulé ne peut plus changer de statut
-            default:
-                return false;
+        if (tournament.getTournamentType().isGroupStage()){
+            List<Ranking> rankings = rankingService.getAllByTournamentId(id);
+            if(newStatus == TournamentStatus.STARTED){
+                for(Ranking r : rankings){
+                    rankingService.openRanking(r);
+                }
+            }
+            if (newStatus != TournamentStatus.STARTED){
+                for(Ranking r : rankings){
+                    rankingService.closeRanking(r);
+                }
+            }
         }
     }
+
+
+
 
 
     @Override
