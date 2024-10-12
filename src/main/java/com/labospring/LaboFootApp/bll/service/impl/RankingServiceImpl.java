@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.BadStatusRankingException;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.exceptions.IncorrectRankingListSize;
 import com.labospring.LaboFootApp.bll.service.RankingService;
@@ -68,18 +69,30 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void openRanking(Ranking ranking){
+        if (ranking.isOpen()){
+            throw new BadStatusRankingException("Impossible to open the ranking with id : " + ranking.getId() + " because it's already open !");
+        }
         ranking.setOpen(true);
         rankingRepository.save(ranking);
     }
 
     @Override
     public void closeRanking(Ranking ranking){
+        if (!ranking.isOpen()){
+            throw new BadStatusRankingException("Impossible to close the ranking with id : " + ranking.getId() + " because it's already closed !");
+        }
         ranking.setOpen(false);
         rankingRepository.save(ranking);
     }
 
     @Override
     public void updateStartingMatch(Ranking rankingTeamHome, Ranking rankingTeamAway){
+        if (!rankingTeamHome.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + rankingTeamHome.getId() + " because it's closed !");
+        }
+        if (!rankingTeamAway.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + rankingTeamAway.getId() + " because it's closed !");
+        }
         rankingTeamHome.setNbMatchPlayed(rankingTeamHome.getNbMatchPlayed() + 1);
         rankingTeamAway.setNbMatchPlayed(rankingTeamAway.getNbMatchPlayed() + 1);
         rankingTeamHome.setNbDraws(rankingTeamHome.getNbDraws() + 1);
@@ -92,6 +105,12 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void updateGettingWinner(Ranking winningRanking, Ranking losingRanking){
+        if (!winningRanking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + winningRanking.getId() + " because it's closed !");
+        }
+        if (!losingRanking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + losingRanking.getId() + " because it's closed !");
+        }
         winningRanking.setNbDraws(winningRanking.getNbDraws() - 1);
         losingRanking.setNbDraws(losingRanking.getNbDraws() - 1);
         winningRanking.setNbWins(winningRanking.getNbWins() + 1);
@@ -104,6 +123,12 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void updateGettingWinnerFromLoser(Ranking winningRanking, Ranking losingRanking){
+        if (!winningRanking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + winningRanking.getId() + " because it's closed !");
+        }
+        if (!losingRanking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + losingRanking.getId() + " because it's closed !");
+        }
         winningRanking.setNbWins(winningRanking.getNbWins() + 1);
         winningRanking.setNbLosses(winningRanking.getNbLosses() - 1);
         losingRanking.setNbLosses(losingRanking.getNbLosses() + 1);
@@ -117,6 +142,12 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void updateGettingDrawer(Ranking fromwinnerRanking, Ranking fromLoserRanking){
+        if (!fromwinnerRanking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + fromwinnerRanking.getId() + " because it's closed !");
+        }
+        if (!fromLoserRanking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + fromLoserRanking.getId() + " because it's closed !");
+        }
         fromwinnerRanking.setNbWins(fromwinnerRanking.getNbWins() - 1);
         fromwinnerRanking.setNbDraws(fromwinnerRanking.getNbDraws() + 1);
         fromLoserRanking.setNbLosses(fromLoserRanking.getNbLosses() - 1);
@@ -129,6 +160,9 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void updateGoalsFor(Ranking ranking, int goals){
+        if (!ranking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + ranking.getId() + " because it's closed !");
+        }
         ranking.setGoalsFor(ranking.getGoalsFor() + goals);
         calculGoalsDiff(ranking);
         rankingRepository.save(ranking);
@@ -136,6 +170,9 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void updateGoalsAgainst(Ranking ranking, int goals){
+        if (!ranking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the ranking with id : " + ranking.getId() + " because it's closed !");
+        }
         ranking.setGoalsAgainst(ranking.getGoalsAgainst() + goals);
         calculGoalsDiff(ranking);
         rankingRepository.save(ranking);
@@ -233,6 +270,9 @@ public class RankingServiceImpl implements RankingService {
 
     @Override
     public void updateNumGroup(Ranking ranking, int numGroup) {
+        if (ranking.isOpen()){
+            throw new BadStatusRankingException("Impossible to update the num_group for ranking with id : " + ranking.getId() + " because it's open !");
+        }
         ranking.setNumGroup(numGroup);
         rankingRepository.save(ranking);
     }
