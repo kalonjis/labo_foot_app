@@ -92,7 +92,7 @@ public class TournamentServiceImpl implements TournamentService {
                     rankingService.openRanking(r);
                 }
             }
-            if (newStatus != TournamentStatus.STARTED){
+            if (currentStatus == TournamentStatus.STARTED){
                 for(Ranking r : rankings){
                     rankingService.closeRanking(r);
                 }
