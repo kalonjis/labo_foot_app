@@ -8,6 +8,7 @@ import com.labospring.LaboFootApp.dl.entities.*;
 import com.labospring.LaboFootApp.dl.enums.SubscriptionStatus;
 import com.labospring.LaboFootApp.bll.validators.DispatchingTeamsValidator;
 import com.labospring.LaboFootApp.bll.validators.ParticipatingTeamStatusValidator;
+import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,22 +90,40 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     public void changeStatus(ParticipatingTeam.ParticipatingTeamId id, SubscriptionStatus newStatus) {
 
         ParticipatingTeam participatingTeam = getOneById(id);
+        Tournament tournament = tournamentService.getOne(participatingTeam.getTournament().getId());
+        Team team = teamService.getOne(participatingTeam.getTeam().getId());
+
         if(participatingTeam != null){
             ParticipatingTeamStatusValidator.validateNewStatus(participatingTeam, newStatus);
             SubscriptionStatus statusBeforeChange = participatingTeam.getSubscriptionStatus();
+            if (tournament.getTournamentStatus() == TournamentStatus.STARTED &&
+                    (newStatus == SubscriptionStatus.CANCELED ||
+                            newStatus == SubscriptionStatus.REJECTED
+                    )
+            ){
+                newStatus = SubscriptionStatus.FORFEITED;
+            }
             participatingTeam.setSubscriptionStatus(newStatus);
             participatingTeamRepository.save(participatingTeam);
 
-            if(participatingTeam.getTournament().getTournamentType().isGroupStage()){
-                if (statusBeforeChange == SubscriptionStatus.ACCEPTED){
-                    Ranking ranking = rankingService.getByTournamentIdAndTeamId(id.getTournamentId(), id.getTeamId());
+            if(tournament.getTournamentType().isGroupStage()){
+                if (statusBeforeChange == SubscriptionStatus.ACCEPTED &&
+                        (tournament.getTournamentStatus() == TournamentStatus.BUILDING ||
+                                tournament.getTournamentStatus() == TournamentStatus.PENDING
+                        )
+                   ){
+                    Ranking ranking = rankingService.getByTournamentIdAndTeamId(tournament.getId(), team.getId());
                     if (ranking != null){
                         rankingService.deleteOne(ranking.getId());
                     }
                 }
                 if (newStatus == SubscriptionStatus.ACCEPTED) {
-                    Team team = teamService.getOne(participatingTeam.getTeam().getId());
-                    rankingService.createOne(participatingTeam.getTournament(), team);
+                    rankingService.createOne(tournament, team);
+                }
+
+                if (newStatus == SubscriptionStatus.FORFEITED){
+                    Ranking ranking = rankingService.getByTournamentIdAndTeamId(participatingTeam.getTournament().getId(), participatingTeam.getTeam().getId());
+                    rankingService.closeRanking(ranking);
                 }
             }
         }
