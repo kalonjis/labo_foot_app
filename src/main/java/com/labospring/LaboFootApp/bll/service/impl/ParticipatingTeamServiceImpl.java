@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.events.TeamForfeitedEvent;
 import com.labospring.LaboFootApp.bll.exceptions.*;
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.bll.service.models.ParticipatingTeamBusiness;
@@ -10,6 +11,7 @@ import com.labospring.LaboFootApp.bll.validators.DispatchingTeamsValidator;
 import com.labospring.LaboFootApp.bll.validators.ParticipatingTeamStatusValidator;
 import com.labospring.LaboFootApp.dl.enums.TournamentStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
     private final TournamentService tournamentService;
     private final TeamService teamService;
     private final BracketService bracketService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public List<ParticipatingTeam> getAll() {
@@ -102,6 +105,8 @@ public class ParticipatingTeamServiceImpl implements ParticipatingTeamService {
                     )
             ){
                 newStatus = SubscriptionStatus.FORFEITED;
+                eventPublisher.publishEvent(new TeamForfeitedEvent(this, team, tournament));
+
             }
             participatingTeam.setSubscriptionStatus(newStatus);
             participatingTeamRepository.save(participatingTeam);
