@@ -157,6 +157,7 @@ public class FootMatchServiceImpl implements FootMatchService {
     @Transactional
     public void changeScore(Long id, ScoreBusiness scoreBusiness) {
         FootMatch footMatch = getOne(id);
+
         if (footMatch.getMatchStatus() == MatchStatus.SCHEDULED) {
             throw new IncorrectMatchStatusException("Cannot change score for a match that has not started yet.", 409);
         }
