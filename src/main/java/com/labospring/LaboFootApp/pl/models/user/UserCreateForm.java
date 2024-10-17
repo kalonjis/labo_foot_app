@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
         message = "Password do not match!"
 )
 public class UserCreateForm extends UserEditForm{
-    @Email
+    @Email @NotBlank @NotNull
     private String email;
     @NotNull
     @NotBlank

@@ -43,9 +43,9 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // region  User
-        User user1 = new User(null, "steby81", passwordEncoder.encode("test123"), "Steph", "Kal", "kalonj1981@hotmail.com", LocalDate.of(1981, 5, 12), "0498123456", new Address("123 Main St", "Brussels", "1000", "Brussels", "Belgium"), Role.ADMIN);
-        User user2 = new User(null, "gabinho", passwordEncoder.encode("test123"), "Jean", "Gabin", "kalonjis@outlook.com", LocalDate.of(1990, 3, 25), "0498765432", new Address("456 Elm St", "Antwerp", "2000", "Antwerp", "Belgium"), Role.ADMIN);
-        User user3 = new User(null, "homerSps", passwordEncoder.encode("test123"), "Homer", "Simpson", "kalonji_s@skynet.be", LocalDate.of(1978, 6, 15), "0476987654", new Address("789 Maple St", "Liège", "4000", "Liège", "Belgium"), Role.USER);
+        User user1 = new User(null, "steby81", passwordEncoder.encode("test123"), "Steph", "Kal", "kalonj1@springfield.com", LocalDate.of(1981, 5, 12), "0498123456", new Address("123 Main St", "Brussels", "1000", "Brussels", "Belgium"), Role.ADMIN);
+        User user2 = new User(null, "gabinho", passwordEncoder.encode("test123"), "Jean", "Gabin", "kalo@springfield.com", LocalDate.of(1990, 3, 25), "0498765432", new Address("456 Elm St", "Antwerp", "2000", "Antwerp", "Belgium"), Role.ADMIN);
+        User user3 = new User(null, "homerSps", passwordEncoder.encode("test123"), "Homer", "Simpson", "kalon@springfield.be", LocalDate.of(1978, 6, 15), "0476987654", new Address("789 Maple St", "Liège", "4000", "Liège", "Belgium"), Role.USER);
         User user4 = new User(null, "margeSimps", passwordEncoder.encode("test123"), "Marge", "Simpson", "marge.s@springfield.com", LocalDate.of(1975, 10, 1), "0466554433", new Address("123 Springfield Ave", "Springfield", "5000", "Illinois", "USA"), Role.USER);
         User user5 = new User(null, "bartSimps", passwordEncoder.encode("test123"), "Bart", "Simpson", "bart.s@springfield.com", LocalDate.of(2005, 4, 1), "0456789123", new Address("456 Springfield Ave", "Springfield", "5001", "Illinois", "USA"), Role.USER);
         User user6 = new User(null, "lisaSimps", passwordEncoder.encode("test123"), "Lisa", "Simpson", "lisa.s@springfield.com", LocalDate.of(2007, 5, 9), "0478996453", new Address("789 Springfield Ave", "Springfield", "5002", "Illinois", "USA"), Role.USER);

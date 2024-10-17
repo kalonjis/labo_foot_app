@@ -1,11 +1,13 @@
 package com.labospring.LaboFootApp.bll.security.impl;
 
+import com.labospring.LaboFootApp.bll.events.UserRegisteredEvent;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.dal.repositories.UserRepository;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.enums.Role;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public User register(User user) {
@@ -25,7 +28,11 @@ public class AuthServiceImpl implements AuthService {
         }
         user.setRole(Role.USER);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        User savedUser =  userRepository.save(user);
+
+        eventPublisher.publishEvent(new UserRegisteredEvent(this, savedUser));
+
+        return savedUser;
     }
 
     @Override

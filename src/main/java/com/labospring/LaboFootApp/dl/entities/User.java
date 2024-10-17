@@ -30,7 +30,7 @@ public class User extends BaseEntity implements UserDetails {
     private String firstname;
     @Setter @Column(nullable = false, length = 50)
     private String lastname;
-    @Setter
+    @Setter @Column(unique = true)
     private String email;
     @Setter @Temporal(TemporalType.DATE)
     private LocalDate birthdate;
