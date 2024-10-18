@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -106,5 +107,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getUsersForMatchAndTeamsWithNotifications(Long matchId, List<Long> teamIds) {
         return userRepository.findUsersByFavoriteMatchOrTeamWithNotifications(matchId, teamIds);
+    }
+
+
+    @Override
+    @Transactional
+    public void enableUser(User user){
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public void disableUser(User user){
+        user.setEnabled(false);
+        userRepository.save(user);
     }
 }
