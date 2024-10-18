@@ -12,4 +12,6 @@ public interface UserService extends BaseService<Long, User, User>{
     List<User> findAllByUsername(String username);
     List<User> getByCriteria(User user);
     List<User> getUsersForMatchAndTeamsWithNotifications(Long matchId, List<Long> teamIds);
+    void enableUser(User user);
+    void disableUser(User user);
 }

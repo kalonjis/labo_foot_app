@@ -30,7 +30,7 @@ public class User extends BaseEntity implements UserDetails {
     private String firstname;
     @Setter @Column(nullable = false, length = 50)
     private String lastname;
-    @Setter
+    @Setter @Column(unique = true)
     private String email;
     @Setter @Temporal(TemporalType.DATE)
     private LocalDate birthdate;
@@ -43,26 +43,43 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Setter
+    @Column(nullable = false)
+    private boolean enabled;
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-
-    public User(String username, String password, String firstname, String lastname, String email, LocalDate birthdate, String phoneNumber, Address address) {
-        this(firstname, lastname, birthdate, phoneNumber, address);
-        this.username = username;
-        this.password = password;
-        this.email = email;
+        this.enabled = false;
     }
 
     public User(String firstname, String lastname, LocalDate birthdate, String phoneNumber, Address address) {
         this.firstname = firstname;
         this.lastname = lastname;
-
         this.birthdate = birthdate;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        this.enabled = false;
     }
+    public User(String username, String password, String firstname, String lastname, String email, LocalDate birthdate, String phoneNumber, Address address) {
+        this(firstname, lastname, birthdate, phoneNumber, address);
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.enabled = false;
+
+    }
+
+    public User(String username, String password, String firstname, String lastname, String email, LocalDate birthdate, String phoneNumber, Address address, Role role) {
+        this(firstname, lastname, birthdate, phoneNumber, address);
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
+        this.enabled = false;
+
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -86,6 +103,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return this.enabled;
     }
 }
