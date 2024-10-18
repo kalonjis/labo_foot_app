@@ -3,7 +3,6 @@ package com.labospring.LaboFootApp.bll.events;
 
 import com.labospring.LaboFootApp.bll.service.MailerService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -13,9 +12,9 @@ public class UserRegisteredEventListener {
 
     private final MailerService mailerService;
 
-
     @EventListener
     public void handleUserRegisteredEvent(UserRegisteredEvent event){
+
         mailerService.sendWelcomeEmail(event.getUser());
     }
 }
