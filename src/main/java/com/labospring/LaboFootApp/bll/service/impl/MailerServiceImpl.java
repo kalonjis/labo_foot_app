@@ -31,6 +31,19 @@ public class MailerServiceImpl implements MailerService {
 
     @Async
     @Override
+    public void sendNewConfirmation(String token){
+        User user = userVerificationTokenService.getOne(token).getUser();
+        String confirmationUrl = "http://localhost:8080/registrationConfirm?token=" + token;
+        Context context = new Context();
+        context.setVariable("username", user.getUsername());
+        context.setVariable("url", confirmationUrl);
+
+        mailerUtils.sendMail("Confirm your Account", "NewConfirmationRequest", context, user.getEmail());
+    }
+
+
+    @Async
+    @Override
     public void sendPasswordResetEmail(String userEmail, String token) {
         return;
     }
