@@ -1,15 +1,13 @@
 package com.labospring.LaboFootApp.pl.controller.security;
 
 import com.labospring.LaboFootApp.bll.security.UserVerificationTokenService;
+import com.labospring.LaboFootApp.bll.service.MailerService;
 import com.labospring.LaboFootApp.bll.service.UserService;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.entities.UserVerificationToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -20,12 +18,12 @@ public class UserVerificationTokenController {
 
     private final UserVerificationTokenService userVerificationTokenService;
     private final UserService userService;
+    private final MailerService mailerService;
 
     @GetMapping("/registrationConfirm")
     public ResponseEntity<String> confirmAccount(@RequestParam String token) {
         // Récupérer le token de vérification
         UserVerificationToken userToken = userVerificationTokenService.getOne(token);
-        System.out.println("usertoken = :" + userToken.getUser().getEmail());
 
         // Si le token est invalide
         if (userToken == null) {
@@ -34,7 +32,12 @@ public class UserVerificationTokenController {
 
         // Vérifier si le token a expiré
         if (userToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            return ResponseEntity.badRequest().body("Token has expired");
+            String requestNewTokenUrl = "http://localhost:8080/requestNewToken?token=" + token;
+            String message = "Link has expired. Please request a new one at the following link: " +
+            "<br/> <a href=\"" + requestNewTokenUrl + "\">Request New Confirmation Email</a>";
+            return ResponseEntity.badRequest()
+                    .header("Content-Type", "text/html")
+                    .body(message);
         }
 
         // Récupérer l'utilisateur correspondant au token
@@ -45,5 +48,21 @@ public class UserVerificationTokenController {
 
         // Réponse de succès avec message de confirmation
         return ResponseEntity.ok("Your account has been successfully activated.");
+    }
+
+
+    @GetMapping("/requestNewToken")
+    public ResponseEntity<String> requestNewToken(@RequestParam String token){
+        UserVerificationToken verificationToken = userVerificationTokenService.getOne(token);
+
+        // Si le token est invalide
+        if (verificationToken == null) {
+            return ResponseEntity.badRequest().body("Invalid token");
+        }
+
+        String newToken = userVerificationTokenService.generateNewVerificationToken(token).getToken();
+        mailerService.sendNewConfirmation(newToken);
+
+        return ResponseEntity.ok("A new confirmation email has been sent.");
     }
 }

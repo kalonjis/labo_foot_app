@@ -1,0 +1,20 @@
+<!doctype html>
+<html xmlns:th="http://www.thymleaf.org"  lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+<h1 th:text="'Welcome ' + ${username}"> </h1>
+
+<p>
+    Hello,<br/>
+    Thank you again for joining the MyFootT family.
+
+    Just one more step and you'll be able to enjoy the full functionality of your application.<br/>
+    Please click on the link below to confirm your user account:<br/>
+    <a th:href="${url}">Confirm account</a>.
+</p>
+
+</body>
+</html>
