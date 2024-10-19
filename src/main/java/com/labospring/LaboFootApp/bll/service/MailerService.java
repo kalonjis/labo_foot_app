@@ -6,4 +6,5 @@ public interface MailerService {
     void sendWelcomeEmail(User user);
     void sendPasswordResetEmail(String userEmail, String token);
     void sendTournmentNotification(String userEmail, String TournamentTitle, String message);
+    void sendNewConfirmation(String token);
 }
