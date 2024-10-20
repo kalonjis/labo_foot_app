@@ -2,6 +2,7 @@ package com.labospring.LaboFootApp.bll.service.impl;
 
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.UserService;
+import com.labospring.LaboFootApp.bll.service.models.user.PasswordResetFormBusiness;
 import com.labospring.LaboFootApp.bll.service.models.user.UserEditBusiness;
 import com.labospring.LaboFootApp.bll.service.models.user.UserPasswordEditBusiness;
 import com.labospring.LaboFootApp.bll.specification.UserSpecification;
@@ -67,6 +68,15 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPassword(passwordEncoder.encode(passwordEditBusiness.newPassword()));
+
+        userRepository.save(user);
+    }
+
+
+    @Override
+    public void resetPassword(Long id, PasswordResetFormBusiness passwordResetFormBusiness) {
+        User user = getOne(id);
+        user.setPassword(passwordEncoder.encode(passwordResetFormBusiness.password()));
 
         userRepository.save(user);
     }

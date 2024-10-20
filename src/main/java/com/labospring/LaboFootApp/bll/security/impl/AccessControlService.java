@@ -1,4 +1,4 @@
-package com.labospring.LaboFootApp.bll.security;
+package com.labospring.LaboFootApp.bll.security.impl;
 
 import com.labospring.LaboFootApp.bll.service.*;
 import com.labospring.LaboFootApp.dl.entities.*;

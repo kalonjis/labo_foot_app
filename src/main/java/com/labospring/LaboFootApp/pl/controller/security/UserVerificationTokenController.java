@@ -1,6 +1,6 @@
 package com.labospring.LaboFootApp.pl.controller.security;
 
-import com.labospring.LaboFootApp.bll.security.UserVerificationTokenService;
+import com.labospring.LaboFootApp.bll.security.impl.UserVerificationTokenServiceImpl;
 import com.labospring.LaboFootApp.bll.service.MailerService;
 import com.labospring.LaboFootApp.bll.service.UserService;
 import com.labospring.LaboFootApp.dl.entities.User;
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @CrossOrigin(origins = "*")
 public class UserVerificationTokenController {
 
-    private final UserVerificationTokenService userVerificationTokenService;
+    private final UserVerificationTokenServiceImpl userVerificationTokenService;
     private final UserService userService;
     private final MailerService mailerService;
 
@@ -32,7 +32,7 @@ public class UserVerificationTokenController {
 
         // Vérifier si le token a expiré
         if (userToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            String requestNewTokenUrl = "http://localhost:8080/requestNewToken?token=" + token;
+            String requestNewTokenUrl = "http://localhost:8080/request-confirmtoken?token=" + token;
             String message = "Link has expired. Please request a new one at the following link: " +
             "<br/> <a href=\"" + requestNewTokenUrl + "\">Request New Confirmation Email</a>";
             return ResponseEntity.badRequest()
@@ -51,7 +51,7 @@ public class UserVerificationTokenController {
     }
 
 
-    @GetMapping("/requestNewToken")
+    @GetMapping("/request-confirmtoken")
     public ResponseEntity<String> requestNewToken(@RequestParam String token){
         UserVerificationToken verificationToken = userVerificationTokenService.getOne(token);
 
@@ -60,7 +60,7 @@ public class UserVerificationTokenController {
             return ResponseEntity.badRequest().body("Invalid token");
         }
 
-        String newToken = userVerificationTokenService.generateNewVerificationToken(token).getToken();
+        String newToken = userVerificationTokenService.generateNewToken(token, UserVerificationToken.class, 60L).getToken();
         mailerService.sendNewConfirmation(newToken);
 
         return ResponseEntity.ok("A new confirmation email has been sent.");

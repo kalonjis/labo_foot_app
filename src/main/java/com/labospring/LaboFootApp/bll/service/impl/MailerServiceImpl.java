@@ -1,6 +1,7 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
-import com.labospring.LaboFootApp.bll.security.UserVerificationTokenService;
+import com.labospring.LaboFootApp.bll.security.impl.PasswordResetTokenServiceImpl;
+import com.labospring.LaboFootApp.bll.security.impl.UserVerificationTokenServiceImpl;
 import com.labospring.LaboFootApp.bll.service.MailerService;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.dl.entities.UserVerificationToken;
@@ -15,12 +16,13 @@ import org.thymeleaf.context.Context;
 public class MailerServiceImpl implements MailerService {
 
     private final MailerUtils mailerUtils;
-    private final UserVerificationTokenService userVerificationTokenService;
+    private final UserVerificationTokenServiceImpl userVerificationTokenService;
+    private final PasswordResetTokenServiceImpl passwordResetTokenService;
 
     @Async
     @Override
     public void sendWelcomeEmail(User user) {
-        UserVerificationToken verificationToken = userVerificationTokenService.createVerificationToken(user);
+        UserVerificationToken verificationToken = userVerificationTokenService.createToken(user, UserVerificationToken.class, 20L);
         String confirmationUrl = "http://localhost:8080/registrationConfirm?token=" + verificationToken.getToken();
         Context context = new Context();
         context.setVariable("username", user.getUsername());
@@ -44,8 +46,14 @@ public class MailerServiceImpl implements MailerService {
 
     @Async
     @Override
-    public void sendPasswordResetEmail(String userEmail, String token) {
-        return;
+    public void sendPasswordResetEmail(String token) {
+        User user = passwordResetTokenService.getOne(token).getUser();
+        String resetUrl = "http://localhost:8080/reset-password?token=" + token;
+        Context context = new Context();
+        context.setVariable("username", user.getUsername());
+        context.setVariable("url", resetUrl);
+
+        mailerUtils.sendMail("Password Reset", "NewPasswordRequest", context, user.getEmail());
     }
 
     @Async

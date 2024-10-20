@@ -1,7 +1,7 @@
 package com.labospring.LaboFootApp.pl.controller;
 
 
-import com.labospring.LaboFootApp.bll.security.AccessControlService;
+import com.labospring.LaboFootApp.bll.security.impl.AccessControlService;
 import com.labospring.LaboFootApp.bll.service.ParticipatingTeamService;
 import com.labospring.LaboFootApp.dl.entities.ParticipatingTeam;
 import com.labospring.LaboFootApp.dl.entities.User;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponents;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
