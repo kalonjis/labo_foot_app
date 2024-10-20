@@ -32,7 +32,7 @@ public class UserVerificationTokenController {
 
         // Vérifier si le token a expiré
         if (userToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            String requestNewTokenUrl = "http://localhost:8080/requestNewToken?token=" + token;
+            String requestNewTokenUrl = "http://localhost:8080/request-confirmtoken?token=" + token;
             String message = "Link has expired. Please request a new one at the following link: " +
             "<br/> <a href=\"" + requestNewTokenUrl + "\">Request New Confirmation Email</a>";
             return ResponseEntity.badRequest()
@@ -51,7 +51,7 @@ public class UserVerificationTokenController {
     }
 
 
-    @GetMapping("/requestNewToken")
+    @GetMapping("/request-confirmtoken")
     public ResponseEntity<String> requestNewToken(@RequestParam String token){
         UserVerificationToken verificationToken = userVerificationTokenService.getOne(token);
 
