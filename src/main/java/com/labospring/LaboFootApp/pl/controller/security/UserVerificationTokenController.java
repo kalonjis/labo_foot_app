@@ -50,6 +50,8 @@ public class UserVerificationTokenController {
         // Activer le compte de l'utilisateur
         userService.enableUser(user);
 
+        mailerService.sendWelcomeEmail(user);
+
         // Réponse de succès avec message de confirmation
         return ResponseEntity.ok("Your account has been successfully activated.");
     }
