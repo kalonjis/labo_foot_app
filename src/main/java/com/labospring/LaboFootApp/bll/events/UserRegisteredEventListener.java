@@ -15,6 +15,6 @@ public class UserRegisteredEventListener {
     @EventListener
     public void handleUserRegisteredEvent(UserRegisteredEvent event){
 
-        mailerService.sendWelcomeEmail(event.getUser());
+        mailerService.sendEmailVerification(event.getUser());
     }
 }
