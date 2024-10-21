@@ -10,6 +10,7 @@ import com.labospring.LaboFootApp.pl.models.user.UserSearchForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,8 @@ public class PasswordResetController {
     public final MailerService mailerService;
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form){
+    //public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form){
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @ModelAttribute PasswordResetForm form) {
         PasswordResetToken passwordToken = passwordResetTokenService.getOne(token);
 
         if (passwordToken == null){
@@ -45,9 +47,9 @@ public class PasswordResetController {
         return ResponseEntity.ok().body("Thank you.\n" +
                 "your password has been successfully modified. You can now use it to connect to your favorite app. “login") ;
 
-
-
     }
+
+
 
     @GetMapping("/request-passwordtoken")
     public ResponseEntity<String> requestNewToken(@RequestParam String token){

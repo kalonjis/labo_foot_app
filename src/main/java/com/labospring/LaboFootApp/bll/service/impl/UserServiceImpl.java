@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.bll.service.impl;
 
+import com.labospring.LaboFootApp.bll.exceptions.BadEnabledStatusException;
 import com.labospring.LaboFootApp.bll.exceptions.DoesntExistsException;
 import com.labospring.LaboFootApp.bll.service.UserService;
 import com.labospring.LaboFootApp.bll.service.models.user.PasswordResetFormBusiness;
@@ -123,6 +124,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void enableUser(User user){
+        if(user.isEnabled()){
+            throw new BadEnabledStatusException("user account is already enabled");
+        }
         user.setEnabled(true);
         userRepository.save(user);
     }
@@ -130,6 +134,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void disableUser(User user){
+        if(user.isEnabled()){
+            throw new BadEnabledStatusException("user account is already disabled");
+        }
         user.setEnabled(false);
         userRepository.save(user);
     }
