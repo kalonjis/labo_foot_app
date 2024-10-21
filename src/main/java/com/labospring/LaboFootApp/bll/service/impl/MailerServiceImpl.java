@@ -21,14 +21,23 @@ public class MailerServiceImpl implements MailerService {
 
     @Async
     @Override
-    public void sendWelcomeEmail(User user) {
+    public void sendEmailVerification(User user) {
         UserVerificationToken verificationToken = userVerificationTokenService.createToken(user, UserVerificationToken.class, 20L);
         String confirmationUrl = "http://localhost:8080/registrationConfirm?token=" + verificationToken.getToken();
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", confirmationUrl);
 
-        mailerUtils.sendMail("Welcome to Tournament Manager", "signUpConfirmation", context, user.getEmail());
+        mailerUtils.sendMail("Email Verification", "signUpConfirmation", context, user.getEmail());
+    }
+
+    @Async
+    @Override
+    public void sendWelcomeEmail(User user) {
+        Context context = new Context();
+        context.setVariable("username", user.getUsername());
+
+        mailerUtils.sendMail("Welcome to Tournament Manager", "GreetingComfirmedUser", context, user.getEmail());
     }
 
     @Async
