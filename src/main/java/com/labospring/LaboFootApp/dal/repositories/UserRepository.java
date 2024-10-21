@@ -10,11 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User>{
-@Query("select u from User u where u.username ilike :username")
+
+    @Query("select u from User u where u.username ilike :username")
     Optional<User> findByUsername(@Param("username") String username);
 
     @Query("select count(u) > 0 from User u where u.username ilike :username")
     boolean existsByUsername(@Param("username") String username);
+
+    @Query("select count(u) > 0 from User u where u.email ilike :email")
+    boolean existsByUserEmail(@Param("email") String email);
 
     @Query("SELECT DISTINCT u FROM User u " +
             "LEFT JOIN FavoriteFootMatch ffm ON ffm.user = u " +
