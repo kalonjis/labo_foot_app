@@ -30,6 +30,10 @@ public class UserVerificationTokenController {
             return ResponseEntity.badRequest().body("Invalid token");
         }
 
+        if (userToken.getUser().isEnabled()){
+            return ResponseEntity.badRequest().body("Account is already activated. LOGIN");
+        }
+
         // Vérifier si le token a expiré
         if (userToken.getExpiryDate().isBefore(LocalDateTime.now())) {
             String requestNewTokenUrl = "http://localhost:8080/request-confirmtoken?token=" + token;
