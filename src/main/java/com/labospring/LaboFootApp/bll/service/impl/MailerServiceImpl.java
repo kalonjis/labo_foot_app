@@ -48,7 +48,8 @@ public class MailerServiceImpl implements MailerService {
     @Override
     public void sendPasswordResetEmail(String token) {
         User user = passwordResetTokenService.getOne(token).getUser();
-        String resetUrl = "http://localhost:8080/reset-password?token=" + token;
+        //String resetUrl = "http://localhost:8080/reset-password?token=" + token; Use without html page (postman)
+        String resetUrl = "http://localhost:8080/reset-password-form?token=" + token;
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", resetUrl);
