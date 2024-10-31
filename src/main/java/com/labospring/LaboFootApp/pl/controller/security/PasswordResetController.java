@@ -10,12 +10,14 @@ import com.labospring.LaboFootApp.pl.models.user.UserSearchForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequiredArgsConstructor
 public class PasswordResetController {
@@ -25,8 +27,7 @@ public class PasswordResetController {
     public final MailerService mailerService;
 
     @PostMapping("/reset-password")
-    //public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form){
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @ModelAttribute PasswordResetForm form) {
+    public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form){
         PasswordResetToken passwordToken = passwordResetTokenService.getOne(token);
 
         if (passwordToken == null){
@@ -67,24 +68,28 @@ public class PasswordResetController {
     }
 
     @PostMapping("/request-password")
-    public ResponseEntity<String> requestPassword(@Valid @RequestBody UserSearchForm form){
+    public ResponseEntity<Map<String, String>> requestPassword(@Valid @RequestBody UserSearchForm form) {
         User userCriteria = new User();
-        userCriteria.setUsername(form.username());
         userCriteria.setEmail(form.email());
+
         List<User> users = userService.getByCriteria(userCriteria);
-        if(users.isEmpty()){
-            return ResponseEntity.badRequest().body("Sorry, but there are no users matching the information you entered.");
-        }
-        if(users.size() > 1){
-            return ResponseEntity.badRequest().body("It seems that the name and email address you have entered do not " +
-                    "correspond to the same user. Make sure they match, or choose one of the two");
+
+        Map<String, String> response = new HashMap<>();
+        if (users.isEmpty()) {
+            response.put("error", "Sorry, but there are no users matching the information you entered.");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        PasswordResetToken token = passwordResetTokenService.createToken(users.get(0), PasswordResetToken.class, 60L);
+        if (users.size() > 1) {
+            response.put("error", "It seems that the name and email address you have entered do not correspond to the same user. Make sure they match, or choose one of the two");
+            return ResponseEntity.badRequest().body(response);
+        }
+
+        PasswordResetToken token = passwordResetTokenService.createToken(users.getFirst(), PasswordResetToken.class, 600L);
         mailerService.sendPasswordResetEmail(token.getToken());
 
-        return ResponseEntity.ok("Check your inbox\n" +
-                "If your e-mail address matches our database, you will receive an e-mail asking you to reset your password.");
+        response.put("message", "Check your inbox. If your e-mail address matches our database, you will receive an e-mail asking you to reset your password.");
+        return ResponseEntity.ok(response);
     }
 
 }
