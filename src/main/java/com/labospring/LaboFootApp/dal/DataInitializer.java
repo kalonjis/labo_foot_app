@@ -43,7 +43,7 @@ public class DataInitializer implements CommandLineRunner {
     public void run(String... args) throws Exception {
 
         // region  User
-        User user1 = new User("steby81", passwordEncoder.encode("test123"), "Steph", "Kal", "kalonj1@springfield.com", LocalDate.of(1981, 5, 12), "0498123456", new Address("123 Main St", "Brussels", "1000", "Brussels", "Belgium"), Role.ADMIN);
+        User user1 = new User("steby81", passwordEncoder.encode("test123"), "Steph", "Kal", "kalonj1981@hotmail.com", LocalDate.of(1981, 5, 12), "0498123456", new Address("123 Main St", "Brussels", "1000", "Brussels", "Belgium"), Role.ADMIN);
         User user2 = new User("gabinho", passwordEncoder.encode("test123"), "Jean", "Gabin", "kalo@springfield.com", LocalDate.of(1990, 3, 25), "0498765432", new Address("456 Elm St", "Antwerp", "2000", "Antwerp", "Belgium"), Role.ADMIN);
         User user3 = new User("homerSps", passwordEncoder.encode("test123"), "Homer", "Simpson", "kalon@springfield.be", LocalDate.of(1978, 6, 15), "0476987654", new Address("789 Maple St", "Liège", "4000", "Liège", "Belgium"), Role.USER);
         User user4 = new User("margeSimps", passwordEncoder.encode("test123"), "Marge", "Simpson", "marge.s@springfield.com", LocalDate.of(1975, 10, 1), "0466554433", new Address("123 Springfield Ave", "Springfield", "5000", "Illinois", "USA"), Role.USER);
