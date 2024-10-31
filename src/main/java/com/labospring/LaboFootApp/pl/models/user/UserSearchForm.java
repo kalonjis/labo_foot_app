@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record UserSearchForm(
-        @NotBlank @NotNull
-        String username,
+//        @NotBlank @NotNull
+//        String username,
         @Email
         String email
         ) { }
