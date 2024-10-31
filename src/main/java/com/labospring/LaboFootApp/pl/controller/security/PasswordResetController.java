@@ -27,11 +27,13 @@ public class PasswordResetController {
     public final MailerService mailerService;
 
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form){
+    public ResponseEntity<Map<String, String>> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form) {
         PasswordResetToken passwordToken = passwordResetTokenService.getOne(token);
+        Map<String, String> response = new HashMap<>();
 
-        if (passwordToken == null){
-            return ResponseEntity.badRequest().body("Invalid token");
+        if (passwordToken == null) {
+            response.put("error", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
         }
 
         // Vérifier si le token a expiré
@@ -39,32 +41,37 @@ public class PasswordResetController {
             String requestNewTokenUrl = "http://localhost:8080/request-passwordtoken?token=" + token;
             String message = "Link has expired. Please request a new one at the following link: " +
                     "<br/> <a href=\"" + requestNewTokenUrl + "\">Request reset password email</a>";
+
+            response.put("error", message);
             return ResponseEntity.badRequest()
-                    .header("Content-Type", "text/html")
-                    .body(message);
+                    .header("Content-Type", "application/json")
+                    .body(response);
         }
+
         userService.resetPassword(passwordToken.getUser().getId(), form.toBusiness());
 
-        return ResponseEntity.ok().body("Thank you.\n" +
-                "your password has been successfully modified. You can now use it to connect to your favorite app. “login") ;
-
+        response.put("message", "Thank you. Your password has been successfully modified. You can now use it to connect to your favorite app. \"login\"");
+        return ResponseEntity.ok(response);
     }
 
 
 
     @GetMapping("/request-passwordtoken")
-    public ResponseEntity<String> requestNewToken(@RequestParam String token){
+    public ResponseEntity<Map<String, String>> requestNewToken(@RequestParam String token) {
         PasswordResetToken passwordToken = passwordResetTokenService.getOne(token);
+        Map<String, String> response = new HashMap<>();
 
         // Si le token est invalide
         if (passwordToken == null) {
-            return ResponseEntity.badRequest().body("Invalid token");
+            response.put("error", "Invalid token");
+            return ResponseEntity.badRequest().body(response);
         }
 
-        String newToken = passwordResetTokenService.generateNewToken(token, PasswordResetToken.class, 60L).getToken();
+        String newToken = passwordResetTokenService.generateNewToken(token, PasswordResetToken.class, 600L).getToken();
         mailerService.sendPasswordResetEmail(newToken);
 
-        return ResponseEntity.ok("A new confirmation email has been sent.");
+        response.put("message", "A new confirmation email has been sent.");
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/request-password")
