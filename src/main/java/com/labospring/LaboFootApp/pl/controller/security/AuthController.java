@@ -52,6 +52,14 @@ public class AuthController {
         return ResponseEntity.ok(mapUserToken(u));
     }
 
+    //@PreAuthorize("isAuthenticated()")
+//    @PostMapping("/logout")
+//    public ResponseEntity<String> logout() {
+//        // Le mécanisme de Spring Security se charge du logout via la configuration
+//        return ResponseEntity.ok("Logout successful");
+//    }
+
+
     /**
      * Maps a User entity to a UserTokenDTO, generating a JWT token for the user.
      *
