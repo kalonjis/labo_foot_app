@@ -25,7 +25,16 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(r -> r.anyRequest().permitAll());
+                .authorizeHttpRequests(r -> r.anyRequest().permitAll()
+                );
+//                .logout( logout -> logout
+//                        .logoutUrl("/logout")
+//                        .logoutSuccessUrl("/login?logout")
+//                        .invalidateHttpSession(true)
+//                        .clearAuthentication(true)
+//                        .permitAll()
+//
+//                );
 
         return http.build();
     }
