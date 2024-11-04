@@ -15,7 +15,7 @@ import org.thymeleaf.context.Context;
 @RequiredArgsConstructor
 public class MailerUtils {
 
-    @Value("${spring.mail.username")
+    @Value("${spring.mail.username}")
     private String appEmailAddress;
 
     private final JavaMailSender mailSender;
