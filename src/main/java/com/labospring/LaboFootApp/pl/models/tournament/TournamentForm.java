@@ -11,11 +11,11 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 public record TournamentForm(
-        @NotNull @NotBlank
+        @NotNull @NotBlank (message = "Title can't be empty")
         String title,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        @NotNull @NotBlank
+        @NotNull @NotBlank (message = "Place name can't be empty")
         String placeName,
         @NotNull
         Address address,
