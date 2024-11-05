@@ -11,6 +11,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 
+import static com.labospring.LaboFootApp.il.props.LaboFootProps.BACK_URL;
+import static com.labospring.LaboFootApp.il.props.LaboFootProps.FRONT_URL;
+
 @Service
 @RequiredArgsConstructor
 public class MailerServiceImpl implements MailerService {
@@ -23,7 +26,7 @@ public class MailerServiceImpl implements MailerService {
     @Override
     public void sendEmailVerification(User user) {
         UserVerificationToken verificationToken = userVerificationTokenService.createToken(user, UserVerificationToken.class, 20L);
-        String confirmationUrl = "http://localhost:8080/registrationConfirm?token=" + verificationToken.getToken();
+        String confirmationUrl = BACK_URL + "/registrationConfirm?token=" + verificationToken.getToken();
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", confirmationUrl);
@@ -44,7 +47,7 @@ public class MailerServiceImpl implements MailerService {
     @Override
     public void sendNewConfirmation(String token){
         User user = userVerificationTokenService.getOne(token).getUser();
-        String confirmationUrl = "http://localhost:8080/registrationConfirm?token=" + token;
+        String confirmationUrl = BACK_URL + "/registrationConfirm?token=" + token;
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", confirmationUrl);
@@ -57,7 +60,7 @@ public class MailerServiceImpl implements MailerService {
     @Override
     public void sendPasswordResetEmail(String token) {
         User user = passwordResetTokenService.getOne(token).getUser();
-        String resetUrl = "http://localhost:4200/user/reset-password?token=" + token;
+        String resetUrl = FRONT_URL + "/user/reset-password?token=" + token;
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", resetUrl);
