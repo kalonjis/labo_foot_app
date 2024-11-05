@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.pl.controller.security;
 
+import com.labospring.LaboFootApp.bll.exceptions.UserCredentialAlreadyTakenException;
 import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.dl.entities.User;
 import com.labospring.LaboFootApp.il.utils.JwtUtils;
@@ -8,13 +9,16 @@ import com.labospring.LaboFootApp.pl.models.user.UserLoginForm;
 import com.labospring.LaboFootApp.pl.models.user.UserTokenDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class AuthController {
 
     private final AuthService authService;
@@ -29,12 +33,29 @@ public class AuthController {
      */
     @PostMapping("/register")
     @PreAuthorize("isAnonymous()")
-    public ResponseEntity<UserTokenDTO> register(@Valid @RequestBody UserCreateForm form) {
-        // Register the user using the provided form and obtain the newly registered user object.
-        User u = authService.register(form.toUser());
-        // Map the user to a UserTokenDTO (which includes a JWT token) and return it in the response.
-        return ResponseEntity.ok(mapUserToken(u));
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody UserCreateForm form) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            // Enregistrement de l'utilisateur
+            User u = authService.register(form.toUser());
+            //mapUserToken(u);
+
+            // Message de succès
+            response.put("message", "Thank you. You've been successfully registered. One last step: check your email and confirm your account");
+            return ResponseEntity.ok(response);
+
+        } catch (UserCredentialAlreadyTakenException e) {
+            // Cas où le nom d'utilisateur ou l'email est déjà pris
+            response.put("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+
+        } catch (Exception e) {
+            // Erreur générique
+            response.put("error", "An error occurred during registration. Please try again later.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
 
     /**
      * Handles the user login process.
