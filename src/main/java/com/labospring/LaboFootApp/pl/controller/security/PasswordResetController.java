@@ -17,7 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:4200")
+import static com.labospring.LaboFootApp.il.props.LaboFootProps.BACK_URL;
+
+
 @RestController
 @RequiredArgsConstructor
 public class PasswordResetController {
@@ -38,11 +40,10 @@ public class PasswordResetController {
 
         // Vérifier si le token a expiré
         if (passwordToken.getExpiryDate().isBefore(LocalDateTime.now())) {
-            String requestNewTokenUrl = "http://localhost:8080/request-passwordtoken?token=" + token;
-            String message = "Link has expired. Please request a new one at the following link: " +
-                    "<br/> <a href=\"" + requestNewTokenUrl + "\">Request reset password email</a>";
-
+            String requestNewTokenUrl = BACK_URL + "/request-passwordtoken?token=" + token;
+            String message = "Link has expired. Please request a new one at the following link: ";
             response.put("error", message);
+            response.put("url", requestNewTokenUrl);
             return ResponseEntity.badRequest()
                     .header("Content-Type", "application/json")
                     .body(response);
@@ -92,7 +93,7 @@ public class PasswordResetController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        PasswordResetToken token = passwordResetTokenService.createToken(users.getFirst(), PasswordResetToken.class, 600L);
+        PasswordResetToken token = passwordResetTokenService.createToken(users.getFirst(), PasswordResetToken.class, 6L);
         mailerService.sendPasswordResetEmail(token.getToken());
 
         response.put("message", "Check your inbox. If your e-mail address matches our database, you will receive an e-mail asking you to reset your password.");
