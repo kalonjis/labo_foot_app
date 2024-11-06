@@ -32,6 +32,9 @@ public class JwtUtils {
     public String generateToken(User u){
         return builder
                 .setSubject(u.getUsername())
+                .claim("userId", u.getId())
+                .claim("username", u.getUsername())
+                .claim("role", u.getRole())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expireAt * 1000L))
                 .compact();
@@ -42,12 +45,17 @@ public class JwtUtils {
         return parser.parseClaimsJws(token).getBody();
     }
 
-
-    public String getUsername(String token){
+    public String getUsername(String token) {
         return getClaims(token).getSubject();
     }
 
+    public Long getUserId(String token) {
+        return getClaims(token).get("userId", Long.class);
+    }
 
+    public String getRole(String token) {
+        return getClaims(token).get("role", String.class);
+    }
     public boolean isValid(String token){
         Claims claims = getClaims(token);
         Date now = new Date();
