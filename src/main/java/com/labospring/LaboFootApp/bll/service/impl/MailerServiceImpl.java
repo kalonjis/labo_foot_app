@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
-
-import static com.labospring.LaboFootApp.il.props.LaboFootProps.BACK_URL;
 import static com.labospring.LaboFootApp.il.props.LaboFootProps.FRONT_URL;
 
 @Service
@@ -26,7 +24,7 @@ public class MailerServiceImpl implements MailerService {
     @Override
     public void sendEmailVerification(User user) {
         UserVerificationToken verificationToken = userVerificationTokenService.createToken(user, UserVerificationToken.class, 20L);
-        String confirmationUrl = BACK_URL + "/registrationConfirm?token=" + verificationToken.getToken();
+        String confirmationUrl = FRONT_URL + "/user/confirm-account?token=" + verificationToken.getToken();
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", confirmationUrl);
@@ -47,7 +45,7 @@ public class MailerServiceImpl implements MailerService {
     @Override
     public void sendNewConfirmation(String token){
         User user = userVerificationTokenService.getOne(token).getUser();
-        String confirmationUrl = BACK_URL + "/registrationConfirm?token=" + token;
+        String confirmationUrl = FRONT_URL + "/user/confirm-account?token=" + token;
         Context context = new Context();
         context.setVariable("username", user.getUsername());
         context.setVariable("url", confirmationUrl);
