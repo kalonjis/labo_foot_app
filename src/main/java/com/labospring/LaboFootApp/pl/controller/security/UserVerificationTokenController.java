@@ -10,8 +10,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.labospring.LaboFootApp.il.props.LaboFootProps.BACK_URL;
+import static com.labospring.LaboFootApp.il.props.LaboFootProps.FRONT_URL;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,27 +25,37 @@ public class UserVerificationTokenController {
     private final MailerService mailerService;
 
     @GetMapping("/registrationConfirm")
-    public ResponseEntity<String> confirmAccount(@RequestParam String token) {
+    public ResponseEntity<Map<String, String>> confirmAccount(@RequestParam String token) {
         // Récupérer le token de vérification
         UserVerificationToken userToken = userVerificationTokenService.getOne(token);
+        Map<String, String> response = new HashMap<>();
 
         // Si le token est invalide
         if (userToken == null) {
-            return ResponseEntity.badRequest().body("Invalid token");
+            response.put("type", "validity");
+            response.put("message", "Invalid token");
+            return ResponseEntity.badRequest()
+                    .header("Content-Type", "application/json")
+                    .body(response);
         }
 
         if (userToken.getUser().isEnabled()){
-            return ResponseEntity.badRequest().body("Account is already activated. LOGIN");
+            response.put("type", "activation");
+            response.put("message", "Account is already activated !");
+            return ResponseEntity.badRequest()
+                    .header("Content-Type", "application/json")
+                    .body(response);
         }
 
         // Vérifier si le token a expiré
         if (userToken.getExpiryDate().isBefore(LocalDateTime.now())) {
             String requestNewTokenUrl = BACK_URL + "/request-confirmtoken?token=" + token;
-            String message = "Link has expired. Please request a new one at the following link: " +
-            "<br/> <a href=\"" + requestNewTokenUrl + "\">Request New Confirmation Email</a>";
+            response.put("type", "expiration");
+            response.put("message", "Link has expired. Please request a new one at the following link: ");
+            response.put("url", requestNewTokenUrl);
             return ResponseEntity.badRequest()
-                    .header("Content-Type", "text/html")
-                    .body(message);
+                    .header("Content-Type", "application/json")
+                    .body(response);
         }
 
         // Récupérer l'utilisateur correspondant au token
@@ -54,22 +67,33 @@ public class UserVerificationTokenController {
         mailerService.sendWelcomeEmail(user);
 
         // Réponse de succès avec message de confirmation
-        return ResponseEntity.ok("Your account has been successfully activated.");
+        response.put("message", "Thank you. Your account has been successfully activated. You can now use it to connect to your favorite app.");
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(response);
     }
 
 
     @GetMapping("/request-confirmtoken")
-    public ResponseEntity<String> requestNewToken(@RequestParam String token){
+    public ResponseEntity<Map<String, String>> requestNewToken(@RequestParam String token){
         UserVerificationToken verificationToken = userVerificationTokenService.getOne(token);
 
+        Map<String, String> response = new HashMap<>();
         // Si le token est invalide
         if (verificationToken == null) {
-            return ResponseEntity.badRequest().body("Invalid token");
+            response.put("error", "Invalid token");
+            return ResponseEntity.badRequest()
+                    .header("Content-Type", "application/json")
+                    .body(response);
         }
 
         String newToken = userVerificationTokenService.generateNewToken(token, UserVerificationToken.class, 60L).getToken();
         mailerService.sendNewConfirmation(newToken);
 
-        return ResponseEntity.ok("A new confirmation email has been sent.");
+        // Réponse de succès avec message de confirmation
+        response.put("message", "A new confirmation email has been sent.");
+        return ResponseEntity.ok()
+                .header("Content-Type", "application/json")
+                .body(response);
     }
 }
