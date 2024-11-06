@@ -45,6 +45,12 @@ public class TournamentServiceImpl implements TournamentService {
     }
 
     @Override
+    public List<Tournament> getAllFromOrganizer() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return tournamentRepository.findAllByUser(user);
+    }
+
+    @Override
     public List<Tournament> getAll() {
         return tournamentRepository.findAll();
     }

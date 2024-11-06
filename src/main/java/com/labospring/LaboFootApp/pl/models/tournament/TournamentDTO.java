@@ -15,7 +15,8 @@ public record TournamentDTO(
         String placeName,
         Address address,
         TournamentType tournamentType,
-        TournamentStatus tournamentStatus) {
+        TournamentStatus tournamentStatus,
+        Long organizerId) {
 
     public static TournamentDTO fromEntity(Tournament tournament){
         return new TournamentDTO(
@@ -26,7 +27,8 @@ public record TournamentDTO(
                 tournament.getPlaceName(),
                 tournament.getAddress(),
                 tournament.getTournamentType(),
-                tournament.getTournamentStatus()
+                tournament.getTournamentStatus(),
+                tournament.getCreator() != null? tournament.getCreator().getId() : null
         );
     }
 }
