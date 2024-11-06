@@ -39,6 +39,7 @@ public class TournamentController {
     }
 
     @PostMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> create(@Valid @RequestBody TournamentForm tournamentForm){
         Long id = tournamentService.addOne(tournamentForm.toTournamentBusiness());
         UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id);
@@ -64,6 +65,16 @@ public class TournamentController {
     public ResponseEntity<Void> remove(@PathVariable long id){
         tournamentService.deleteOne(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/organize")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<TournamentDTO>> getAllFromOrganizer(){
+        return ResponseEntity.ok(
+                tournamentService.getAllFromOrganizer().stream()
+                        .map(TournamentDTO::fromEntity)
+                        .toList()
+        );
     }
 
 }
