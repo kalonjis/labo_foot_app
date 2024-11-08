@@ -10,6 +10,7 @@ import com.labospring.LaboFootApp.pl.models.user.UserSearchForm;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ public class PasswordResetController {
     public final PasswordResetTokenServiceImpl passwordResetTokenService;
     public final MailerService mailerService;
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/reset-password")
     public ResponseEntity<Map<String, String>> resetPassword(@RequestParam String token, @Valid @RequestBody PasswordResetForm form) {
         PasswordResetToken passwordToken = passwordResetTokenService.getOne(token);
@@ -58,6 +60,7 @@ public class PasswordResetController {
 
 
     @GetMapping("/request-passwordtoken")
+    @PreAuthorize("isAnonymous()")
     public ResponseEntity<Map<String, String>> requestNewToken(@RequestParam String token) {
         PasswordResetToken passwordToken = passwordResetTokenService.getOne(token);
         Map<String, String> response = new HashMap<>();
@@ -75,6 +78,7 @@ public class PasswordResetController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/request-password")
     public ResponseEntity<Map<String, String>> requestPassword(@Valid @RequestBody UserSearchForm form) {
         User userCriteria = new User();
