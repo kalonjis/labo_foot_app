@@ -23,7 +23,7 @@ public class UserEditForm {
     private String lastname;
     @BeforeToday
     private LocalDate birthdate;
-    @Pattern( regexp = LaboFootProps.PHONE_REGEX, message = "Not a valid phone number")
+    //@Pattern( regexp = LaboFootProps.PHONE_REGEX, message = "Not a valid phone number")
     private String phoneNumber;
     private String street;
     private String city;

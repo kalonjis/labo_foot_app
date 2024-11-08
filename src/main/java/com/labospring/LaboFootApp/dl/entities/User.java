@@ -34,7 +34,7 @@ public class User extends BaseEntity implements UserDetails {
     private String email;
     @Setter @Temporal(TemporalType.DATE)
     private LocalDate birthdate;
-    @Setter @Column(unique = true, length = 25)
+    @Setter @Column(length = 25)
     private String phoneNumber;
     @Setter @Embedded
     private Address address;
