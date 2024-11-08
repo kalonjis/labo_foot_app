@@ -1,8 +1,10 @@
 package com.labospring.LaboFootApp.pl.advisor;
 
+import com.labospring.LaboFootApp.bll.exceptions.BadEnabledStatusException;
 import com.labospring.LaboFootApp.bll.exceptions.LaboFootException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -42,6 +44,17 @@ public class ControllerAdvisor {
         String errorMessage = extractEnumErrorMessage(ex.getMessage());
         log.error("HTTP Message Not Readable Exception: {}", ex.getMessage());
         return ResponseEntity.badRequest().body(errorMessage);
+    }
+
+    @ExceptionHandler(BadEnabledStatusException.class)
+    public ResponseEntity<Map<String, String>> handleBadEnabledStatusException(BadEnabledStatusException exception) {
+        Map<String, String> errorResponse = exception.messageToMap(exception.getMessage());
+        if (errorResponse == null) {
+            errorResponse = new HashMap<>();
+            errorResponse.put("error", "Unknown error in account status");
+        }
+        log.error("BadEnabledStatusException : {}", errorResponse);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);  // Utilisation du status 409
     }
 
     private String extractEnumErrorMessage(String fullMessage) {
