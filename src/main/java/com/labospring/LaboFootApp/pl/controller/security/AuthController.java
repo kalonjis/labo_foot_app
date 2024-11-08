@@ -1,5 +1,6 @@
 package com.labospring.LaboFootApp.pl.controller.security;
 
+import com.labospring.LaboFootApp.bll.exceptions.BadEnabledStatusException;
 import com.labospring.LaboFootApp.bll.exceptions.UserCredentialAlreadyTakenException;
 import com.labospring.LaboFootApp.bll.security.AuthService;
 import com.labospring.LaboFootApp.dl.entities.User;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,12 +50,12 @@ public class AuthController {
         } catch (UserCredentialAlreadyTakenException e) {
             // Cas où le nom d'utilisateur ou l'email est déjà pris
             response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+            return status(HttpStatus.CONFLICT).body(response);
 
         } catch (Exception e) {
             // Erreur générique
             response.put("error", "An error occurred during registration. Please try again later.");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+            return status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -66,11 +69,22 @@ public class AuthController {
      */
     @PostMapping("/login")
     @PreAuthorize("isAnonymous()")
-    public ResponseEntity<UserTokenDTO> login(@RequestBody UserLoginForm form) {
-        // Log in the user using the provided username and password, and obtain the user object.
-        User u = authService.login(form.username(), form.password());
-        // Map the user to a UserTokenDTO (which includes a JWT token) and return it in the response.
-        return ResponseEntity.ok(mapUserToken(u));
+    public ResponseEntity<?> login(@RequestBody UserLoginForm form) {
+        try {
+            User u = authService.login(form.username(), form.password());
+            return ResponseEntity.ok(mapUserToken(u));
+        } catch (BadEnabledStatusException e) {
+            throw e;
+        } catch (Exception e) {
+            // Capture uniquement les autres exceptions génériques
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            //log.error("Unhandled exception during login", e);
+            return ResponseEntity
+                    .badRequest()
+                    .header("Content-Type", "application/json")
+                    .body(errorResponse);
+        }
     }
 
     //@PreAuthorize("isAuthenticated()")
