@@ -53,7 +53,7 @@ public class PasswordResetController {
 
         userService.resetPassword(passwordToken.getUser().getId(), form.toBusiness());
 
-        response.put("message", "Thank you. Your password has been successfully modified. You can now use it to connect to your favorite app. \"login\"");
+        response.put("message", "Thank you. Your password has been successfully modified. You can now use it to connect to your favorite app.");
         return ResponseEntity.ok(response);
     }
 
