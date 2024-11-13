@@ -31,6 +31,18 @@ public class RankingController {
         );
     }
 
+    @GetMapping("by-tournament-team")
+    public ResponseEntity<List<RankingDTO>>getGroupRankingsByTournamentAndTeam(
+            @RequestParam long tournamentId,
+            @RequestParam long teamId){
+        return ResponseEntity.ok(rankingService.getGroupRankingsByTournamentAndTeam(
+                tournamentId, teamId)
+                .stream()
+                .map(RankingDTO::fromEntity)
+                .toList()
+        );
+    }
+
 
     @GetMapping("/{id:^\\d+}")
     public ResponseEntity<RankingDTO> get(@PathVariable long id){
@@ -39,18 +51,18 @@ public class RankingController {
         );
     }
 
-    @GetMapping("by-group")
-    public ResponseEntity<List<RankingDTO>> getByGroup(
-            @RequestParam Long tournamentId,
-            @RequestParam int numGroup
-            ){
-        return ResponseEntity.ok(
-                rankingService.getAllByTournamentIdAndNumGroup(tournamentId, numGroup)
-                        .stream()
-                        .map(RankingDTO::fromEntity)
-                        .toList()
-        );
-    }
+//    @GetMapping("by-group")
+//    public ResponseEntity<List<RankingDTO>> getByGroup(
+//            @RequestParam Long tournamentId,
+//            @RequestParam int numGroup
+//            ){
+//        return ResponseEntity.ok(
+//                rankingService.getAllByTournamentIdAndNumGroup(tournamentId, numGroup)
+//                        .stream()
+//                        .map(RankingDTO::fromEntity)
+//                        .toList()
+//        );
+//    }
 
     @DeleteMapping("/{id:^\\d+}")
     @PreAuthorize("isAuthenticated() && (@accessControlService.isUserRanking(principal, #id) || hasAuthority('ADMIN'))")
