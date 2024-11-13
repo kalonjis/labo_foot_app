@@ -14,6 +14,7 @@ public interface RankingService extends BaseService<Long, Ranking, RankingBusine
     Ranking getByTournamentIdAndTeamId(Long tournamentId, Long TeamId);
     List<Ranking> getAllByTournamentId(Long tournamentId);
     List<Ranking> getAllByTournamentIdAndNumGroup(Long tournamentId, int numGroup);
+    List<Ranking>getGroupRankingsByTournamentAndTeam(Long tournamentId, Long teamId);
     void update(Long id, RankingEditBusiness entityBusiness);
     void updateNumGroup(Ranking ranking, int numGroup);
     void updateGoalsFor(Ranking ranking, int goals);

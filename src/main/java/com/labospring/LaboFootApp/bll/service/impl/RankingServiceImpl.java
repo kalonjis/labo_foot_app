@@ -47,6 +47,12 @@ public class RankingServiceImpl implements RankingService {
     }
 
     @Override
+    public List<Ranking>getGroupRankingsByTournamentAndTeam(Long tournamentId, Long teamId){
+        int numGroup = getByTournamentIdAndTeamId(tournamentId, teamId).getNumGroup();
+        return getAllByTournamentIdAndNumGroup(tournamentId, numGroup);
+    }
+
+    @Override
     public List<Ranking> getAllByTournamentId(Long tournamentId){
         return rankingRepository.findByTournamentId(tournamentId);
     }
