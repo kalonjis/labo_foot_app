@@ -5,6 +5,7 @@ import com.labospring.LaboFootApp.bll.service.RankingService;
 import com.labospring.LaboFootApp.pl.models.ranking.RankingDTO;
 import com.labospring.LaboFootApp.pl.models.ranking.RankingEditForm;
 import com.labospring.LaboFootApp.pl.models.ranking.RankingForm;
+import com.labospring.LaboFootApp.pl.models.tournament.TournamentDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,16 @@ public class RankingController {
                 .stream()
                 .map(RankingDTO::fromEntity)
                 .toList()
+        );
+    }
+
+    @GetMapping("by-tournament/{id:^\\d+}")
+    public ResponseEntity<List<RankingDTO>>getAllByTournamentId(@PathVariable Long id){
+        return ResponseEntity.ok(
+                rankingService.getAllByTournamentId(id)
+                        .stream()
+                        .map(RankingDTO::fromEntity)
+                        .toList()
         );
     }
 
