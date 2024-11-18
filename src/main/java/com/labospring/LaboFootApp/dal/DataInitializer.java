@@ -382,6 +382,7 @@ public class DataInitializer implements CommandLineRunner {
         );
 
         if (tournamentRepository.count() == 0) {
+            tournament6.setCreator(user1);
             tournamentRepository.saveAll(tournaments);
         }
         // endregion
