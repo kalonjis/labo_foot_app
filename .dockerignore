@@ -1,0 +1,6 @@
+#ignore All
+*
+.env
+
+#keep
+!target/*.jar
