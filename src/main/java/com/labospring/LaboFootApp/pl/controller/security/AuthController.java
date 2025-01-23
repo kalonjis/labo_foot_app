@@ -41,8 +41,6 @@ public class AuthController {
         try {
             // Enregistrement de l'utilisateur
             User u = authService.register(form.toUser());
-            //mapUserToken(u);
-
             // Message de succès
             response.put("message", "Thank you. You've been successfully registered. One last step: check your email and confirm your account");
             return ResponseEntity.ok(response);
