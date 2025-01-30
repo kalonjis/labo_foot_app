@@ -11,7 +11,7 @@ public class FootMatchSpecification {
 
     // Search if team name is either in teamHome or teamAway
     public static Specification<FootMatch> hasTeamName(String teamName) {
-        return (root, _, builder) -> {
+        return (root, query, builder) -> {
             Join<FootMatch, Team> teamHomeJoin = root.join("teamHome", JoinType.INNER);
             Join<FootMatch, Team> teamAwayJoin = root.join("teamAway", JoinType.INNER);
 
@@ -24,22 +24,22 @@ public class FootMatchSpecification {
     }
 
     public static Specification<FootMatch> hasMatchDateTimeAfter(LocalDateTime localDateTime) {
-        return (root, _, builder) ->
+        return (root, query, builder) ->
                 builder.greaterThanOrEqualTo(root.get("matchDateTime"), localDateTime);
     }
 
     public static Specification<FootMatch> hasMatchDateTimeBefore(LocalDateTime localDateTime) {
-        return (root, _, builder) ->
+        return (root, query, builder) ->
                 builder.lessThanOrEqualTo(root.get("matchDateTime"), localDateTime);
     }
 
     public static Specification<FootMatch> hasFieldLocation(String fieldLocation) {
-        return (root, _, builder) ->
+        return (root, query, builder) ->
                 builder.like(builder.lower(root.get("fieldLocation")),"%" + fieldLocation.toLowerCase() + "%");
     }
 
     public static Specification<FootMatch> hasRefereeName(String refereeName) {
-        return (root, _, builder) -> {
+        return (root, query, builder) -> {
             Join<FootMatch, Referee> refereeJoin = root.join("referee", JoinType.INNER);
             return builder.or(
                     builder.like(builder.lower(refereeJoin.get("firstname")), "%" + refereeName.toLowerCase() + "%"),
@@ -49,7 +49,7 @@ public class FootMatchSpecification {
     }
 
     public static Specification<FootMatch> hasTournament(String tournamentName) {
-        return (root, _, builder) -> {
+        return (root, query, builder) -> {
             Join<FootMatch, Tournament> tournamentJoin = root.join("tournament", JoinType.INNER);
 
             // Build condition for teamHome or teamAway having the specified name
