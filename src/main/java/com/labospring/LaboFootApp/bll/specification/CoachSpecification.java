@@ -5,12 +5,12 @@ import org.springframework.data.jpa.domain.Specification;
 
 public class CoachSpecification {
     public static Specification<Coach> hasFirstname(String firstname) {
-        return (root, _, builder) ->
+        return (root, query, builder) ->
                 builder.like(builder.lower(root.get("firstname")), "%" + firstname.toLowerCase() + "%");
     }
 
     public static Specification<Coach> hasLastname(String lastname) {
-        return (root, _, builder) ->
+        return (root, query, builder) ->
                 builder.like(builder.lower(root.get("lastname")), "%" + lastname.toLowerCase() + "%");
     }
 }
